@@ -9,14 +9,12 @@ FeynML is a project to develop an XML dialect for describing Feynman diagrams as
 
 [![test][a t image]][a t link]     [![Coverage Status][c t i]][c t l] [![Codacy Badge][cc c i]][cc c l]  [![Codacy Badge][cc q i]][cc q l]  [![Documentation][rtd t i]][rtd t l]
 
-## Dependencies
-
-*   libmagickwand-dev (to display pdfs in a jupyter-notebook, might require a policy change of the imagemagick config for PDFs, see Troubleshooting)
-*   ghostscript
-*   latexmk
-*   (feynmp-auto/feynmf)
-
 ## Installation
+```sh
+pip install [--user] feynml
+```
+
+or from cloned source:
 
 ```sh
 poerty install --with docs --with dev
@@ -25,23 +23,13 @@ poetry shell
 
 ## Documentation
 
-*   <https://pyfeyn2.readthedocs.io/en/stable/>
-*   <https://apn-pucky.github.io/pyfeyn2/index.html>
+*   <https://pyfeyn2.readthedocs.io/en/feynml/stable/>
+*   <https://apn-pucky.github.io/pyfeyn2/feynml/index.html>
 
-## Similar Feynman diagram rendering project:
+## Related:
 
-*   <https://github.com/ndeutschmann/qgraf-xml-drawer>
-*   <https://github.com/GkAntonius/feynman>
-*   <https://github.com/JP-Ellis/tikz-feynman>
-*   <https://pyfeyn.hepforge.org/> 
-*   <https://feynml.hepforge.org/>
-*   <http://www.feyndiagram.com/>
+*   <https://github.com/APN-Pucky/pyfeyn2>
 
-Several of these are integrated into pyfeyn2.
-
-## Troubleshooting
-
-*   [ImageMagick security policy 'PDF' blocking conversion]( https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion )
 
 ## Development
 
@@ -78,7 +66,7 @@ Several of these are integrated into pyfeyn2.
 [c t l]: https://coveralls.io/github/APN-Pucky/feynml?branch=master
 [c t i]: https://coveralls.io/repos/github/APN-Pucky/feynml/badge.svg?branch=master
 
-[rtd s i]: https://readthedocs.org/projects/feynml/badge/?version=stable
-[rtd s l]: https://feynml.readthedocs.io/en/stable/?badge=stable
-[rtd t i]: https://readthedocs.org/projects/feynml/badge/?version=latest
-[rtd t l]: https://feynml.readthedocs.io/en/latest/?badge=latest
+[rtd s i]: https://readthedocs.org/projects/pyfeyn2/badge/?version=stable
+[rtd s l]: https://pyfeyn2.readthedocs.io/en/stable/?badge=stable
+[rtd t i]: https://readthedocs.org/projects/pyfeyn2/badge/?version=latest
+[rtd t l]: https://pyfeyn2.readthedocs.io/en/latest/?badge=latest
