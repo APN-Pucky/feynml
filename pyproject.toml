@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "feynml"
+version = "0.0.0"
+description = "Feynman diagram markup language"
+authors = ["Alexander Puck Neuwirth <alexander@neuwirth-informatik.de>"]
+readme = "README.md"
+repository = "https://github.com/APN-Pucky/feynml"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+particle = "*"
+xsdata = {version = "*", extras = ["cli","lxml","soap"]}
+cssutils= "*"
+cssselect ="*"
+#pyqgraf = {path= "../pyqgraf", develop = true }
+#ipyparallel = "*"
+deprecated = "*"
+deprecation = "*"
+smpl_io = "*"
+smpl_doc = "*"
+smpl_util= "*"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx-rtd-theme = "*"
+sphinxcontrib-napoleon = "*"
+nbsphinx = "*"
+jupyter-sphinx = "*"
+sphinx_autobuild = "*"
+sphinx_math_dollar = "*"
+myst-parser  = "*"
+toml = "*"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.20.0"
+pytest = "*"
+pytest-cov =  "*"
+pytest-profiling =  "*"
+pytest-line-profiler-apn = ">=0.1.3"
+ipython =  "*"
+jupyterlab =  "*"
+jupyter = "*"
+poetry-dynamic-versioning = {extras = ["plugin"], version = "^0.21.1"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+dirty = true
+# modified dunami default pattern without v
+pattern = '(?x)(?# ignore whitespace)^((?P<epoch>\d+)!)?(?P<base>\d+(\.\d+)*)(?# v1.2.3 or v1!2000.1.2)([-._]?((?P<stage>[a-zA-Z]+)[-._]?(?P<revision>\d+)?))?(?# b0)(\+(?P<tagged_metadata>.+))?$(?# +linux)'
+strict = true
+format-jinja = "{% if distance == 0 %}{{ base }}{% else %}{{ base }}.{{ distance }}{% endif %}"

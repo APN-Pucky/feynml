@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram>
+  <propagator id="p1" source="v1" target="v2" pdgid="21" type="" latexname="g" label=""/>
+  <vertex id="v1" label=""/>
+  <vertex id="v2" label=""/>
+  <leg id="l1" target="" pdgid="21" type="" latexname="g" label="" sense=""/>
+</diagram>
