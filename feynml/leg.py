@@ -6,7 +6,6 @@ from feynml.point import Point
 from feynml.targeting import Targeting
 
 
-from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
 

@@ -1,7 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
-from smpl_doc.doc import deprecated
-
+from typing import Optional
 
 @dataclass
 class Sourcing:
