@@ -23,8 +23,8 @@ poetry shell
 
 ## Documentation
 
-*   <https://feynml.readthedocs.io/en/stable/>
-*   <https://apn-pucky.github.io/feynml/index.html>
+*   <https://pyfeyn2.readthedocs.io/en/feynml/stable/>
+*   <https://apn-pucky.github.io/pyfeyn2/feynml/index.html>
 
 ## Related:
 
