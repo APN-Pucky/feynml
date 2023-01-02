@@ -66,7 +66,7 @@ poetry shell
 [c t l]: https://coveralls.io/github/APN-Pucky/feynml?branch=master
 [c t i]: https://coveralls.io/repos/github/APN-Pucky/feynml/badge.svg?branch=master
 
-[rtd s i]: https://readthedocs.org/projects/feynml/badge/?version=stable
-[rtd s l]: https://feynml.readthedocs.io/en/stable/?badge=stable
-[rtd t i]: https://readthedocs.org/projects/feynml/badge/?version=latest
-[rtd t l]: https://feynml.readthedocs.io/en/latest/?badge=latest
+[rtd s i]: https://readthedocs.org/projects/pyfeyn2/badge/?version=stable
+[rtd s l]: https://pyfeyn2.readthedocs.io/en/stable/?badge=stable
+[rtd t i]: https://readthedocs.org/projects/pyfeyn2/badge/?version=latest
+[rtd t l]: https://pyfeyn2.readthedocs.io/en/latest/?badge=latest
