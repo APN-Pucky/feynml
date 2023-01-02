@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from importlib.metadata import version
 from typing import List, Optional, Union
 from smpl_doc.doc import deprecated
 

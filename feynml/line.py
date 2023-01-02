@@ -1,8 +1,5 @@
-from dataclasses import dataclass, field
-from importlib.metadata import version
-from typing import List, Optional, Union
+from dataclasses import dataclass
 from smpl_util.util import withify
-from feynml.connector import Connector
 
 from feynml.sourcing import Sourcing
 from feynml.targeting import Targeting

@@ -1,16 +1,8 @@
-import logging
-import warnings
 from dataclasses import dataclass, field
-from importlib.metadata import version
-from typing import List, Optional, Union
+from typing import Optional
 
-import cssutils
-from cssselect import GenericTranslator, SelectorError
-from lxml import etree
-from particle import Particle
 from feynml.connector import Connector
 from feynml.point import Point
-from feynml.style import Bending, Labeled, Styled, Texted
 from feynml.targeting import Targeting
 
 

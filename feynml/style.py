@@ -1,20 +1,10 @@
 import logging
-import warnings
 from dataclasses import dataclass, field
-from importlib.metadata import version
-from typing import List, Optional, Union
+from typing import Optional
 
 import cssutils
-from cssselect import GenericTranslator, SelectorError
-from lxml import etree
-from particle import Particle
 from xsdata.formats.converter import Converter, converter
-from xsdata.formats.dataclass.parsers import XmlParser
-from xsdata.formats.dataclass.serializers import XmlSerializer
-from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-
-from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
 # We don't want to see the cssutils warnings, since we have custom properties

@@ -1,9 +1,5 @@
 from dataclasses import dataclass, field
-from importlib.metadata import version
-from typing import List, Optional, Union
-from smpl_doc.doc import deprecated
-
-# We don't want to see the cssutils warnings, since we have custom properties
+from typing import Optional
 
 
 @dataclass

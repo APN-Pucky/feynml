@@ -1,8 +1,6 @@
-
 # TODO think about withify for sub-classes
 from dataclasses import dataclass, field
 from typing import Optional
-
 
 
 @dataclass

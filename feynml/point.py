@@ -1,20 +1,5 @@
-import logging
-import warnings
 from dataclasses import dataclass, field
-from importlib.metadata import version
-from typing import List, Optional, Union
-
-import cssutils
-from cssselect import GenericTranslator, SelectorError
-from lxml import etree
-from particle import Particle
-from feynml.style import Bending, Labeled, Styled, Texted
-
-from smpl_doc.doc import deprecated
-from smpl_util.util import withify
-
-# We don't want to see the cssutils warnings, since we have custom properties
-cssutils.log.setLevel(logging.CRITICAL)
+from typing import Optional
 
 
 @dataclass

@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
-from importlib.metadata import version
-from typing import List, Optional, Union
+from typing import Optional
 
 from feynml.id import Identifiable
 from feynml.point import Point
-from feynml.style import Bending, Labeled, Styled, Texted
+from feynml.style import Labeled, Styled
 
 from smpl_util.util import withify
 
