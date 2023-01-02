@@ -6,9 +6,11 @@ import cssutils
 from xsdata.formats.converter import Converter, converter
 
 from smpl_util.util import withify
+from smpl_doc.doc import deprecated
 
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)
+
 
 @withify()
 @dataclass
@@ -17,7 +19,6 @@ class Labeled:
         default=None, metadata={"xml_attribute": True, "type": "Attribute"}
     )
     """Label the object"""
-
 
 
 CSSString = cssutils.css.CSSStyleDeclaration
@@ -65,9 +66,22 @@ class Styled:
     def raw_style(self):
         return self.style.cssText.replace("\n", " ")
 
+    def get_style(self, key=None):
+        if self.style is None:
+            return None
+        if key is None:
+            return self.style
+        else:
+            return self.style.getProperty(key)
+
+    @deprecated("0.0.0", "use put_styles")
     def put_style(self, key, value):
+        return self.put_styles({key: value})
+
+    def put_styles(self, **kwargs):
         if self.style is not None:
-            self.style.setProperty(key, value)
+            for key, value in kwargs.items():
+                self.style.setProperty(key, value)
         return self
 
     def with_style(self, style):

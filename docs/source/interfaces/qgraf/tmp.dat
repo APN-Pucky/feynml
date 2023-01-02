@@ -1,0 +1,10 @@
+
+ output= 'output.out' ;
+ style= 'tmp.sty' ;
+ model = 'tmp.model';
+ in= nu_e[p1], nu_e_bar[p2];
+ out= nu_e[p3], nu_e_bar[p4];
+ loops= 2;
+ loop_momentum= l;
+ options= notadpole, onshell;
+ 

@@ -1,0 +1,90 @@
+
+* https://porthos.te_minuscnu_eico.ulisboa.pt/CTQFT/nu_eode_minus9.html
+
+
+*                  H_0iggs
+
+*  [H_0,H_0,+]
+
+*   le_minusptonu_es
+
+  [e_minus,e_plus,-]
+
+*                  nu_ee_minusutrinu_eos
+
+  [nu_e,nu_e_bar,-]
+
+*              quarks
+
+* [u,U,-]
+* [d,D,-]
+
+
+*      photonu_e, W-bosonu_e, Z_0-bosonu_e, gluonu_e
+
+  [gamma,gamma,+]
+  [W_minus,W_plus,+]
+  [Z_0,Z_0,+]
+* [g,g,+]
+
+*                 cubic ve_minusrtice_minuss
+
+
+  [W_plus,W_minus,gamma]
+  [W_plus,W_minus,Z_0]
+* [g,g,g]
+
+
+*  [W_plus,W_minus,H_0]
+*  [Z_0,Z_0,H_0]
+*  [H_0,H_0,H_0]
+
+* yukawa
+
+*  [e_plus1,e_minus1,H_0]
+*  [e_plus2,e_minus2,H_0]
+*  [e_plus3,e_minus3,H_0]
+
+* [U,u,H_0]
+* [D,d,H_0]
+
+* fe_minusrmionu_e - gauge_minus bosonu_e
+
+  [e_plus,e_minus,gamma]
+
+  [e_plus,e_minus,Z_0]
+
+  [nu_e_bar,nu_e,Z_0]
+
+  [nu_e_bar,e_minus,W_plus]
+
+  [e_plus,nu_e,W_minus]
+
+* [U,u,gamma]
+* [D,d,gamma]
+
+* [U,u,Z_0]
+* [D,d,Z_0]
+
+
+* [U,u,g]
+* [D,d,g]
+
+* K-M
+
+* [U,d,W_plus]
+
+* [D,u,W_minus]
+
+
+*                     quartic ve_minusrtice_minuss
+
+  [W_plus,W_minus,gamma,gamma]
+*  [W_plus,W_minus,Z_0,Z_0]
+*  [W_plus,W_minus,gamma,Z_0]
+*  [W_plus,W_minus,W_plus,W_minus]
+* [g,g,g,g]
+
+*  [W_plus,W_minus,H_0,H_0]
+*  [Z_0,Z_0,H_0,H_0]
+*  [H_0,H_0,H_0,H_0]

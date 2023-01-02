@@ -1,0 +1,47 @@
+\documentclass[preview,crop,tikz]{standalone}%
+\usepackage[T1]{fontenc}%
+\usepackage[utf8]{inputenc}%
+\usepackage{lmodern}%
+\usepackage{textcomp}%
+\usepackage{lastpage}%
+%
+\RequirePackage{luatex85}%
+\usepackage[compat=1.1.0]{tikz-feynman}%
+%
+\begin{document}%
+\normalsize%
+\begin{tikzpicture}
+\begin{feynman}
+	\vertex (Vert1) [] at (1.3251013324919296,6.385039198077717);
+	\vertex (Vert1clone) [] at (1.3251013324919296,6.385039198077717);
+	\vertex (Vert2) [] at (15.0,6.634426348875027);
+	\vertex (Vert2clone) [] at (15.0,6.634426348875027);
+	\vertex (Vert3) [] at (4.000388340088833,6.764034853522973);
+	\vertex (Vert3clone) [] at (4.000388340088833,6.764034853522973);
+	\vertex (Vert4) [] at (12.532341448023107,6.5346714885561035);
+	\vertex (Vert4clone) [] at (12.532341448023107,6.5346714885561035);
+	\vertex (Vert5) [] at (6.870342952840951,6.677022402368875);
+	\vertex (Vert5clone) [] at (6.870342952840951,6.677022402368875);
+	\vertex (Vert6) [] at (9.694424892599693,7.268998325283366);
+	\vertex (Vert6clone) [] at (9.694424892599693,7.268998325283366);
+	\vertex (In1) [] at (2.0666367321181527,11.140506298390816);
+	\vertex (In2) [] at (2.0666367321181527,0.6553238999053421);
+	\vertex (Out1) [] at (12.551637096186987,11.140506298390816);
+	\vertex (Out2) [] at (12.551637096186987,0.6553238999053421);
+	\diagram*{
+		(Vert3) -- [photon,edge label=$Z^{0}$] (Vert1),
+		(Vert4) -- [photon,edge label=$Z^{0}$] (Vert2),
+		(Vert5) -- [photon,edge label=$W^{-}$,bend left] (Vert3),
+		(Vert3) -- [photon,edge label=$W^{-}$,bend left] (Vert5),
+		(Vert6) -- [fermion,edge label=$e^{-}$,bend left] (Vert4),
+		(Vert4) -- [fermion,edge label=$e^{-}$,bend left] (Vert6),
+		(Vert6) -- [photon,edge label=$Z^{0}$] (Vert5),
+		(In1) -- [fermion,edge label=$\nu_{e}$] (Vert1),
+		(In2) -- [anti fermion,edge label=$\overline{\nu}_{e}$] (Vert1),
+		(Vert2) -- [fermion,edge label=$\nu_{e}$] (Out1),
+		(Vert2) -- [anti fermion,edge label=$\overline{\nu}_{e}$] (Out2),
+	};
+\end{feynman}
+\end{tikzpicture}
+%
+\end{document}

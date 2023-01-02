@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<feynml>
+ <head>
+   <meta name="creator" value="PyFeyn"/>
+   <description>
+   A sample diagram showing a QCD correction to the Drell-Yan process.
+   </description>
+ </head>
+ <diagram legs="4">
+   <label id="L0" text="Drell-Yan QCD vertex correction" x="0" y="2"/>
+   <vertex id="V0" x="-2.0" y="0.0"/>
+   <vertex id="V1" x="2.0" y="0.0"/>
+   <leg id="E0" type="fermion" sense="incoming" target="V0" x="-4.0" y="2.0" label="e-" style="arrow-pos:0.53;"/>
+   <leg id="E1" type="fermion" sense="outgoing" target="V0" x="-4.0" y="-2.0" label="e+" style="arrow-pos:0.53; parallel-arrow-displace:-0.06; parallel-arrow-sense:-1;"/>
+   <propagator id="P2" type="photon" source="V0" target="V1" label="Z"/>
+   <vertex id="V5" x="3.0" y="-1.0"/>
+   <propagator id="P4" type="fermion" source="V5" target="V1"/>
+   <vertex id="V6" x="3.0" y="1.0"/>
+   <propagator id="P5" type="fermion" source="V1" target="V6"/>
+   <propagator id="P7" type="gluon" source="V5" target="V6" bend="0.5" label="g" style="parallel-arrow-displace:0.2;"/>
+   <leg id="E2" type="fermion" sense="incoming" target="V5" x="4.0" y="-2.0" label="q+" style="arrow-pos:0.53; parallel-arrow-displace:-0.06; parallel-arrow-sense:-1;"/>
+   <leg id="E3" type="fermion" sense="outgoing" target="V6" x="4.0" y="2.0" label="q-" style="arrow-pos:0.53;"/>
+ </diagram>
+</feynml>

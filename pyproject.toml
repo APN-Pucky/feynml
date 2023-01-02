@@ -24,7 +24,7 @@ smpl_util= "*"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-pyfeyn2 = "*"
+pyfeyn2 = ">=2.2.0"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 sphinxcontrib-napoleon = "*"

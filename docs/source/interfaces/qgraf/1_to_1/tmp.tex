@@ -1,0 +1,41 @@
+\documentclass[preview,crop,tikz]{standalone}%
+\usepackage[T1]{fontenc}%
+\usepackage[utf8]{inputenc}%
+\usepackage{lmodern}%
+\usepackage{textcomp}%
+\usepackage{lastpage}%
+%
+\RequirePackage{luatex85}%
+\usepackage[compat=1.1.0]{tikz-feynman}%
+%
+\begin{document}%
+\normalsize%
+\begin{tikzpicture}
+\begin{feynman}
+	\vertex (Vert1) [] at (4.714285714285714,3.427238095238095) ;
+	\vertex (Vert1clone) [] at (4.714285714285714,3.427238095238095);
+	\vertex (Vert2) [] at (11.571428571428571,3.427238095238095) ;
+	\vertex (Vert2clone) [] at (11.571428571428571,3.427238095238095);
+	\vertex (Vert3) [] at (7.811428571428571,2.859) ;
+	\vertex (Vert3clone) [] at (7.811428571428571,2.859);
+	\vertex (Vert4) [] at (10.817619047619047,0.8571428571428571) ;
+	\vertex (Vert4clone) [] at (10.817619047619047,0.8571428571428571);
+	\vertex (Vert5) [] at (8.864285714285716,6.94) ;
+	\vertex (Vert5clone) [] at (8.864285714285716,6.94);
+	\vertex (In1) [] at (1.2857142857142858,3.427238095238095);
+	\vertex (Out1) [] at (15.0,3.427238095238095);
+	\diagram*{
+		(Vert1) -- [fermion,edge label=$e^{-}$] (Vert3),
+		(Vert5) -- [photon,edge label=$W^{-}$] (Vert1),
+		(Vert4) -- [fermion,edge label=$e^{-}$] (Vert2),
+		(Vert2) -- [photon,edge label=$W^{-}$] (Vert5),
+		(Vert3) -- [fermion,edge label=$\nu_{e}$,bend right] (Vert4),
+		(Vert3) -- [photon,edge label=$W^{-}$,bend left] (Vert4),
+		(Vert5) -- [photon,edge label=$\gamma$,loop , in=123.394333, out=33.394333, min distance=2cm] (Vert5clone),
+		(In1) -- [fermion,edge label=$\nu_{e}$] (Vert1),
+		(Vert2) -- [fermion,edge label=$\nu_{e}$] (Out1),
+	};
+\end{feynman}
+\end{tikzpicture}
+%
+\end{document}
