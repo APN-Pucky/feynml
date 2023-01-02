@@ -14,7 +14,7 @@ jobs:
         - uses: APN-Pucky/make-python-action@main
           with:
             test: true
-            doc: true
+            doc: false
             coveralls: true
             codacy-api-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
             pypi-token: ${{ secrets.pypi_token }}
