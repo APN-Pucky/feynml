@@ -24,7 +24,7 @@ smpl_util= "*"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-pyfeyn2 = ">=2.2.0"
+pyfeyn2 = ">=2.2.2"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 sphinxcontrib-napoleon = "*"
@@ -34,6 +34,14 @@ sphinx_autobuild = "*"
 sphinx_math_dollar = "*"
 myst-parser  = "*"
 toml = "*"
+
+pyqgraf = {version = ">=0.0.3", optional = true}
+pyhepmc = {version = "*", optional = true}
+
+[tool.poetry.extras]
+opt = ["iminuit", "smpl_animation"]
+animation = ["smpl_animation", ]
+
 
 [tool.poetry.group.dev]
 optional = true

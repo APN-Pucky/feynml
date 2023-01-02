@@ -12,34 +12,31 @@
 \normalsize%
 \begin{tikzpicture}
 \begin{feynman}
-	\vertex (Vert1) [] at (1.3251013324919296,6.385039198077717);
-	\vertex (Vert1clone) [] at (1.3251013324919296,6.385039198077717);
-	\vertex (Vert2) [] at (15.0,6.634426348875027);
-	\vertex (Vert2clone) [] at (15.0,6.634426348875027);
-	\vertex (Vert3) [] at (4.000388340088833,6.764034853522973);
-	\vertex (Vert3clone) [] at (4.000388340088833,6.764034853522973);
-	\vertex (Vert4) [] at (12.532341448023107,6.5346714885561035);
-	\vertex (Vert4clone) [] at (12.532341448023107,6.5346714885561035);
-	\vertex (Vert5) [] at (6.870342952840951,6.677022402368875);
-	\vertex (Vert5clone) [] at (6.870342952840951,6.677022402368875);
-	\vertex (Vert6) [] at (9.694424892599693,7.268998325283366);
-	\vertex (Vert6clone) [] at (9.694424892599693,7.268998325283366);
-	\vertex (In1) [] at (2.0666367321181527,11.140506298390816);
-	\vertex (In2) [] at (2.0666367321181527,0.6553238999053421);
-	\vertex (Out1) [] at (12.551637096186987,11.140506298390816);
-	\vertex (Out2) [] at (12.551637096186987,0.6553238999053421);
+	\vertex (Vert1) [] at (4.236333333333333,8.91142857142857) ;
+	\vertex (Vert1clone) [] at (4.236333333333333,8.91142857142857);
+	\vertex (Vert2) [] at (11.815238095238096,10.477142857142857) ;
+	\vertex (Vert2clone) [] at (11.815238095238096,10.477142857142857);
+	\vertex (Vert3) [] at (13.485238095238095,6.8185714285714285) ;
+	\vertex (Vert3clone) [] at (13.485238095238095,6.8185714285714285);
+	\vertex (Vert4) [] at (7.897142857142859,9.691428571428572) ;
+	\vertex (Vert4clone) [] at (7.897142857142859,9.691428571428572);
+	\vertex (Vert5) [] at (10.040952380952382,6.9709523809523795) ;
+	\vertex (Vert5clone) [] at (10.040952380952382,6.9709523809523795);
+	\vertex (In1) [] at (1.2857142857142858,14.571428571428571);
+	\vertex (In2) [] at (1.2857142857142858,0.8571428571428571);
+	\vertex (Out1) [] at (15.0,14.571428571428571);
+	\vertex (Out2) [] at (15.0,0.8571428571428571);
 	\diagram*{
-		(Vert3) -- [photon,edge label=$Z^{0}$] (Vert1),
-		(Vert4) -- [photon,edge label=$Z^{0}$] (Vert2),
-		(Vert5) -- [photon,edge label=$W^{-}$,bend left] (Vert3),
-		(Vert3) -- [photon,edge label=$W^{-}$,bend left] (Vert5),
-		(Vert6) -- [fermion,edge label=$e^{-}$,bend left] (Vert4),
-		(Vert4) -- [fermion,edge label=$e^{-}$,bend left] (Vert6),
-		(Vert6) -- [photon,edge label=$Z^{0}$] (Vert5),
+		(Vert4) -- [photon,edge label=$Z^{0}$] (Vert1),
+		(Vert3) -- [fermion,edge label=$e^{-}$] (Vert2),
+		(Vert2) -- [photon,edge label=$W^{-}$] (Vert4),
+		(Vert5) -- [photon,edge label=$W^{-}$] (Vert3),
+		(Vert4) -- [photon,edge label=$W^{-}$] (Vert5),
+		(Vert5) -- [photon,edge label=$\gamma$,loop , in=288.142475, out=198.142475, min distance=2cm] (Vert5clone),
 		(In1) -- [fermion,edge label=$\nu_{e}$] (Vert1),
 		(In2) -- [anti fermion,edge label=$\overline{\nu}_{e}$] (Vert1),
 		(Vert2) -- [fermion,edge label=$\nu_{e}$] (Out1),
-		(Vert2) -- [anti fermion,edge label=$\overline{\nu}_{e}$] (Out2),
+		(Vert3) -- [anti fermion,edge label=$\overline{\nu}_{e}$] (Out2),
 	};
 \end{feynman}
 \end{tikzpicture}

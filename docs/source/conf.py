@@ -61,6 +61,7 @@ extensions = [
 ]
 
 nbsphinx_execute = "always"
+nbsphinx_allow_errors = True
 
 napoleon_use_ivar = True
 # autoapi_type = "python"
