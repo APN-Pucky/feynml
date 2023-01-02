@@ -15,7 +15,3 @@ class Sourcing:
         else:
             self.source = source.id
         return self
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_source(self, *args, **kwargs):
-        return self.with_source(*args, **kwargs)

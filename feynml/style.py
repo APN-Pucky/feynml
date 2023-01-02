@@ -20,33 +20,6 @@ from smpl_util.util import withify
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)
 
-
-@dataclass
-class Bending:
-    bend: Optional[float] = field(
-        default=None, metadata={"xml_attribute": True, "type": "Attribute"}
-    )
-
-    @deprecated(version="2.0.7.1", reason='Use style="bend : true".')
-    def with_bend(self, bend):
-        self.bend = bend
-        return self
-
-
-@withify()
-@dataclass
-class Texted:
-    text: Optional[str] = field(
-        default="", metadata={"xml_attribute": True, "type": "Attribute"}
-    )
-    """Text the object"""
-
-    @deprecated(version="2.0.7.1", reason='Use label=""')
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_text(self, *args, **kwargs):
-        return self.with_text(*args, **kwargs)
-
-
 @withify()
 @dataclass
 class Labeled:
@@ -55,9 +28,6 @@ class Labeled:
     )
     """Label the object"""
 
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_label(self, *args, **kwargs):
-        return self.with_label(*args, **kwargs)
 
 
 CSSString = cssutils.css.CSSStyleDeclaration

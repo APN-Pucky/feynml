@@ -9,13 +9,12 @@ from cssselect import GenericTranslator, SelectorError
 from lxml import etree
 from particle import Particle
 from feynml.connector import Identifiable, Leg, Propagator, Vertex
-from feynml.style import CSSSheet, Label, Styled
+from feynml.style import CSSSheet, Styled
 from xsdata.formats.converter import Converter, converter
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from pyfeyn2.particles import get_either_particle
 from pyfeyn2.types import get_default_sheet
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
@@ -47,10 +46,6 @@ class FeynmanDiagram(Styled, Identifiable):
         default_factory=list,
         metadata={"name": "leg", "type": "Element", "namespace": ""},
     )
-    labels: List[Label] = field(
-        default_factory=list,
-        metadata={"name": "label", "type": "Element", "namespace": ""},
-    )
 
     sheet: CSSSheet = field(
         default_factory=lambda: cssutils.parseString(""),
@@ -62,7 +57,7 @@ class FeynmanDiagram(Styled, Identifiable):
         },
     )
 
-    def add(self, *fd_all: List[Union[Propagator, Vertex, Leg, Label]]):
+    def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
         for a in fd_all:
             if isinstance(a, Propagator):
                 self.propagators.append(a)
@@ -70,8 +65,6 @@ class FeynmanDiagram(Styled, Identifiable):
                 self.vertices.append(a)
             elif isinstance(a, Leg):
                 self.legs.append(a)
-            elif isinstance(a, Label):
-                self.labels.append(a)
             else:
                 raise Exception("Unknown type: " + str(type(a)) + " " + str(a))
         return self

@@ -17,7 +17,3 @@ class Targeting:
         else:
             self.target = target.id
         return self
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_target(self, *args, **kwargs):
-        return self.with_target(*args, **kwargs)

@@ -14,8 +14,6 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from pyfeyn2.particles import get_either_particle
-from pyfeyn2.types import get_default_sheet
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 

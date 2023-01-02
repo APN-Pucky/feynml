@@ -47,15 +47,3 @@ class Point:
         self.y = float(y)
         self.z = float(z)
         return self
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_point(self, *args, **kwargs):
-        return self.with_point(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_xy(self, *args, **kwargs):
-        return self.with_xy(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_xyz(self, *args, **kwargs):
-        return self.with_xyz(*args, **kwargs)

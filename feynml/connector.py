@@ -20,10 +20,6 @@ from smpl_util.util import withify
 cssutils.log.setLevel(logging.CRITICAL)
 
 
-
-
-
-
 @withify()
 @dataclass
 class Connector(Labeled, Bending, Styled, PDG):
@@ -31,25 +27,3 @@ class Connector(Labeled, Bending, Styled, PDG):
         default=None, metadata={"name": "momentum", "type": "Element"}
     )
     """Momentum of the connector"""
-    tension: Optional[float] = field(
-        default=None, metadata={"xml_attribute": True, "type": "Attribute"}
-    )
-    """Tension of the connector"""
-    length: Optional[float] = field(
-        default=None, metadata={"xml_attribute": True, "type": "Attribute"}
-    )
-    """Length of the connector"""
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_momentum(self, *args, **kwargs):
-        return self.with_momentum(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason='Use style="tension=".')
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_tension(self, *args, **kwargs):
-        return self.with_tension(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason='Use style="tension=".')
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_length(self, *args, **kwargs):
-        return self.with_length(*args, **kwargs)

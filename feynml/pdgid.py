@@ -100,15 +100,3 @@ class PDG(Identifiable):
     #    self.name = name
     #    self._sync()
     #    return self
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_pdgig(self, *args, **kwargs):
-        return self.with_pdgid(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_type(self, *args, **kwargs):
-        return self.with_type(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_name(self, *args, **kwargs):
-        return self.with_name(*args, **kwargs)

@@ -44,15 +44,3 @@ class Leg(Point, Targeting, Connector):
     def with_outgoing(self):
         self.sense = "outgoing"
         return self
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_external(self, *args, **kwargs):
-        return self.with_external(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_incoming(self, *args, **kwargs):
-        return self.with_incoming(*args, **kwargs)
-
-    @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_outgoing(self, *args, **kwargs):
-        return self.with_outgoing(*args, **kwargs)
