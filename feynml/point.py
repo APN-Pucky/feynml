@@ -8,10 +8,7 @@ import cssutils
 from cssselect import GenericTranslator, SelectorError
 from lxml import etree
 from particle import Particle
-from feynml.momentum import Momentum
-from feynml.pdgid import PDG
 from feynml.style import Bending, Labeled, Styled, Texted
-
 
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
@@ -20,36 +17,45 @@ from smpl_util.util import withify
 cssutils.log.setLevel(logging.CRITICAL)
 
 
-
-
-
-
-@withify()
 @dataclass
-class Connector(Labeled, Bending, Styled, PDG):
-    momentum: Optional[Momentum] = field(
-        default=None, metadata={"name": "momentum", "type": "Element"}
-    )
-    """Momentum of the connector"""
-    tension: Optional[float] = field(
+class Point:
+    x: Optional[float] = field(
         default=None, metadata={"xml_attribute": True, "type": "Attribute"}
     )
-    """Tension of the connector"""
-    length: Optional[float] = field(
+    """x coordinate"""
+    y: Optional[float] = field(
         default=None, metadata={"xml_attribute": True, "type": "Attribute"}
     )
-    """Length of the connector"""
+    """y coordinate"""
+    z: Optional[float] = field(
+        default=None, metadata={"xml_attribute": True, "type": "Attribute"}
+    )
+    """z coordinate"""
+
+    def with_point(self, p):
+        self.x = float(p.x)
+        self.y = float(p.y)
+        return self
+
+    def with_xy(self, x, y):
+        self.x = float(x)
+        self.y = float(y)
+        return self
+
+    def with_xyz(self, x, y, z):
+        self.x = float(x)
+        self.y = float(y)
+        self.z = float(z)
+        return self
 
     @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_momentum(self, *args, **kwargs):
-        return self.with_momentum(*args, **kwargs)
+    def set_point(self, *args, **kwargs):
+        return self.with_point(*args, **kwargs)
 
-    @deprecated(version="2.0.7.1", reason='Use style="tension=".')
     @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_tension(self, *args, **kwargs):
-        return self.with_tension(*args, **kwargs)
+    def set_xy(self, *args, **kwargs):
+        return self.with_xy(*args, **kwargs)
 
-    @deprecated(version="2.0.7.1", reason='Use style="tension=".')
     @deprecated(version="2.0.7.1", reason="Use with...().")
-    def set_length(self, *args, **kwargs):
-        return self.with_length(*args, **kwargs)
+    def set_xyz(self, *args, **kwargs):
+        return self.with_xyz(*args, **kwargs)

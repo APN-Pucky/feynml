@@ -13,14 +13,12 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from pyfeyn2.particles import get_either_particle
-from pyfeyn2.types import get_default_sheet
+
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)
-
 
 
 @dataclass
@@ -33,6 +31,7 @@ class Bending:
     def with_bend(self, bend):
         self.bend = bend
         return self
+
 
 @withify()
 @dataclass
@@ -59,6 +58,7 @@ class Labeled:
     @deprecated(version="2.0.7.1", reason="Use with...().")
     def set_label(self, *args, **kwargs):
         return self.with_label(*args, **kwargs)
+
 
 CSSString = cssutils.css.CSSStyleDeclaration
 CSSSheet = cssutils.css.CSSStyleSheet
