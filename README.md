@@ -9,14 +9,12 @@ FeynML is a project to develop an XML dialect for describing Feynman diagrams as
 
 [![test][a t image]][a t link]     [![Coverage Status][c t i]][c t l] [![Codacy Badge][cc c i]][cc c l]  [![Codacy Badge][cc q i]][cc q l]  [![Documentation][rtd t i]][rtd t l]
 
-## Dependencies
-
-*   libmagickwand-dev (to display pdfs in a jupyter-notebook, might require a policy change of the imagemagick config for PDFs, see Troubleshooting)
-*   ghostscript
-*   latexmk
-*   (feynmp-auto/feynmf)
-
 ## Installation
+```sh
+pip install [--user] feynml
+```
+
+or from cloned source:
 
 ```sh
 poerty install --with docs --with dev
@@ -25,8 +23,8 @@ poetry shell
 
 ## Documentation
 
-*   <https://pyfeyn2.readthedocs.io/en/stable/>
-*   <https://apn-pucky.github.io/pyfeyn2/index.html>
+*   <https://feynml.readthedocs.io/en/stable/>
+*   <https://apn-pucky.github.io/feynml/index.html>
 
 ## Similar Feynman diagram rendering project:
 
