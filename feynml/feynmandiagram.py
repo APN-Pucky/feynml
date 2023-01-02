@@ -6,14 +6,18 @@ from typing import List, Optional, Union
 import cssutils
 from cssselect import GenericTranslator, SelectorError
 from lxml import etree
-from feynml.connector import Identifiable, Leg, Propagator, Vertex
+from feynml.id import Identifiable
+from feynml.leg import Leg
+from feynml.propagator import Propagator
 from feynml.style import CSSSheet, Styled
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from types import get_default_sheet
+from .types import get_default_sheet
 from smpl_util.util import withify
+
+from feynml.vertex import Vertex
 
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)

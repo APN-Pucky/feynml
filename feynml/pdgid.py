@@ -5,7 +5,7 @@ from typing import Optional
 from particle import Particle
 from feynml.id import Identifiable
 
-from particles import get_either_particle
+from .particles import get_either_particle
 from smpl_util.util import withify
 
 

@@ -4,7 +4,10 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from pyfeyn2.feynmandiagram import FeynmanDiagram, Leg, Propagator, Vertex
+from feynml.feynmandiagram import FeynmanDiagram
+from feynml.leg import Leg
+from feynml.propagator import Propagator
+from feynml.vertex import Vertex
 
 
 def test_print_as_xml():

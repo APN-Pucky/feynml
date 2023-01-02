@@ -29,9 +29,9 @@ class Tool:
     class Meta:
         name = "tool"
 
-    name: Optional[str] = field(default="pyfeyn2", metadata={"type": "Element"})
+    name: Optional[str] = field(default="feynml", metadata={"type": "Element"})
     version: Optional[str] = field(
-        default=version("pyfeyn2"), metadata={"type": "Element"}
+        default=version("feynml"), metadata={"type": "Element"}
     )
 
 
@@ -77,7 +77,7 @@ class FeynML:
         elif self.version > feynml_version:
             warnings.warn("FeynML version is newer than this parser.")
 
-        self.head.metas.append(Meta("pyfeyn2", version("pyfeyn2")))
+        self.head.metas.append(Meta("feynml", version("feynml")))
 
     head: Optional[Head] = field(
         default=Head(), metadata={"name": "head", "namespace": "", "type": "Element"}

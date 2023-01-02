@@ -3,7 +3,7 @@ from typing import Optional
 
 from feynml.momentum import Momentum
 from feynml.pdgid import PDG
-from feynml.style import Bending, Labeled, Styled, Texted
+from feynml.style import Labeled, Styled
 
 
 from smpl_util.util import withify
@@ -11,7 +11,7 @@ from smpl_util.util import withify
 
 @withify()
 @dataclass
-class Connector(Labeled, Bending, Styled, PDG):
+class Connector(Labeled, Styled, PDG):
     momentum: Optional[Momentum] = field(
         default=None, metadata={"name": "momentum", "type": "Element"}
     )

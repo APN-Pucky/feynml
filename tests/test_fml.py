@@ -4,20 +4,15 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
+from feynml.feynmandiagram import FeynmanDiagram
+from feynml.feynml import FeynML, Head, Meta
+from feynml.leg import Leg
+from feynml.momentum import Momentum
+from feynml.propagator import Propagator
+from feynml.vertex import Vertex
+
 # Load an FML file and check that it is the same as the original
 # FeynmanDiagram object
-from pyfeyn2.feynmandiagram import (
-    FeynmanDiagram,
-    FeynML,
-    Head,
-    Leg,
-    Meta,
-    Momentum,
-    Propagator,
-    Tool,
-    Vertex,
-)
-from pyfeyn2.render.pyx.pyxrender import PyxRender
 
 
 def test_fml_print():
@@ -50,13 +45,6 @@ def test_fml_load():
     parser = XmlParser()
     fd = parser.from_string(xml_string, FeynML)
     print(fd)
-
-
-def test_fml_plot():
-    xml_string = Path("tests/test.fml").read_text()
-    parser = XmlParser()
-    fml = parser.from_string(xml_string, FeynML)
-    PyxRender(fml.diagrams[0]).render()
 
 
 def test_fml_css():
