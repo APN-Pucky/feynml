@@ -76,7 +76,7 @@ class Styled:
 
     @deprecated("0.0.0", "use put_styles")
     def put_style(self, key, value):
-        return self.put_styles({key: value})
+        return self.put_styles(**{key: value})
 
     def put_styles(self, **kwargs):
         if self.style is not None:
