@@ -20,5 +20,3 @@ jobs:
             coveralls: true
             codacy-api-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
             test-pypi-token: ${{ secrets.test_pypi_token }}
-            test-gh-pages: true
-            gh-pages-folder: docs/build/html
