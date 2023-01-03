@@ -46,27 +46,17 @@ poetry shell
 [pypi link]: https://pypi.org/project/feynml/
 [pypi versions]: https://img.shields.io/pypi/pyversions/feynml.svg
 
-[a s image]: https://github.com/APN-Pucky/feynml/actions/workflows/stable.yml/badge.svg
-[a s link]: https://github.com/APN-Pucky/feynml/actions/workflows/stable.yml
 [a t link]: https://github.com/APN-Pucky/feynml/actions/workflows/test.yml
 [a t image]: https://github.com/APN-Pucky/feynml/actions/workflows/test.yml/badge.svg
 
-[cc s q i]: https://app.codacy.com/project/badge/Grade/135bae47c6344ab0bfb180135ea1db44?branch=stable
-[cc s q l]: https://www.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=APN-Pucky/feynml&amp;utm_campaign=Badge_Grade?branch=stable
-[cc s c i]: https://app.codacy.com/project/badge/Coverage/135bae47c6344ab0bfb180135ea1db44?branch=stable
-[cc s c l]: https://www.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=github.com&utm_medium=referral&utm_content=APN-Pucky/feynml&utm_campaign=Badge_Coverage?branch=stable
 
 [cc q i]: https://app.codacy.com/project/badge/Grade/135bae47c6344ab0bfb180135ea1db44
 [cc q l]: https://www.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=APN-Pucky/feynml&amp;utm_campaign=Badge_Grade
 [cc c i]: https://app.codacy.com/project/badge/Coverage/135bae47c6344ab0bfb180135ea1db44
 [cc c l]: https://www.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=github.com&utm_medium=referral&utm_content=APN-Pucky/feynml&utm_campaign=Badge_Coverage
 
-[c s i]: https://coveralls.io/repos/github/APN-Pucky/feynml/badge.svg?branch=stable
-[c s l]: https://coveralls.io/github/APN-Pucky/feynml?branch=stable
 [c t l]: https://coveralls.io/github/APN-Pucky/feynml?branch=master
 [c t i]: https://coveralls.io/repos/github/APN-Pucky/feynml/badge.svg?branch=master
 
-[rtd s i]: https://readthedocs.org/projects/pyfeyn2/badge/?version=stable
-[rtd s l]: https://pyfeyn2.readthedocs.io/en/stable/?badge=stable
 [rtd t i]: https://readthedocs.org/projects/pyfeyn2/badge/?version=latest
 [rtd t l]: https://pyfeyn2.readthedocs.io/en/latest/?badge=latest
