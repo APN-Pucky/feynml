@@ -6,7 +6,6 @@ from typing import List, Optional
 
 import cssutils
 from feynml.feynmandiagram import FeynmanDiagram
-from xsdata.formats.converter import  converter
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig

@@ -66,22 +66,33 @@ class Styled:
     def raw_style(self):
         return self.style.cssText.replace("\n", " ")
 
-    def get_style(self, key=None):
-        if self.style is None:
-            return None
-        if key is None:
-            return self.style
-        else:
-            return self.style.getProperty(key)
-
-    @deprecated("0.0.0", "use put_styles")
+    @deprecated("0.0.0", "use with_style_property")
     def put_style(self, key, value):
         return self.put_styles(**{key: value})
 
+    @deprecated("0.0.0", "use with_style_properties")
     def put_styles(self, **kwargs):
         if self.style is not None:
             for key, value in kwargs.items():
                 self.style.setProperty(key, value)
+        return self
+
+    def get_style_property(self, key):
+        if self.style is None:
+            return None
+        if self.style.getProperty(key) is not None:
+            return self.style.getProperty(key).value
+        else:
+            return None
+
+    def with_style_property(self, key, value):
+        if self.style is not None:
+            self.style.setProperty(key, value)
+        return self
+
+    def with_style_properties(self, **kwargs):
+        for key, value in kwargs.items():
+            self.put_style_properties(key, value)
         return self
 
     def with_style(self, style):
