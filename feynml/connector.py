@@ -19,16 +19,16 @@ class Connector(Labeled, Styled, PDG):
 
     def with_tension(self, tension: float):
         """Add tension to the connector"""
-        return self.put_styles(tension=tension)
+        return self.with_style_properties(tension=tension)
 
     def get_tension(self):
         """Get tension of the connector"""
-        return self.get_style("tension")
+        return self.get_style_property("tension")
 
     def with_length(self, length: float):
         """Add length to the connector"""
-        return self.put_styles(length=length)
+        return self.with_styles_properties(length=length)
 
     def get_length(self):
         """Get length of the connector"""
-        return self.get_style("length")
+        return self.get_style_property("length")
