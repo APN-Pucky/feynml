@@ -1,9 +1,9 @@
-from feynml.propagator import Propagator
-from feynml.vertex import Vertex
 from pyhepmc import GenEvent
 
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.leg import Leg
+from feynml.propagator import Propagator
+from feynml.vertex import Vertex
 
 
 def _vertex_id_wrap(idd):

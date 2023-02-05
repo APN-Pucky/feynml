@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from smpl_util.util import withify
 
 from feynml.sourcing import Sourcing

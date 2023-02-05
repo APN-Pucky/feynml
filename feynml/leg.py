@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+from smpl_util.util import withify
+
 from feynml.connector import Connector
 from feynml.point import Point
 from feynml.targeting import Targeting
-
-
-from smpl_util.util import withify
 
 
 @withify()

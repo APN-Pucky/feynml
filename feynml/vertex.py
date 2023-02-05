@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+from smpl_util.util import withify
+
 from feynml.id import Identifiable
 from feynml.point import Point
 from feynml.style import Labeled, Styled
-
-from smpl_util.util import withify
 
 
 @withify()

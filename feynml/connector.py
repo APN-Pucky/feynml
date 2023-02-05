@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+from smpl_util.util import withify
+
 from feynml.momentum import Momentum
 from feynml.pdgid import PDG
 from feynml.style import Labeled, Styled
-
-
-from smpl_util.util import withify
 
 
 @withify()

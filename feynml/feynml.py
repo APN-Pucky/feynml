@@ -5,11 +5,11 @@ from importlib.metadata import version
 from typing import List, Optional
 
 import cssutils
-from feynml.feynmandiagram import FeynmanDiagram
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
+from feynml.feynmandiagram import FeynmanDiagram
 
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)

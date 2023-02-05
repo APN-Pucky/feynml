@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+
 @dataclass
 class Sourcing:
     source: Optional[str] = field(default="", metadata={})
