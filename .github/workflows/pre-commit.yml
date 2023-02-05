@@ -1,0 +1,18 @@
+name: pre-commit
+
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v3
+    # install poetry dynammic versioning
+    - name: Install poetry-dynamic-versioning
+      run: |
+        pip install poetry-dynamic-versioning
+    - uses: pre-commit/action@v3.0.0
