@@ -91,7 +91,7 @@ class Styled:
 
     def with_style_properties(self, **kwargs):
         for key, value in kwargs.items():
-            self.put_style_properties(key, value)
+            self.with_style_property(key, value)
         return self
 
     def with_style(self, style):
