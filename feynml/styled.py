@@ -10,16 +10,6 @@ from xsdata.formats.converter import Converter, converter
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)
 
-
-@withify()
-@dataclass
-class Labeled:
-    label: Optional[str] = field(
-        default=None, metadata={"xml_attribute": True, "type": "Attribute"}
-    )
-    """Label the object"""
-
-
 CSSString = cssutils.css.CSSStyleDeclaration
 CSSSheet = cssutils.css.CSSStyleSheet
 

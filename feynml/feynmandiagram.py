@@ -14,7 +14,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from feynml.id import Identifiable
 from feynml.leg import Leg
 from feynml.propagator import Propagator
-from feynml.style import CSSSheet, Styled
+from feynml.styled import CSSSheet, Styled
 from feynml.vertex import Vertex
 
 from .types import get_default_sheet

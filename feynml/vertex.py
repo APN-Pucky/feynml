@@ -4,8 +4,9 @@ from typing import Optional
 from smpl_util.util import withify
 
 from feynml.id import Identifiable
+from feynml.labeled import Labeled
 from feynml.point import Point
-from feynml.style import Labeled, Styled
+from feynml.styled import Styled
 
 
 @withify()

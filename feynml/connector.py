@@ -3,9 +3,10 @@ from typing import Optional
 
 from smpl_util.util import withify
 
+from feynml.labeled import Labeled
 from feynml.momentum import Momentum
 from feynml.pdgid import PDG
-from feynml.style import Labeled, Styled
+from feynml.styled import Styled
 
 
 @withify()
@@ -26,7 +27,7 @@ class Connector(Labeled, Styled, PDG):
 
     def with_length(self, length: float):
         """Add length to the connector"""
-        return self.with_styles_properties(length=length)
+        return self.with_style_properties(length=length)
 
     def get_length(self):
         """Get length of the connector"""
