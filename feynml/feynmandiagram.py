@@ -56,6 +56,10 @@ class FeynmanDiagram(Styled, Identifiable):
             "namespace": "",
         },
     )
+    # external_sheet is used to store the sheet from the file
+    # so that we can use it to update the sheet.
+    # It is not saved to the fml file.
+    external_sheet: CSSSheet = None
 
     def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
         for a in fd_all:
@@ -156,11 +160,12 @@ class FeynmanDiagram(Styled, Identifiable):
     def _get_style(self, lambdaselector) -> cssutils.css.CSSStyleDeclaration:
 
         ret = []
-
+        sheets = []
         if self.default_style:
-            sheets = [get_default_sheet(), self.sheet]
-        else:
-            sheets = [self.sheet]
+            sheets += [get_default_sheet()]
+        sheets += [self.sheet]
+        if self.external_sheet:
+            sheets += [self.external_sheet]
         for sheet in sheets:
             idd = []
             cls = []
