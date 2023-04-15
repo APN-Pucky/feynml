@@ -3,9 +3,9 @@ import warnings
 from dataclasses import dataclass, field
 from importlib.metadata import version
 from typing import List, Optional
-from smpl_doc import doc
 
 import cssutils
+from smpl_doc import doc
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
@@ -17,7 +17,6 @@ cssutils.log.setLevel(logging.CRITICAL)
 
 
 feynml_version = version("feynml")
-
 
 
 @dataclass
@@ -61,7 +60,7 @@ class Head:
 
     style: Optional[str] = field(default="", metadata={"type": "Element"})
 
-    def get_meta_dict(self) -> dict[str,str]:
+    def get_meta_dict(self):
         """
         Return a dictionary of meta tags.
         """
