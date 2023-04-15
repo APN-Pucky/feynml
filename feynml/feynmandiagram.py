@@ -127,6 +127,14 @@ class FeynmanDiagram(Styled, Identifiable):
         self.sheet = cssutils.parseString(rules)
         return self
 
+    def get_style_property(self, obj, property_name):
+        style = self.get_style(obj)
+        p = style.getProperty(property_name)
+        if p is None:
+            return None
+        else:
+            return p.value
+
     def get_style(self, obj) -> cssutils.css.CSSStyleDeclaration:
         """Get the style of an object.
 

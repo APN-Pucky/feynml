@@ -12,7 +12,7 @@ default_sheet = cssutils.parseString(
         /*************************************************************************/
 
         diagram {
-            direction: right;
+            direction : right;
             layout : neato;
         }
 
