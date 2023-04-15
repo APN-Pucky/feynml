@@ -3,6 +3,7 @@ import warnings
 from dataclasses import dataclass, field
 from importlib.metadata import version
 from typing import List, Optional
+from smpl_doc import doc
 
 import cssutils
 from xsdata.formats.dataclass.parsers import XmlParser
@@ -15,13 +16,19 @@ from feynml.feynmandiagram import FeynmanDiagram
 cssutils.log.setLevel(logging.CRITICAL)
 
 
-feynml_version = "0.0"
+feynml_version = version("feynml")
+
 
 
 @dataclass
 class Tool:
     class Meta:
         name = "tool"
+
+    # Deprecated to stay closer to html meta tags
+    @doc.deprecated("0.1.3", "Use feynml.feynml.Meta instead.")
+    def __init__(*args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     name: Optional[str] = field(default="feynml", metadata={"type": "Element"})
     version: Optional[str] = field(
@@ -53,6 +60,12 @@ class Head:
     description: Optional[str] = field(default="", metadata={"type": "Element"})
 
     style: Optional[str] = field(default="", metadata={"type": "Element"})
+
+    def get_meta_dict(self) -> dict[str,str]:
+        """
+        Return a dictionary of meta tags.
+        """
+        return {m.name: m.content for m in self.metas}
 
 
 @dataclass
