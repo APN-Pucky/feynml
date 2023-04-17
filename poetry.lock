@@ -2478,18 +2478,19 @@ testing = ["docopt", "pytest (<6.0.0)"]
 
 [[package]]
 name = "particle"
-version = "0.21.2"
+version = "0.22.0"
 description = "Extended PDG particle data and MC identification codes"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "particle-0.21.2-py3-none-any.whl", hash = "sha256:b85aa51b4e993e58f672c61d8e43d03f0b45f072751868ec2f88f4f1d58c0e18"},
-    {file = "particle-0.21.2.tar.gz", hash = "sha256:0434d39aab4fc72bce452a11f822736f95937c5f4116b0e831254ebcef6cfcdb"},
+    {file = "particle-0.22.0-py3-none-any.whl", hash = "sha256:b2bb8b4579372c5a8f5340dd98b72a1f95dfa3a41d41c3cd98ec2549370d474a"},
+    {file = "particle-0.22.0.tar.gz", hash = "sha256:567bb3017cb7526f9c9ef4399e9ba5acbdb5b9ce93eb18e4da6479d3181c93a5"},
 ]
 
 [package.dependencies]
 attrs = ">=19.2"
+deprecated = "*"
 hepunits = ">=2.0.0"
 importlib-resources = {version = ">=2.0", markers = "python_version < \"3.9\""}
 
