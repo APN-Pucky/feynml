@@ -3643,15 +3643,18 @@ deprecation = "*"
 
 [[package]]
 name = "smpl-io"
-version = "1.0.6"
+version = "1.1.0"
 description = "simple input and output for python"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "smpl_io-1.0.6-py3-none-any.whl", hash = "sha256:29b948deacaf726385f00da1763f3b606b56e25261e0d3ec098115b7a4219472"},
-    {file = "smpl_io-1.0.6.tar.gz", hash = "sha256:cb5811576e0ab8a0b2c972b3c763fa90927f44ffe3c4b1ec1a52c2c915f42736"},
+    {file = "smpl_io-1.1.0-py3-none-any.whl", hash = "sha256:c3d02775cbff67b38134694cd2a5d9e83bd1f36e1dc93754d34b1fba87d3bc34"},
+    {file = "smpl_io-1.1.0.tar.gz", hash = "sha256:b4180d9a6a753b57e3cf6fe895fe66803f91ed568705bdafad20ac041c5749c8"},
 ]
+
+[package.dependencies]
+smpl_doc = "*"
 
 [[package]]
 name = "smpl-util"
