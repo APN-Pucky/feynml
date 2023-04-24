@@ -33,7 +33,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 pyhepmc = "*" # for testing
 pyqgraf = ">=0.0.3" # for testing
-pre-commit = "^2.20.0"
+pre-commit = ">=2.20,<4.0"
 pytest = "*"
 pytest-cov =  "*"
 pytest-profiling =  "*"
