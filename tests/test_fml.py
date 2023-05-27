@@ -53,6 +53,13 @@ def test_fml_css():
             print("tot", l.style.cssText)
     print(fml.to_xml())
 
+    assert (
+        fml.get_style_property(
+            fml.diagrams[0].get(lambda a: a.type == "fermion")[0], "color"
+        )
+        == "green"
+    )
+
 
 test_fml_print()
 # test_fml_load()

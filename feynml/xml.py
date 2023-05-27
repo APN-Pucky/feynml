@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import smpl_io.io as io
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
@@ -21,4 +22,4 @@ class XML:
     @classmethod
     def from_xml_file(cls, file: str):
         """Load self from XML file."""
-        return cls.from_xml(Path(file).read_text())
+        return cls.from_xml(io.read(file))

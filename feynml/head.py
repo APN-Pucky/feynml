@@ -35,6 +35,7 @@ class Head(SheetHandler):
         metadata={"name": "link", "namespace": ""},
     )
     cached_links = {}
+    root = "."  # root directory for relative links
     title: Optional[str] = field(default=None, metadata={"type": "Element"})
 
     # description: Optional[str] = field(default="", metadata={"type": "Element"})
@@ -56,12 +57,14 @@ class Head(SheetHandler):
         """
         ret = {}
         for m in self.links:
-            if m.ref in self.cached_links and cached:
-                ret[m.ref] = self.cached_links[m.ref]
+            if m.rel in self.cached_links and cached:
+                ret[m.rel] = self.cached_links[m.rel]
             else:
-                ret[m.ref] = io.read(m.href)
+                ret[m.rel] = io.read(self.root + m.href)
+                if m.rel == "stylesheet":
+                    ret[m.rel] = cssutils.parseString(ret[m.rel])
                 if cache:
-                    self.cached_links[m.ref] = ret[m.ref]
+                    self.cached_links[m.rel] = ret[m.rel]
         return ret
 
     def get_meta_dict(self):

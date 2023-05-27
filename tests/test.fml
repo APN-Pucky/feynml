@@ -4,6 +4,7 @@
    <meta name="creator" value="PyFeyn"/>
    <meta name="tool" value="PyFeyn2"/>
    <meta name="description" value="A sample diagram showing a QCD correction to the Drell-Yan process."/>
+   <link rel="stylesheet" type="text/css" href="test_styles.css"/>
  </head>
  <diagram legs="4">
    <vertex id="V0" x="-2.0" y="0.0">

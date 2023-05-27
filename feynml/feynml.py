@@ -1,10 +1,12 @@
 import logging
+import os
 import warnings
 from dataclasses import dataclass, field
 from importlib.metadata import version
 from typing import List, Optional
 
 import cssutils
+import smpl_io.io as io
 from smpl_doc import doc
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
@@ -59,6 +61,13 @@ class FeynML(SheetHandler, XML):
         metadata={"name": "diagram", "type": "Element", "namespace": ""},
     )
 
+    def get_root(self):
+        return self.head.root
+
+    def with_root(self, root):
+        self.head.root = root
+        return self
+
     def get_diagram(self, idd):
         for d in self.diagrams:
             if d.id == idd:
@@ -83,3 +92,16 @@ class FeynML(SheetHandler, XML):
     def with_sheet(self, sheet):
         self.head.with_sheet(sheet)
         return self
+
+    @classmethod
+    def from_xml_file(cls, file: str):
+        """Load self from XML file."""
+        # get parent directory of file
+        r = cls.from_xml(io.read(file))
+        # check if file exists
+        if os.path.isfile(file):
+            r.head.root = os.path.dirname(file) + "/"
+        elif file.startswith("http"):
+            # remove last file in url
+            r.head.root = "/".join(file.split("/")[:-1]) + "/"
+        return r

@@ -74,6 +74,17 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                     return True
         return False
 
+    def get(self, lmbda):
+        ret = []
+        for l in [self.propagators, self.vertices, self.legs]:
+            for a in l:
+                try:
+                    if lmbda(a):
+                        ret.append(a)
+                except:
+                    pass
+        return ret
+
     def get_point(self, idd):
         for v in self.vertices:
             if v.id == idd:
