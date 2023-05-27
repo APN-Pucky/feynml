@@ -1,19 +1,30 @@
+import pyhepmc
 from pyhepmc import GenEvent
 
 from feynml.feynmandiagram import FeynmanDiagram
+from feynml.feynml import FeynML, Head, Meta
 from feynml.leg import Leg
 from feynml.propagator import Propagator
 from feynml.vertex import Vertex
 
+from .util import leg_id_wrap, propagator_id_wrap, vertex_id_wrap
 
-def _vertex_id_wrap(idd):
-    return "Vertex" + str(idd).replace("-", "m")
+# TODO add momenta?
 
 
-def event_to_feynman(event: GenEvent):
+def hepmc_event_to_feynman(event: GenEvent) -> FeynmanDiagram:
+    """
+    Convert a GenEvent to a FeynmanDiagram.
+
+    Args:
+        event: The GenEvent to convert.
+
+    Returns:
+        A FeynmanDiagram object.
+    """
     fd = FeynmanDiagram()
     for v in event.vertices:
-        v = Vertex(id=_vertex_id_wrap(v.id))
+        v = Vertex(id=vertex_id_wrap(v.id))
         fd.add(v)
     for p in event.particles:
         # TODO first create all vertices?
@@ -21,9 +32,9 @@ def event_to_feynman(event: GenEvent):
             # incoming Leg
             fd.add(
                 Leg(
-                    id="Leg" + str(p.id).replace("-", "m"),
+                    id=leg_id_wrap(p.id),
                     pdgid=p.pid,
-                    target=_vertex_id_wrap(p.end_vertex.id),
+                    target=vertex_id_wrap(p.end_vertex.id),
                     sense="incoming",
                 )
             )
@@ -31,9 +42,9 @@ def event_to_feynman(event: GenEvent):
             # outgoing Leg
             fd.add(
                 Leg(
-                    id="Leg" + str(p.id).replace("-", "m"),
+                    id=leg_id_wrap(p.id),
                     pdgid=p.pid,
-                    target=_vertex_id_wrap(p.production_vertex.id),
+                    target=vertex_id_wrap(p.production_vertex.id),
                     sense="outgoing",
                 )
             )
@@ -41,15 +52,47 @@ def event_to_feynman(event: GenEvent):
             # Propagator
             fd.add(
                 Propagator(
-                    id="Propagator" + str(p.id).replace("-", "m"),
+                    id=propagator_id_wrap(p.id),
                     pdgid=p.pid,
-                    source=_vertex_id_wrap(p.production_vertex.id),
-                    target=_vertex_id_wrap(p.end_vertex.id),
+                    source=vertex_id_wrap(p.production_vertex.id),
+                    target=vertex_id_wrap(p.end_vertex.id),
                 )
             )
     return fd
 
 
-def hepmc_to_feynml(hepmc_file):
-    # TODO: use pyhepmc
-    pass
+def hepmc_to_feynml(
+    hepmc_file: str,
+    creator="pyfeyn2",
+    tool="pyfeyn2.interface.hepmc",
+    title="",
+    description="",
+) -> FeynML:
+    """
+    Convert a HepMC file to a FeynML object.
+
+    Args:
+        hepmc_file: The path to the HepMC file.
+        creator: The creator of the file.
+        tool: The tool used to create the file.
+        title: The title of the file.
+        description: The description of the file.
+
+    Returns:
+        A FeynML object.
+    """
+    fds = []
+    with pyhepmc.open(hepmc_file) as f:
+        for event in f:
+            fds.append(hepmc_event_to_feynman(event))
+    return FeynML(
+        diagrams=fds,
+        head=Head(
+            metas=[
+                Meta(name="creator", content=creator),
+                Meta(name="tool", content=tool),
+                Meta(name="description", content=description),
+                Meta(name="title", content=title),
+            ]
+        ),
+    )

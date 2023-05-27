@@ -56,7 +56,8 @@ class Head:
         default_factory=list,
         metadata={"name": "meta", "namespace": ""},
     )
-    description: Optional[str] = field(default="", metadata={"type": "Element"})
+    # title: Optional[str] = field(default="", metadata={"type": "Element"})
+    # description: Optional[str] = field(default="", metadata={"type": "Element"})
 
     style: Optional[str] = field(default="", metadata={"type": "Element"})
 
@@ -86,7 +87,8 @@ class FeynML:
         self.head.metas.append(Meta("feynml", version("feynml")))
 
     head: Optional[Head] = field(
-        default=Head(), metadata={"name": "head", "namespace": "", "type": "Element"}
+        default_factory=lambda: Head(),
+        metadata={"name": "head", "namespace": "", "type": "Element"},
     )
 
     diagrams: List[FeynmanDiagram] = field(

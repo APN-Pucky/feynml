@@ -1,0 +1,99 @@
+<LesHouchesEvents version="3.0">
+<!--
+file generated with POWHEG-BOX-V2
+Input file powheg.input contained:
+vdecaymode  1     ! Z decay products (default 2): 1 for electronic
+
+numevts 20000	! number of events to be generated
+ih1   1           ! hadron 1 (1 for protons, -1 for antiprotons)
+ih2   1           ! hadron 2 (1 for protons, -1 for antiprotons)
+ebeam1 2510d0      ! energy of beam 1
+ebeam2 2510d0      ! energy of beam 2
+
+
+bornktmin 0.25     !  (default 0d0) generation cut. Minimum kt in underlying Born
+##bornsuppfact 10d0 ! (default 0d0) mass param for Born suppression factor. If < 0 suppfact = 1
+
+
+! To be set only if using LHA pdfs
+lhans1 27100 ! pdf set for hadron 1 (LHA numbering)
+lhans2 27100 ! pdf set for hadron 2 (LHA numbering)	
+
+! Parameters to allow or not the use of stored data
+use-old-grid    1 ! if 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
+use-old-ubound  1 ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; <>
+
+ncall1 10000    ! number of calls for initializing the integration grid
+itmx1    2      ! number of iterations for initializing the integration grid
+ncall2 10000     ! number of calls for computing the integral and finding upper bounding envelope
+itmx2    2      ! number of iterations for computing the integral and finding upper bouding envelope
+foldcsi   1     ! number of folds on csi integration
+foldy    1     ! number of folds on  y  integration
+foldphi   1     ! number of folds on phi integration
+nubound 30000  ! number of calls to set up the upper bounding norms for radiation
+
+! OPTIONAL PARAMETERS
+
+min_Z_mass 0.5
+max_Z_mass 10
+##runningscale 0
+
+alphas_from_pdf 1
+pdf_cutoff_fact 0.01d0
+#bornonly 1
+#LOevents 1
+
+storemintupb 1
+
+!! parallel
+iseed 10103        ! initialize random number sequence
+manyseeds 1
+parallelstage 4
+xgriditeration 2
+maxseeds 2000
+clobberlhe 1
+
+!! shower/analysis param
+NoPythia 0
+NoRivet 0
+QEDShower 0
+QCDShower 1
+hadronization 1
+mpi 0
+pythiaHepMC 1
+HepMCEventOutput 0
+HepMCEventInput 0
+rivetAnalysis "ALICE_2020_I1797621"
+rivetAnalysis1 "ALICE_2020_I1797621:PHOTON_Z=1"
+rivetAnalysis2 "POWHEG_2023_DILEPTONS"
+rivetWeight 0
+End of powheg.input content
+PDF package: lha
+ Random number generator initialized with:         1000             0             0
+-->
+<init>
+     2212     2212  2.51000E+03  2.51000E+03     -1     -1     -1     -1     -4      1
+  4.37712E+06  1.47821E+04  1.00000E+00  10001
+</init>
+<event>
+      6  10001  1.68713E+07  8.94427E-01 -1.00000E+00  6.65838E-01
+       2    -1     0     0   501     0  0.000000000E+00  0.000000000E+00  1.749324861E+02  1.749324861E+02  0.000000000E+00  0.00000E+00  9.000E+00
+      21    -1     0     0   502   501  0.000000000E+00  0.000000000E+00 -1.592747830E-03  1.592747830E-03  0.000000000E+00  0.00000E+00  9.000E+00
+      23     2     1     2     0     0 -2.408277128E-01  1.052626414E-01  1.565325189E+02  1.565338272E+02  5.835294129E-01  0.00000E+00  9.000E+00
+      11     1     3     3     0     0  7.521133062E-02  1.659522570E-01  1.774845055E+01  1.774938573E+01  5.110000000E-04  0.00000E+00  9.000E+00
+     -11     1     3     3     0     0 -3.160390434E-01 -6.068961564E-02  1.387840684E+02  1.387844415E+02  5.110000000E-04  0.00000E+00  9.000E+00
+       2     1     1     2   502     0  2.408277128E-01 -1.052626414E-01  1.839837441E+01  1.840025160E+01  0.000000000E+00  0.00000E+00  9.000E+00
+#rwgt            1          24   6209355.4982931120             1000         419           0
+</event>
+<event>
+      6  10001 -1.68713E+07  8.94427E-01 -1.00000E+00  6.63949E-01
+      -4    -1     0     0     0   502  0.000000000E+00  0.000000000E+00  9.983585819E-01  9.983585819E-01  0.000000000E+00  0.00000E+00  9.000E+00
+      21    -1     0     0   502   501  0.000000000E+00  0.000000000E+00 -7.764707284E-01  7.764707284E-01  0.000000000E+00  0.00000E+00  9.000E+00
+      23     2     1     2     0     0 -2.586998664E-01 -1.510185871E-01  6.026979797E-01  1.290320707E+00  1.100886206E+00  0.00000E+00  9.000E+00
+      11     1     3     3     0     0 -6.211468495E-01 -2.712056290E-01  1.429668701E-01  6.926872952E-01  5.110000000E-04  0.00000E+00  9.000E+00
+     -11     1     3     3     0     0  3.624469831E-01  1.201870419E-01  4.597311097E-01  5.976334118E-01  5.110000000E-04  0.00000E+00  9.000E+00
+      -4     1     1     2     0   501  2.586998664E-01  1.510185871E-01 -3.808101262E-01  4.845086034E-01  0.000000000E+00  0.00000E+00  9.000E+00
+#rwgt            1           3  -1231479.7875413459             1000        4036           0
+</event>
+</LesHouchesEvents>
+ #Random number generator exit values:         1000      58113976             0

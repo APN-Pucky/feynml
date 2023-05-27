@@ -31,13 +31,10 @@ def test_fml_print():
     fml = FeynML(
         head=Head(
             metas=[Meta(name="pyfeyn2", content="test")],
-            description="Simple single test diagram",
         ),
         diagrams=[fd],
     )
-    config = SerializerConfig(pretty_print=True)
-    serializer = XmlSerializer(config=config)
-    print(serializer.render(fml))
+    print(fml.to_xml())
 
 
 def test_fml_load():

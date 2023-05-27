@@ -1,13 +1,17 @@
 import pyhepmc
 
-from feynml.interface.hepmc import event_to_feynman
+from feynml.interface.hepmc import hepmc_event_to_feynman, hepmc_to_feynml
 
 
-def test_hepmc():
+def test_hepmc_to_feynman():
     with pyhepmc.open("tests/example.HepMC") as f:
         for event in f:
-            event_to_feynman(event)
+            hepmc_event_to_feynman(event)
             break
 
 
-test_hepmc()
+def test_hepmc_to_feynml():
+    hepmc_to_feynml("tests/example.HepMC")
+
+
+test_hepmc_to_feynman()
