@@ -17,12 +17,3 @@ repos:
     hooks:
       - id: isort
         args: ["--profile", "black"]
-  - repo: local
-    hooks:
-      - id: make-test
-        name: make-test
-        entry: bash -c 'make test'
-        args: ["api/"]
-        language: system
-        types: [python]
-        pass_filenames: false

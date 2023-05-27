@@ -92,3 +92,6 @@ class Styled:
     def with_class(self, clazz):
         self.clazz = clazz
         return self
+
+    def with_color(self, color):
+        return self.with_style_property("color", color)
