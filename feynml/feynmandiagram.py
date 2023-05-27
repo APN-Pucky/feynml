@@ -26,14 +26,9 @@ cssutils.log.setLevel(logging.CRITICAL)
 
 @withify()
 @dataclass
-class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
+class FeynmanDiagram(SheetHandler, XML, Identifiable):
     class Meta:
         name = "diagram"
-
-    default_style: Optional[bool] = field(
-        default=True,
-        metadata={"name": "default_style", "xml_attribute": True, "type": "Attribute"},
-    )
 
     propagators: List[Propagator] = field(
         default_factory=list,
@@ -53,7 +48,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     sheet: CSSSheet = field(
         default_factory=lambda: cssutils.parseString(""),
         metadata={
-            "name": "sheet",
+            "name": "style",
             "xml_attribute": True,
             "type": "Attribute",
             "namespace": "",
@@ -131,18 +126,12 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             max_y = max(max_y, leg.y)
         return min_x, min_y, max_x, max_y
 
-    @doc.append_doc(Head.get_style_property)
-    def get_style_property(self, obj, property_name):
-        if self.parent_fml is not None:
-            return self.parent_fml.get_style_property(obj, property_name)
-        else:
-            warnings.warn("No parent fml, returning default style")
-            return super().get_style_property(obj, property_name, self)
-
     @doc.append_doc(Head.get_style)
-    def get_style(self, obj) -> cssutils.css.CSSStyleDeclaration:
+    def get_style(self, obj, xml: XML = None) -> cssutils.css.CSSStyleDeclaration:
         if self.parent_fml is not None:
-            return self.parent_fml.get_style(obj)
+            return self.parent_fml.get_style(obj, xml)
+        elif xml is not None:
+            return super().get_style(obj, xml)
         else:
             warnings.warn("No parent fml, returning default style")
             return super().get_style(obj, self)

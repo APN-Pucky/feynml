@@ -16,10 +16,10 @@ cssselect ="*"
 #ipyparallel = "*"
 deprecated = "*"
 deprecation = "*"
-#smpl_io = "^1.1.2"
-smpl_io = {path= "../smpl_io", develop = true}
-#smpl_doc = "^1.1.3"
-smpl_doc = {path= "../smpl_doc", develop = true}
+smpl_io = "^1.1.2"
+#smpl_io = {path= "../smpl_io", develop = true}
+smpl_doc = "^1.1.3"
+#smpl_doc = {path= "../smpl_doc", develop = true}
 smpl_util= "*"
 
 pyqgraf = {version = ">=0.0.3", optional = true}

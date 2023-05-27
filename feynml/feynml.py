@@ -64,11 +64,10 @@ class FeynML(SheetHandler, XML):
                 return d
         return None
 
-    def get_style(self, obj):
-        return self.head.get_style(obj, self)
-
-    def get_style_property(self, obj, name):
-        return self.head.get_style_property(obj, name, self)
+    def get_style(self, obj, xml=None):
+        if xml is None:
+            xml = self
+        return self.head.get_style(obj, xml)
 
     def get_sheets(self):
         return self.head.get_sheets()
