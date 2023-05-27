@@ -5,6 +5,7 @@ from importlib.metadata import version
 from typing import List, Optional, Union
 
 import cssutils
+import smpl_io.io as io
 from cssselect import GenericTranslator, SelectorError
 from lxml import etree
 
@@ -13,14 +14,15 @@ from feynml.leg import Leg
 from feynml.link import Link
 from feynml.meta import Meta as alias_meta
 from feynml.propagator import Propagator
+from feynml.sheet import SheetHandler
 from feynml.styled import CSSSheet, Styled
-from feynml.types import get_default_sheet
+from feynml.type import get_default_sheet
 from feynml.vertex import Vertex
 from feynml.xml import XML
 
 
 @dataclass
-class Head:
+class Head(SheetHandler):
     class Meta:
         name = "head"
 
@@ -68,118 +70,18 @@ class Head:
         """
         return {m.name: m.content for m in self.metas}
 
-    def get_style_property(self, obj, property_name, xml: XML = None):
-        """
-        Get a style property of an object.
-        """
-        style = self.get_style(obj, xml=xml)
-        p = style.getProperty(property_name)
-        if p is None:
-            return None
-        else:
-            return p.value
-
-    def get_style(self, obj, xml: XML = None) -> cssutils.css.CSSStyleDeclaration:
-        """
-        Get the style of an object.
-
-        This is prefered over accessing the style attribute directly, since it includes class and pdgid definitions.
-        """
-        # selectorText is string
-        css = []
-        # global style
-        if isinstance(obj, Identifiable):
-            css += [self._get_obj_style(obj, xml=xml)]
-        if isinstance(obj, Styled):
-            # specific attribute style
-            css += [obj.style]
-        return cssutils.css.CSSStyleDeclaration(
-            cssText=";".join([c.cssText for c in css])
-        )
-
-    def _get_obj_style(
-        self, obj: Identifiable, xml: XML = None
-    ) -> cssutils.css.CSSStyleDeclaration:
-        if xml is not None:
-            document = etree.XML(xml.to_xml().encode("ascii"))
-        else:
-            warnings.warn("No XML provided, using empty XML")
-            document = etree.XML("")
-
-        def lambdaselector(s, obj=obj, document=document):
-            try:
-                expression = GenericTranslator().css_to_xpath(s)
-            except SelectorError:
-                warnings.warn("Invalid selector: " + s)
-                return False
-            return obj.id in [e.get("id") for e in document.xpath(expression)]
-
-        return self._get_style(lambdaselector)
-
-    def _get_style(self, lambdaselector) -> cssutils.css.CSSStyleDeclaration:
-
-        ret = []
+    def get_sheets(self):
         sheets = []
-        if self.default_style:
-            sheets += [get_default_sheet()]
+        sheets += super().get_sheets()
         for k, v in self.get_link_dict().items():
             if k == "stylesheet":
                 sheets += [v]
-        if self.external_sheet:
-            sheets += [self.external_sheet]
-        sheets += [self.sheet]
-        for sheet in sheets:
-            idd = []
-            cls = []
-            rest = []
-            glob = []
-            for rule in sheet:
-                if rule.type == rule.STYLE_RULE:
-                    s = rule.selectorText
-                    if lambdaselector(s):
-                        if s.startswith("#"):
-                            idd.append(rule)
-                        elif s.startswith("["):
-                            rest.append(rule)
-                        elif s.startswith(":"):
-                            rest.append(rule)
-                        elif s.startswith("*"):
-                            glob.append(rule)
-                        elif "." in s:
-                            cls.append(rule)
-                        else:
-                            rest.append(rule)
-            ret += reversed(idd + cls + rest + glob)
-        # sort rules by priority
-        return cssutils.css.CSSStyleDeclaration(
-            cssText=";".join([r.style.cssText for r in ret])
-        )
+        sheets += [self.style]
+        return sheets
 
-    def add_rule(self, rule: str):
-        """
-        Add a rule to the style.
-        """
-        self.style.add(rule)
-        return self
+    def get_sheet(self):
+        return self.style
 
-    def add_rules(self, rules: str):
-        """
-        Add rules to the style.
-        """
-        self.style = cssutils.parseString(
-            self.style.cssText.decode("utf-8") + "\n" + rules
-        )
-        return self
-
-    def with_rule(self, rule: str):
-        """
-        Replace rules of the style.
-        """
-        return self.with_rules(rule)
-
-    def with_rules(self, rules: str):
-        """
-        Replace rules of the style.
-        """
-        self.style = cssutils.parseString(rules)
+    def with_sheet(self, sheet):
+        self.style = sheet
         return self

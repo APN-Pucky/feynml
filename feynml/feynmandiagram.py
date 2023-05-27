@@ -13,11 +13,12 @@ from feynml.head import Head
 from feynml.id import Identifiable
 from feynml.leg import Leg
 from feynml.propagator import Propagator
+from feynml.sheet import SheetHandler
 from feynml.styled import CSSSheet, Styled
 from feynml.vertex import Vertex
 from feynml.xml import XML
 
-from .types import get_default_sheet
+from .type import get_default_sheet
 
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)
@@ -25,7 +26,7 @@ cssutils.log.setLevel(logging.CRITICAL)
 
 @withify()
 @dataclass
-class FeynmanDiagram(XML, Styled, Identifiable):
+class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     class Meta:
         name = "diagram"
 
@@ -49,20 +50,15 @@ class FeynmanDiagram(XML, Styled, Identifiable):
 
     parent_fml = None
 
-    # sheet: CSSSheet = field(
-    #    default_factory=lambda: cssutils.parseString(""),
-    #    metadata={
-    #        "name": "sheet",
-    #        "xml_attribute": True,
-    #        "type": "Attribute",
-    #        "namespace": "",
-    #    },
-    # )
-
-    # external_sheet is used to store the sheet from the file
-    # so that we can use it to update the sheet.
-    # It is not saved to the fml file.
-    # external_sheet: CSSSheet = None
+    sheet: CSSSheet = field(
+        default_factory=lambda: cssutils.parseString(""),
+        metadata={
+            "name": "sheet",
+            "xml_attribute": True,
+            "type": "Attribute",
+            "namespace": "",
+        },
+    )
 
     def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
         for a in fd_all:
@@ -137,10 +133,30 @@ class FeynmanDiagram(XML, Styled, Identifiable):
 
     @doc.append_doc(Head.get_style_property)
     def get_style_property(self, obj, property_name):
-        self.parent_fml.get_style_property(obj, property_name)
-        return self
+        if self.parent_fml is not None:
+            return self.parent_fml.get_style_property(obj, property_name)
+        else:
+            warnings.warn("No parent fml, returning default style")
+            return super().get_style_property(obj, property_name, self)
 
     @doc.append_doc(Head.get_style)
     def get_style(self, obj) -> cssutils.css.CSSStyleDeclaration:
-        self.parent_fml.get_style(obj)
+        if self.parent_fml is not None:
+            return self.parent_fml.get_style(obj)
+        else:
+            warnings.warn("No parent fml, returning default style")
+            return super().get_style(obj, self)
+
+    def get_sheets(self):
+        if self.parent_fml is not None:
+            return self.parent_fml.get_sheets() + [self.sheet]
+        else:
+            warnings.warn("No parent fml, returning default sheet")
+            return super().get_sheets() + [self.sheet]
+
+    def get_sheet(self):
+        return self.sheet
+
+    def with_sheet(self, sheet):
+        self.sheet = sheet
         return self

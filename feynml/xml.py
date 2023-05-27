@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
@@ -15,3 +17,8 @@ class XML:
         """Load self from XML."""
         parser = XmlParser()
         return parser.from_string(xml, cls)
+
+    @classmethod
+    def from_xml_file(cls, file: str):
+        """Load self from XML file."""
+        return cls.from_xml(Path(file).read_text())

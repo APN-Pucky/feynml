@@ -1,9 +1,3 @@
-from pathlib import Path
-
-from xsdata.formats.dataclass.parsers import XmlParser
-from xsdata.formats.dataclass.serializers import XmlSerializer
-from xsdata.formats.dataclass.serializers.config import SerializerConfig
-
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.feynml import FeynML, Head, Meta
 from feynml.leg import Leg
@@ -38,16 +32,12 @@ def test_fml_print():
 
 
 def test_fml_load():
-    xml_string = Path("tests/test.fml").read_text()
-    parser = XmlParser()
-    fd = parser.from_string(xml_string, FeynML)
-    print(fd)
+    fml = FeynML.from_xml_file("tests/test.fml")
+    print(fml)
 
 
 def test_fml_css():
-    xml_string = Path("tests/test.fml").read_text()
-    parser = XmlParser()
-    fml = parser.from_string(xml_string, FeynML)
+    fml = FeynML.from_xml_file("tests/test.fml")
     for l in fml.diagrams[0].legs:
         if l.id == "E1":
             if l.style is None:
@@ -61,9 +51,7 @@ def test_fml_css():
             print("NE", l.style.opacity)
             print(l.style)
             print("tot", l.style.cssText)
-    config = SerializerConfig(pretty_print=True)
-    serializer = XmlSerializer(config=config)
-    print(serializer.render(fml))
+    print(fml.to_xml())
 
 
 test_fml_print()
