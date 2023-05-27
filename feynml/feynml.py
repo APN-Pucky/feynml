@@ -12,6 +12,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.head import Head
+from feynml.id import Identifiable
 from feynml.meta import Meta
 from feynml.sheet import SheetHandler
 from feynml.styled import CSSSheet
@@ -67,6 +68,10 @@ class FeynML(SheetHandler, XML):
     def get_style(self, obj, xml=None):
         if xml is None:
             xml = self
+        for d in self.diagrams:
+            if isinstance(obj, Identifiable):
+                if d.has_id(obj.id):
+                    return d.get_style(obj, xml)
         return self.head.get_style(obj, xml)
 
     def get_sheets(self):
@@ -76,5 +81,5 @@ class FeynML(SheetHandler, XML):
         return self.head.get_sheet()
 
     def with_sheet(self, sheet):
-        self.head.write_sheet(sheet)
+        self.head.with_sheet(sheet)
         return self

@@ -26,7 +26,7 @@ cssutils.log.setLevel(logging.CRITICAL)
 
 @withify()
 @dataclass
-class FeynmanDiagram(SheetHandler, XML, Identifiable):
+class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     class Meta:
         name = "diagram"
 
@@ -48,7 +48,7 @@ class FeynmanDiagram(SheetHandler, XML, Identifiable):
     sheet: CSSSheet = field(
         default_factory=lambda: cssutils.parseString(""),
         metadata={
-            "name": "style",
+            "name": "sheet",
             "xml_attribute": True,
             "type": "Attribute",
             "namespace": "",
@@ -66,6 +66,13 @@ class FeynmanDiagram(SheetHandler, XML, Identifiable):
             else:
                 raise Exception("Unknown type: " + str(type(a)) + " " + str(a))
         return self
+
+    def has_id(self, id):
+        for l in [self.propagators, self.vertices, self.legs]:
+            for a in l:
+                if a.id == id:
+                    return True
+        return False
 
     def get_point(self, idd):
         for v in self.vertices:
@@ -129,7 +136,7 @@ class FeynmanDiagram(SheetHandler, XML, Identifiable):
     @doc.append_doc(Head.get_style)
     def get_style(self, obj, xml: XML = None) -> cssutils.css.CSSStyleDeclaration:
         if self.parent_fml is not None:
-            return self.parent_fml.get_style(obj, xml)
+            return super().get_style(obj, self.parent_fml)
         elif xml is not None:
             return super().get_style(obj, xml)
         else:
