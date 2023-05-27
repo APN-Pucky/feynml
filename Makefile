@@ -10,7 +10,7 @@ pdf:
 doc: html
 
 install:
-	poetry install --with docs --with dev --with test --extras "interfaces"
+	poetry install --with dev --with test --extras "interfaces"
 	python3 -m pip install --user .
 
 build:

@@ -1,10 +1,5 @@
-import logging
-import warnings
 from dataclasses import dataclass, field
-from importlib.metadata import version
 from typing import List, Optional
-
-from feynml.styled import CSSSheet
 
 
 @dataclass

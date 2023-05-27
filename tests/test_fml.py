@@ -42,16 +42,28 @@ def test_fml_css():
         if l.id == "E1":
             if l.style is None:
                 continue
-            # print(l.raw_style)
-            print("NE", l.style.getPropertyValue("arrow-pos"))
-            print("NE", l.style.opacity)
-            print("NE", l.style.width)
             l.style.opacity = "0.5"
             l.style.width = "40%"
-            print("NE", l.style.opacity)
-            print(l.style)
-            print("tot", l.style.cssText)
-    print(fml.to_xml())
+
+    assert (
+        fml.get_style_property(
+            fml.diagrams[0].get(lambda a: a.type == "fermion")[0], "color"
+        )
+        == "green"
+    )
+
+
+def test_fml_css_online():
+    fml = FeynML.from_xml_file("tests/test.fml")
+    fml.head.links[
+        0
+    ].href = "https://raw.githubusercontent.com/APN-Pucky/feynml/master/tests/test_styles.css"
+    for l in fml.diagrams[0].legs:
+        if l.id == "E1":
+            if l.style is None:
+                continue
+            l.style.opacity = "0.5"
+            l.style.width = "40%"
 
     assert (
         fml.get_style_property(

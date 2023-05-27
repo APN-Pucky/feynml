@@ -60,7 +60,15 @@ class Head(SheetHandler):
             if m.rel in self.cached_links and cached:
                 ret[m.rel] = self.cached_links[m.rel]
             else:
-                ret[m.rel] = io.read(self.root + m.href)
+                # handle absolute or relative
+                if m.href.startswith("http"):
+                    print("Direct")
+                    ret[m.rel] = io.read(m.href)
+                    print(ret[m.rel])
+                elif m.href.startswith("/"):
+                    ret[m.rel] = io.read(m.href)
+                else:
+                    ret[m.rel] = io.read(self.root + m.href)
                 if m.rel == "stylesheet":
                     ret[m.rel] = cssutils.parseString(ret[m.rel])
                 if cache:

@@ -4,7 +4,6 @@ from typing import Optional
 
 import cssutils
 from smpl_doc.doc import deprecated
-from smpl_util.util import withify
 from xsdata.formats.converter import Converter, converter
 
 # We don't want to see the cssutils warnings, since we have custom properties

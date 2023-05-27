@@ -81,7 +81,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 try:
                     if lmbda(a):
                         ret.append(a)
-                except:
+                except Exception:
                     pass
         return ret
 
