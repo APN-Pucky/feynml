@@ -16,11 +16,11 @@ class Field:
         return f"Field[{self.i}]"
 
     @classmethod
-    def re():
+    def re(cls):
         return r"\s*Field\[(\d+)\]\s*"
 
     @classmethod
-    def n():
+    def n(cls):
         return 1
 
     @classmethod
@@ -28,8 +28,8 @@ class Field:
         """
         Example
 
-        >>> Field.from_str("Field[1]")
-        Field(1)
+        >>> str(Field.from_str("Field[1]"))
+        'Field[1]'
         """
-        res = re.search(cls.re(), field)
+        res = re.search(Field.re(), field)
         return Field(int(res.group(1)))

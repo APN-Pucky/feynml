@@ -7,21 +7,16 @@ from feynml.interface.formcalc.vertex import Vertex
 
 @dataclass
 class Propagator:
+    type: str
     v1: Vertex
     v2: Vertex
     f: Field
 
     def __str__(self):
-        """
-        Example
-
-        >>> Propagator.from_str(str(Propagator(Vertex(1,1),Vertex(3,5),Field(1)))) == Propagator(Vertex(1,1),Vertex(3,5),Field(1))
-        True
-        """
-        return f"Propagator[Internal][{self.v1},{self.v2},{self.f}]"
+        return f"Propagator[{self.type}][{self.v1}, {self.v2}, {self.f}]"
 
     @classmethod
-    def re():
+    def re(cls):
         return (
             r"\s*Propagator\[(Incoming|Outgoing|Internal)\]\[("
             + Vertex.re()
@@ -33,7 +28,7 @@ class Propagator:
         )
 
     @classmethod
-    def n():
+    def n(cls):
         return 1 + 1 + Vertex.n() + 1 + Vertex.n() + 1 + Field.n()
 
     @classmethod
@@ -41,11 +36,12 @@ class Propagator:
         """
         Example
 
-        >>> Propagator.from_str("Propagator[Incoming][Vertex[1][1], Vertex[3][5], Field[1]]")
-        Propagator(Vertex(1,1),Vertex(3,5),Field(1))
+        >>> str(Propagator.from_str("Propagator[Incoming][Vertex[1][1], Vertex[3][5], Field[1]]"))
+        'Propagator[Incoming][Vertex[1][1], Vertex[3][5], Field[1]]'
         """
         res = re.search(cls.re(), propagator)
         return Propagator(
+            res.group(1),
             Vertex.from_str(res.group(2)),
             Vertex.from_str(res.group(3 + Vertex.n())),
             Field.from_str(res.group(6 + Vertex.n())),

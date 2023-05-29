@@ -17,11 +17,11 @@ class Vertex:
         return f"Vertex[{self.i}][{self.j}]"
 
     @classmethod
-    def re():
+    def re(cls):
         return r"\s*Vertex\[(\d+)\]\[(\d+)\]\s*"
 
     @classmethod
-    def n():
+    def n(cls):
         return 2
 
     @classmethod
@@ -29,8 +29,8 @@ class Vertex:
         """
         Example
 
-        >>> Vertex.from_str("Vertex[1][1]")
-        Vertex(1,1)
+        >>> str(Vertex.from_str("Vertex[1][1]"))
+        'Vertex[1][1]'
         """
         res = re.search(cls.re(), vertex)
         return Vertex(int(res.group(1)), int(res.group(2)))
