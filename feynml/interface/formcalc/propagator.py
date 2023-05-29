@@ -1,8 +1,13 @@
 import re
 from dataclasses import dataclass
+from typing import List, Tuple
 
+from feynml.connector import Connector
 from feynml.interface.formcalc.field import Field
+from feynml.interface.formcalc.insertions import Insertions
 from feynml.interface.formcalc.vertex import Vertex
+from feynml.leg import Leg as FMLLeg
+from feynml.propagator import Propagator as FMLPropagator
 
 
 @dataclass
@@ -11,6 +16,28 @@ class Propagator:
     v1: Vertex
     v2: Vertex
     f: Field
+
+    def to_feynml(self, insertions: Insertions) -> Tuple[Connector, List[Vertex]]:
+        if self.type == "Internal":
+            fmlv1 = self.v1.to_feynml()
+            fmlv2 = self.v2.to_feynml()
+            return FMLPropagator(
+                source=fmlv1, target=fmlv2, pdgid=insertions.insert(self.f).pdgid
+            ), [fmlv1, fmlv2]
+        elif self.type == "Incoming":
+            fmlv1 = self.v1.to_feynml()
+            fmlv2 = self.v2.to_feynml()
+            return FMLLeg(
+                target=fmlv2, sense="incoming", pdgid=insertions.insert(self.f).pdgid
+            ), [fmlv2]
+        elif self.type == "Outgoing":
+            fmlv1 = self.v1.to_feynml()
+            fmlv2 = self.v2.to_feynml()
+            return FMLLeg(
+                target=fmlv2, sense="outgoing", pdgid=insertions.insert(self.f).pdgid
+            ), [fmlv2]
+        else:
+            raise Exception("Unknown propagator type")
 
     def __str__(self):
         return f"Propagator[{self.type}][{self.v1}, {self.v2}, {self.f}]"

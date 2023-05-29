@@ -1,11 +1,17 @@
 import re
 from dataclasses import dataclass
 
+from feynml.interface.formcalc.particle import Particle
+from feynml.vertex import Vertex as FMLVertex
+
 
 @dataclass
 class Vertex:
     i: int
     j: int
+
+    def to_feynml(self) -> FMLVertex:
+        return FMLVertex(id="v" + "_" + self.i + "_" + self.j)
 
     def __str__(self):
         """

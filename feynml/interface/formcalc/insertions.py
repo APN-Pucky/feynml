@@ -3,13 +3,21 @@ from dataclasses import dataclass
 from typing import List
 
 from feynml.interface.formcalc.feynmangraph import FeynmanGraph
+from feynml.interface.formcalc.field import Field
 from feynml.interface.formcalc.rule import Rule
+from feynml.pdgid import PDG
 
 
 @dataclass
 class Insertions:
     generic: FeynmanGraph
     classes: FeynmanGraph
+
+    def get_pdgid(self, f: Field) -> int:
+        for r in self.classes.rules:
+            if f == r.lhs:
+                return r.rhs.get_pdgid()
+        raise Exception(f"Field {f} not found in Insertions {self}")
 
     def __str__(self):
         return f"Insertions[Generic][{self.generic} -> Insertions[Classes][{self.classes}]]"

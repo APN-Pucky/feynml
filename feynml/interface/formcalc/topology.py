@@ -2,6 +2,8 @@ import re
 from dataclasses import dataclass
 from typing import List
 
+from feynml.feynmandiagram import FeynmanDiagram
+from feynml.interface.formcalc.insertions import Insertions
 from feynml.interface.formcalc.propagator import Propagator
 from feynml.util import len_not_none
 
@@ -10,6 +12,15 @@ from feynml.util import len_not_none
 class Topology:
     order: int
     propagators: List[Propagator]
+
+    def to_feynml(self, insertions: Insertions) -> FeynmanDiagram:
+        fd = FeynmanDiagram()
+        for p in self.propagators:
+            prop, verts = p.to_feynml(insertions)
+            fd.add(prop)
+            for v in verts:
+                fd.add(v)
+        return fd
 
     def __str__(self):
         return (

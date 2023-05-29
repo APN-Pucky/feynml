@@ -1,6 +1,8 @@
 import re
 from dataclasses import dataclass
 
+from feynml.interface.formcalc.insertions import Insertions
+
 
 @dataclass
 class Field:

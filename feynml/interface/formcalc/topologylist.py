@@ -2,8 +2,11 @@ import re
 from dataclasses import dataclass
 from typing import List, Tuple
 
+from feynml.feynml import FeynML
+from feynml.head import Head
 from feynml.interface.formcalc.insertions import Insertions
 from feynml.interface.formcalc.topology import Topology
+from feynml.meta import Meta
 from feynml.util import len_not_none
 
 
@@ -11,6 +14,26 @@ from feynml.util import len_not_none
 class TopologyList:
     rest: str
     topologies: List[Tuple[Topology, Insertions]]
+
+    def to_feynml(
+        self,
+        creator="pyfeyn2",
+        tool="pyfeyn2.interface.formcalc",
+        title="",
+        description="",
+    ) -> FeynML:
+        fds = []
+        for t in self.topologies:
+            fds.append(t[0].to_feynml(t[1]))
+        return FeynML(
+            head=Head(
+                Meta(name="creator", content=creator),
+                Meta(name="tool", content=tool),
+                Meta(name="description", content=description),
+                Meta(name="title", content=title),
+            ),
+            diagrams=fds,
+        )
 
     def __str__(self):
         return f"TopologyList[{self.rest}][{','.join([str(ti[0]) +' -> ' + str(ti[1])  for ti in self.topologies ])}]"

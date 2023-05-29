@@ -4,13 +4,14 @@ from typing import Union
 
 from feynml.interface.formcalc.fermion import Fermion
 from feynml.interface.formcalc.field import Field
+from feynml.interface.formcalc.particle import Particle
 from feynml.interface.formcalc.vector import Vector
 
 
 @dataclass
 class Rule:
     lhs: Field
-    rhs: Union[Vector, Fermion, str]
+    rhs: Union[Particle, str]
 
     def __str__(self):
         return f"{self.lhs} -> {self.rhs}"

@@ -1,15 +1,33 @@
 import re
 from dataclasses import dataclass
 
+from feynml.interface.formcalc.particle import Particle
 from feynml.interface.formcalc.sequenceform import SequenceForm
 
 
 @dataclass
-class Fermion:
+class Fermion(Particle):
     sign: int
     type: int
     i: int
     sequenceform: SequenceForm
+
+    def get_pdgid(self) -> int:
+        """
+        Example
+
+        >>> Fermion(1, 3, 1, SequenceForm("Col", 1)).get_pdgid()
+        2
+        >>> Fermion(-1, 4, 1, SequenceForm("Col", 1)).get_pdgid()
+        -1
+        """
+        assert self.sign in [-1, 1], "Sign must be -1 or 1"
+        if self.type == 3:  # up type
+            return (2 + 2 * (self.i - 1)) * self.sign
+        elif self.type == 4:  # down type
+            return (1 + 2 * (self.i - 1)) * self.sign
+        else:
+            raise ValueError("Fermion type not supported")
 
     def __str__(self):
         return f"{'-' if self.sign < 0 else ''}F[{self.type}, {{{self.i}, {self.sequenceform}}}]"
