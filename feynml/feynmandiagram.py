@@ -167,3 +167,18 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     def with_sheet(self, sheet):
         self.sheet = sheet
         return self
+
+    def has_vertex(self, vertex):
+        return vertex in self.vertices
+
+    def has_vertex_id(self, vertexid):
+        return self.get_vertex(vertexid) is not None
+
+    def has_leg(self, leg):
+        return leg in self.legs
+
+    def has_propagator(self, propagator):
+        return propagator in self.propagators
+
+    def has(self, obj):
+        return self.has_vertex(obj) or self.has_leg(obj) or self.has_propagator(obj)

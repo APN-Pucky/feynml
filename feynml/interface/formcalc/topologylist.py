@@ -27,10 +27,12 @@ class TopologyList:
             fds.append(t[0].to_feynml(t[1]))
         return FeynML(
             head=Head(
-                Meta(name="creator", content=creator),
-                Meta(name="tool", content=tool),
-                Meta(name="description", content=description),
-                Meta(name="title", content=title),
+                metas=[
+                    Meta(name="creator", content=creator),
+                    Meta(name="tool", content=tool),
+                    Meta(name="description", content=description),
+                    Meta(name="title", content=title),
+                ]
             ),
             diagrams=fds,
         )

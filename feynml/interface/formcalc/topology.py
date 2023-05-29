@@ -19,7 +19,8 @@ class Topology:
             prop, verts = p.to_feynml(insertions)
             fd.add(prop)
             for v in verts:
-                fd.add(v)
+                if not fd.has_vertex_id(v.id):  # Unique vertices
+                    fd.add(v)
         return fd
 
     def __str__(self):

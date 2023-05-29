@@ -22,19 +22,19 @@ class Propagator:
             fmlv1 = self.v1.to_feynml()
             fmlv2 = self.v2.to_feynml()
             return FMLPropagator(
-                source=fmlv1, target=fmlv2, pdgid=insertions.insert(self.f).pdgid
+                source=fmlv1.id, target=fmlv2.id, pdgid=insertions.get_pdgid(self.f)
             ), [fmlv1, fmlv2]
         elif self.type == "Incoming":
             fmlv1 = self.v1.to_feynml()
             fmlv2 = self.v2.to_feynml()
             return FMLLeg(
-                target=fmlv2, sense="incoming", pdgid=insertions.insert(self.f).pdgid
+                target=fmlv2.id, sense="incoming", pdgid=insertions.get_pdgid(self.f)
             ), [fmlv2]
         elif self.type == "Outgoing":
             fmlv1 = self.v1.to_feynml()
             fmlv2 = self.v2.to_feynml()
             return FMLLeg(
-                target=fmlv2, sense="outgoing", pdgid=insertions.insert(self.f).pdgid
+                target=fmlv2.id, sense="outgoing", pdgid=insertions.get_pdgid(self.f)
             ), [fmlv2]
         else:
             raise Exception("Unknown propagator type")

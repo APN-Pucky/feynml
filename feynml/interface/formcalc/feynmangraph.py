@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import List
 
 from feynml.interface.formcalc.rule import Rule
-from feynml.util import len_not_none
 
 
 @dataclass

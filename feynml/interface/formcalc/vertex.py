@@ -11,7 +11,7 @@ class Vertex:
     j: int
 
     def to_feynml(self) -> FMLVertex:
-        return FMLVertex(id="v" + "_" + self.i + "_" + self.j)
+        return FMLVertex(id="v" + "_" + str(self.i) + "_" + str(self.j))
 
     def __str__(self):
         """
