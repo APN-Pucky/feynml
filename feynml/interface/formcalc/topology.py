@@ -5,8 +5,6 @@ from typing import List
 from feynml.interface.formcalc.propagator import Propagator
 from feynml.util import len_not_none
 
-Nlimit = 10
-
 
 @dataclass
 class Topology:
@@ -21,10 +19,7 @@ class Topology:
     @classmethod
     def re(cls):
         rtopology = r"\s*Topology\[(\d+)\]"
-        rtopology += r"\[(" + Propagator.re() + r"),?("
-        for i in range(Nlimit - 1):
-            rtopology += Propagator.re() + r")?,?("
-        rtopology += Propagator.re() + r")?\]\s*"
+        rtopology += r"\[((?:" + Propagator.re() + r",?)+)\]\s*"
         return rtopology
 
     @classmethod
@@ -35,7 +30,7 @@ class Topology:
         >>> Topology.n() == Topology.re().count('(') -Topology.re().count('(?')
         True
         """
-        return 1 + (1 + Propagator.n()) * (Nlimit + 1)
+        return 1 + 1 + Propagator.n()
 
     @classmethod
     def from_str(cls, topology: str):
@@ -51,12 +46,16 @@ class Topology:
         'Topology[1][Propagator[Incoming][Vertex[1][1], Vertex[3][5], Field[1]], Propagator[Incoming][Vertex[1][2], Vertex[3][6], Field[2]], Propagator[Outgoing][Vertex[1][3], Vertex[3][6], Field[3]], Propagator[Outgoing][Vertex[1][4], Vertex[3][5], Field[4]], Propagator[Internal][Vertex[3][5], Vertex[3][6], Field[5]]]'
         """
         res = re.search(cls.re(), topology)
+        return cls._handle_match(res)
+
+    @classmethod
+    def _handle_match(cls, res):
         order = int(res.group(1))
         lst = []
         # print(res.groups())
         # return 0
-        nn = Propagator.n() + 1
-        for i in range(0, int((len_not_none(res.groups()) - 1) / nn)):
-            g = res.group(2 + i * nn)
-            lst += [Propagator.from_str(g)]
+
+        for x in re.findall(r"(" + Propagator.re() + r"),?", res.group(2)):
+            lst += [Propagator.from_str(x[0])]
+
         return Topology(order, lst)

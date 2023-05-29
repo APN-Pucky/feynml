@@ -5,8 +5,6 @@ from typing import List
 from feynml.interface.formcalc.feynmangraph import FeynmanGraph
 from feynml.interface.formcalc.rule import Rule
 
-Nlimit = 10
-
 
 @dataclass
 class Insertions:
@@ -67,9 +65,16 @@ class Insertions:
         'Insertions[Generic][FeynmanGraph[1, Generic == 1][Field[1] -> F[3, {1, SequenceForm["Col", 1]}], Field[2] -> -F[3, {1, SequenceForm["Col", 2]}], Field[3] -> V[1], Field[4] -> V[5, {SequenceForm["Glu", 4]}], Field[5] -> F] -> Insertions[Classes][FeynmanGraph[1, Classes == 1][Field[1] -> F[3, {1, SequenceForm["Col", 1]}], Field[2] -> -F[3, {1, SequenceForm["Col", 2]}], Field[3] -> V[1], Field[4] -> V[5, {SequenceForm["Glu", 4]}], Field[5] -> F[3, {1, SequenceForm["Col", 2]}]]]]'
         """
         res = re.search(cls.re(), insertions)
+        return cls._handle_match(res)
         generic = FeynmanGraph.from_str(res.group(1))
         # print(res.groups())
         classes = None
         classes = FeynmanGraph.from_str(res.group(FeynmanGraph.n() + 2))
 
+        return Insertions(generic, classes)
+
+    @classmethod
+    def _handle_match(cls, res):
+        generic = FeynmanGraph.from_str(res.group(1))
+        classes = FeynmanGraph.from_str(res.group(FeynmanGraph.n() + 2))
         return Insertions(generic, classes)

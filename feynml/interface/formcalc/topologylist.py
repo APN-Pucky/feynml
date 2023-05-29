@@ -6,8 +6,6 @@ from feynml.interface.formcalc.insertions import Insertions
 from feynml.interface.formcalc.topology import Topology
 from feynml.util import len_not_none
 
-Nlimit = 100
-
 
 @dataclass
 class TopologyList:
@@ -18,16 +16,16 @@ class TopologyList:
         return f"TopologyList[{self.rest}][{','.join([str(ti[0]) +' -> ' + str(ti[1])  for ti in self.topologies ])}]"
 
     @classmethod
-    def re(cls):
+    def re(cls, full=True):
+        if full:
+            rtopology = Topology.re()
+            rinsertions = Insertions.re()
+        else:
+            rtopology = r"\s*Topology\[\d+\]\[.*?\]\s*"
+            rinsertions = r"\s*Insertions\[Generic\]\[.*?\]\s*"
+
         rtopologylist = r"\s*TopologyList\[(.*)\]\["
-        rtopologylist += r"(" + Topology.re() + r")->(" + Insertions.re() + r"),?("
-        for i in range(Nlimit - 1):
-            rtopologylist += (
-                r"(?:" + Topology.re() + r")->(" + Insertions.re() + r"))?,?("
-            )
-        rtopologylist += (
-            r"(?:" + Topology.re() + r")->(" + Insertions.re() + r"))?\]\s*"
-        )
+        rtopologylist += r"((?:" + rtopology + r"->" + rinsertions + r",?)+)\]\s*"
         return rtopologylist
 
     @classmethod
@@ -38,7 +36,7 @@ class TopologyList:
         >>> TopologyList.n() == TopologyList.re().count('(') -TopologyList.re().count('(?')
         True
         """
-        return 1 + (1 + Topology.n() + 1 + Insertions.n()) * (Nlimit + 1)
+        return 1 + 1 + Topology.n() + Insertions.n()
 
     @classmethod
     def from_str(cls, topologylist: str):
@@ -99,19 +97,14 @@ class TopologyList:
         # remove repeated whitespaces from rest
         rest = re.sub(r"\s+", " ", rest)
         lst = []
-        nn = Topology.n() + 1 + Insertions.n() + 1
-        i = 0
-        g = res.group(2 + i * nn)
 
-        while g is not None:
+        for x in re.findall(
+            r"(" + Topology.re() + r")->(" + Insertions.re() + r"),?", res.group(2)
+        ):
             lst += [
                 (
-                    Topology.from_str(g),
-                    Insertions.from_str(res.group(3 + Topology.n() + i * nn)),
+                    Topology.from_str(x[0]),
+                    Insertions.from_str(x[Topology.n() + 1]),
                 )
             ]
-            # print(g)
-            # print(res.group(3 + Topology.n() + i * nn))
-            i += 1
-            g = res.group(2 + i * nn)
         return TopologyList(rest, lst)

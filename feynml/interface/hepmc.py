@@ -5,9 +5,8 @@ from feynml.feynmandiagram import FeynmanDiagram
 from feynml.feynml import FeynML, Head, Meta
 from feynml.leg import Leg
 from feynml.propagator import Propagator
+from feynml.util import leg_id_wrap, propagator_id_wrap, vertex_id_wrap
 from feynml.vertex import Vertex
-
-from .util import leg_id_wrap, propagator_id_wrap, vertex_id_wrap
 
 # TODO add momenta?
 
