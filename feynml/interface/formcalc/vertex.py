@@ -1,7 +1,6 @@
 import re
 from dataclasses import dataclass
 
-from feynml.interface.formcalc.particle import Particle
 from feynml.vertex import Vertex as FMLVertex
 
 

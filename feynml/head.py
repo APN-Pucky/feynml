@@ -2,23 +2,15 @@ import logging
 import warnings
 from dataclasses import dataclass, field
 from importlib.metadata import version
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import cssutils
 import smpl_io.io as io
-from cssselect import GenericTranslator, SelectorError
-from lxml import etree
 
-from feynml.id import Identifiable
-from feynml.leg import Leg
 from feynml.link import Link
 from feynml.meta import Meta as alias_meta
-from feynml.propagator import Propagator
 from feynml.sheet import SheetHandler
 from feynml.styled import CSSSheet, Styled
-from feynml.type import get_default_sheet
-from feynml.vertex import Vertex
-from feynml.xml import XML
 
 
 @dataclass

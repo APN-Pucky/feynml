@@ -4,8 +4,6 @@ from typing import List
 
 from feynml.interface.formcalc.feynmangraph import FeynmanGraph
 from feynml.interface.formcalc.field import Field
-from feynml.interface.formcalc.rule import Rule
-from feynml.pdgid import PDG
 
 
 @dataclass
