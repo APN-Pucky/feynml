@@ -22,7 +22,7 @@ class Propagator:
             fmlv1 = self.v1.to_feynml()
             fmlv2 = self.v2.to_feynml()
             return FMLPropagator(
-                source=fmlv1.id, target=fmlv2.id, pdgid=insertions.get_pdgid(self.f)
+                source=fmlv2.id, target=fmlv1.id, pdgid=insertions.get_pdgid(self.f)
             ), [fmlv1, fmlv2]
         elif self.type == "Incoming":
             fmlv1 = self.v1.to_feynml()
