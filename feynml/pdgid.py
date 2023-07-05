@@ -66,12 +66,26 @@ class PDG(Identifiable):
                 self.type = "boson"
             elif self.pdgid == 25:
                 self.type = "higgs"
+            elif self.pdgid == 2212:
+                self.type = "fermion"
+            elif self.pdgid == -2212:
+                self.type = "anti fermion"
+            elif self.pdgid < 1000000 and self.pdgid > 100:
+                if self.particle.pdgid.J == 1:
+                    self.type = "boson"
+                elif self.particle.pdgid.J == 0.5:
+                    self.type = "fermion"
+            elif self.pdgid > -1000000 and self.pdgid < -100:
+                if self.particle.pdgid.J == 1:
+                    self.type = "boson"
+                elif self.particle.pdgid.J == 0.5:
+                    self.type = "anti fermion"
             else:
                 warnings.warn(
                     f"Inferring type from pdgid not implemented for pdgid {self.pdgid} "
                 )
                 self.type = "line"
-            if tmptype is not None and self.type != tmptype:
+            if tmptype is not None and tmptype != "" and self.type != tmptype:
                 warnings.warn(
                     f"Type {tmptype} is not consistent with pdgid {self.pdgid}, using {self.type} instead. Using {tmptype} now."
                 )

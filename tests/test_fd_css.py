@@ -1,3 +1,5 @@
+import pytest
+
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.leg import Leg
 from feynml.propagator import Propagator
@@ -30,54 +32,63 @@ def get_test_fd():
 def test_css_direct():
     fd = get_test_fd()
     l = fd.get_leg("myid1").with_style_property("color", "green")
-    assert fd.get_style_property(l, "color") == "green"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "green"
 
 
 def test_css_global_rule():
     fd = get_test_fd()
     fd.with_rule(" * { color: red } ")
     l = fd.get_leg("myid1")
-    assert fd.get_style_property(l, "color") == "red"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "red"
 
 
 def test_css_id():
     fd = get_test_fd()
     l = fd.get_leg("myid1")
     fd.add_rule("#myid1 { color: blue }")
-    assert fd.get_style_property(l, "color") == "blue"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "blue"
 
 
 def test_css_pdgid():
     fd = get_test_fd()
     l = fd.get_leg("myid1")
     fd.add_rule('[pdgid="21"] { color: gray }')
-    assert fd.get_style_property(l, "color") == "gray"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "gray"
 
 
 def test_css_type():
     fd = get_test_fd()
     l = fd.get_leg("myid1")
     fd.add_rule('[type="gluon"] { color: gray }')
-    assert fd.get_style_property(l, "color") == "gray"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "gray"
 
 
 def test_css_class():
     fd = get_test_fd()
     l = fd.get_leg("myid1").with_class("notred")
     fd.add_rule(".notred { color: blue }")
-    assert fd.get_style_property(l, "color") == "blue"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "blue"
 
 
 def test_css_obj():
     fd = get_test_fd()
     l = fd.get_leg("myid1")
     fd.add_rule("leg { color: black }")
-    assert fd.get_style_property(l, "color") == "black"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(l, "color") == "black"
 
     p = fd.propagators[0]
     fd.add_rule("propagator { color: green }")
-    assert fd.get_style_property(p, "color") == "green"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(p, "color") == "green"
 
     v = fd.vertices[0]
     fd.add_rule("vertex { color: yellow }")
-    assert fd.get_style_property(v, "color") == "yellow"
+    with pytest.warns(UserWarning):
+        assert fd.get_style_property(v, "color") == "yellow"
