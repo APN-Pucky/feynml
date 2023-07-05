@@ -151,14 +151,12 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         elif xml is not None:
             return super().get_style(obj, xml)
         else:
-            warnings.warn("No parent fml, returning default style")
             return super().get_style(obj, self)
 
     def get_sheets(self):
         if self.parent_fml is not None:
             return self.parent_fml.get_sheets() + [self.sheet]
         else:
-            warnings.warn("No parent fml, returning default sheet")
             return super().get_sheets() + [self.sheet]
 
     def get_sheet(self):
