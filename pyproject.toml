@@ -12,8 +12,6 @@ particle = "*"
 xsdata = {version = "*", extras = ["cli","lxml","soap"]}
 cssutils= "*"
 cssselect ="*"
-#pyqgraf = {path= "../pyqgraf", develop = true }
-#ipyparallel = "*"
 deprecated = "*"
 deprecation = "*"
 smpl_io = "^1.1.2"
@@ -23,6 +21,7 @@ smpl_doc = "^1.1.3"
 smpl_util= "*"
 
 pyqgraf = {version = ">=0.0.3", optional = true}
+#pyqgraf = {path= "../pyqgraf", develop = true }
 pyhepmc = {version = "*", optional = true}
 pylhe = {version = "*", optional = true}
 
