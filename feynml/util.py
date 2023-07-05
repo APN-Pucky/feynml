@@ -1,3 +1,7 @@
+from smpl_doc.doc import deprecated
+
+
+@deprecated("0.2.1", "no longer in use")
 def len_not_none(arr):
     """
     Length of a List/tuple ignoring None values (e.g. regex non matches at the end)

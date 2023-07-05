@@ -7,7 +7,6 @@ from feynml.head import Head
 from feynml.interface.formcalc.insertions import Insertions
 from feynml.interface.formcalc.topology import Topology
 from feynml.meta import Meta
-from feynml.util import len_not_none
 
 
 @dataclass

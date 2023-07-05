@@ -5,7 +5,6 @@ from typing import List
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.interface.formcalc.insertions import Insertions
 from feynml.interface.formcalc.propagator import Propagator
-from feynml.util import len_not_none
 
 
 @dataclass

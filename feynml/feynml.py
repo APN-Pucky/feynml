@@ -5,12 +5,7 @@ from dataclasses import dataclass, field
 from importlib.metadata import version
 from typing import List, Optional
 
-import cssutils
 import smpl_io.io as io
-from smpl_doc import doc
-from xsdata.formats.dataclass.parsers import XmlParser
-from xsdata.formats.dataclass.serializers import XmlSerializer
-from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.head import Head
@@ -19,10 +14,6 @@ from feynml.meta import Meta
 from feynml.sheet import SheetHandler
 from feynml.styled import CSSSheet
 from feynml.xml import XML
-
-# We don't want to see the cssutils warnings, since we have custom properties
-cssutils.log.setLevel(logging.CRITICAL)
-
 
 feynml_version = version("feynml")
 
