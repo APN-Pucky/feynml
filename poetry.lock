@@ -2640,13 +2640,13 @@ test = ["matplotlib", "particle", "pytest"]
 
 [[package]]
 name = "pylhe"
-version = "0.6.0"
+version = "0.7.0"
 description = "small package to get structured data out of Les Houches Event files"
 optional = true
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pylhe-0.6.0-py3-none-any.whl", hash = "sha256:466c2752b906f6f37e3fd77c1ceb79478b76401f7d2085cd1071d36121e95834"},
-    {file = "pylhe-0.6.0.tar.gz", hash = "sha256:77a6500fd259d4c801775dba8cef52d60cc30d308ec69ce5d2ff56de8241d5ed"},
+    {file = "pylhe-0.7.0-py3-none-any.whl", hash = "sha256:13b38b7022cb1772f9763a818c9589d867d258536a69cab6a1b0095bae2eb445"},
+    {file = "pylhe-0.7.0.tar.gz", hash = "sha256:11450104082db6b0b1668b269b842432a2db94b0e6f80e68babfea8b1d7cf94c"},
 ]
 
 [package.dependencies]
