@@ -146,9 +146,10 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     @doc.append_doc(Head.get_style)
     def get_style(self, obj, xml: XML = None) -> cssutils.css.CSSStyleDeclaration:
-        if self.parent_fml is not None:
-            return super().get_style(obj, self.parent_fml)
-        elif xml is not None:
+        # as of now, we don't have any xpath/styles from the fml itself
+        # if self.parent_fml is not None:
+        #    return super().get_style(obj, self.parent_fml)
+        if xml is not None:
             return super().get_style(obj, xml)
         else:
             return super().get_style(obj, self)
