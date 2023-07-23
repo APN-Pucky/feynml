@@ -14,6 +14,7 @@ from .feynml import FeynML
 from .head import Head
 from .leg import Leg
 from .meta import Meta
+from .momentum import Momentum
 from .pdgid import PDG
 from .point import Point
 from .propagator import Propagator
