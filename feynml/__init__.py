@@ -10,7 +10,7 @@ __version__ = version(package)
 
 from .connector import Connector
 from .feynmandiagram import FeynmanDiagram
-from .feynml import feynml
+from .feynml import FeynML
 from .head import Head
 from .leg import Leg
 from .meta import Meta
