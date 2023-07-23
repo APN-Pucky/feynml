@@ -180,3 +180,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     def has(self, obj):
         return self.has_vertex(obj) or self.has_leg(obj) or self.has_propagator(obj)
+
+    def get_incoming(self):
+        return [leg for leg in self.legs if leg.is_incoming()]
+
+    def get_outgoing(self):
+        return [leg for leg in self.legs if leg.is_outgoing()]
