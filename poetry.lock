@@ -2677,13 +2677,13 @@ tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "pyqgraf"
-version = "0.0.9"
+version = "0.0.11"
 description = "PyQgraf is a Python wrapper for Qgraf, a Feynman diagram generator."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyqgraf-0.0.9-py3-none-any.whl", hash = "sha256:4fd56948ba3eabb1ad70dc40bb28d5b8463a200919b9e56b25d7952405bec6dd"},
-    {file = "pyqgraf-0.0.9.tar.gz", hash = "sha256:625ed01ac2b5ade2fe2f992f996f3795c6b8abdc434a69302c21a87d2b23967c"},
+    {file = "pyqgraf-0.0.11-py3-none-any.whl", hash = "sha256:676162495eba7c95fece12a93f9732acc6a27c0895fe5c975abdb343425a687d"},
+    {file = "pyqgraf-0.0.11.tar.gz", hash = "sha256:427cfb682bb18979cdc7f6757ecc52d97afe67b5d36a1dc1c63f72e9433ac06a"},
 ]
 
 [package.dependencies]
