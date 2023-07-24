@@ -118,6 +118,28 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             + [leg for leg in self.legs if leg.id == vertex.id]
         )
 
+    def get_neighbours(self, vertex):
+        return [v for v in self.vertices if self.are_neighbours(vertex, v)] + [
+            l for l in self.legs if self.are_neighbours(vertex, l)
+        ]
+
+    def are_neighbours(self, vertex1, vertex2):
+        return any(
+            [
+                p
+                for p in self.propagators
+                if (p.source == vertex1.id and p.target == vertex2.id)
+                or (p.source == vertex2.id and p.target == vertex1.id)
+            ]
+        ) or any(
+            [
+                l
+                for l in self.legs
+                if (l.id == vertex1.id and l.target == vertex2.id)
+                or (l.id == vertex2.id and l.target == vertex1.id)
+            ]
+        )
+
     def remove_propagator(self, propagator):
         self.propagators.remove(propagator)
         return self
