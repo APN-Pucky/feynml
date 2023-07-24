@@ -77,12 +77,16 @@ class PDG(Identifiable):
                     self.type = "line"
                 elif self.particle.pdgid.J == 0.5:
                     self.type = "fermion"
+                elif self.particle.pdgid.J == 1.5:
+                    self.type = "fermion"
             elif self.pdgid > -1000000 and self.pdgid < -100:
                 if self.particle.pdgid.J == 0:
                     self.type = "line"
                 elif self.particle.pdgid.J == 1:
                     self.type = "line"
                 elif self.particle.pdgid.J == 0.5:
+                    self.type = "anti fermion"
+                elif self.particle.pdgid.J == 1.5:
                     self.type = "anti fermion"
             else:
                 warnings.warn(
