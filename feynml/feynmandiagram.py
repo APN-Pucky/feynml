@@ -107,11 +107,15 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         return None
 
     def get_connections(self, vertex):
-        return [
-            p
-            for p in self.propagators
-            if p.source == vertex.id or p.target == vertex.id
-        ] + [leg for leg in self.legs if leg.target == vertex.id]
+        return (
+            [
+                p
+                for p in self.propagators
+                if p.source == vertex.id or p.target == vertex.id
+            ]
+            + [leg for leg in self.legs if leg.target == vertex.id]
+            + [leg for leg in self.legs if leg.id == vertex.id]
+        )
 
     def remove_propagator(self, propagator):
         self.propagators.remove(propagator)
