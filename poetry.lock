@@ -2677,13 +2677,13 @@ tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "pyqgraf"
-version = "0.0.9"
+version = "0.0.11"
 description = "PyQgraf is a Python wrapper for Qgraf, a Feynman diagram generator."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyqgraf-0.0.9-py3-none-any.whl", hash = "sha256:4fd56948ba3eabb1ad70dc40bb28d5b8463a200919b9e56b25d7952405bec6dd"},
-    {file = "pyqgraf-0.0.9.tar.gz", hash = "sha256:625ed01ac2b5ade2fe2f992f996f3795c6b8abdc434a69302c21a87d2b23967c"},
+    {file = "pyqgraf-0.0.11-py3-none-any.whl", hash = "sha256:676162495eba7c95fece12a93f9732acc6a27c0895fe5c975abdb343425a687d"},
+    {file = "pyqgraf-0.0.11.tar.gz", hash = "sha256:427cfb682bb18979cdc7f6757ecc52d97afe67b5d36a1dc1c63f72e9433ac06a"},
 ]
 
 [package.dependencies]
@@ -3867,13 +3867,13 @@ cffi = ">=1.0"
 
 [[package]]
 name = "xsdata"
-version = "23.6"
+version = "23.7"
 description = "Python XML Binding"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "xsdata-23.6-py3-none-any.whl", hash = "sha256:5a8df1211642c79949ab4eab31dfc383993ef2c2eb9253613f131048b7bfd735"},
-    {file = "xsdata-23.6.tar.gz", hash = "sha256:695a38de23d270a772d803e260c17eef65d98354884a955e30f08075c0f574a8"},
+    {file = "xsdata-23.7-py3-none-any.whl", hash = "sha256:ccfc72098275dcb65c558cf7850d71e01af3e1c212483f4df4e5d273f6d0e1dc"},
+    {file = "xsdata-23.7.tar.gz", hash = "sha256:8d79e9078d8ff4f8c4830ecda1208613a4b5e283a41e4cd304561bf6fca96aac"},
 ]
 
 [package.dependencies]
