@@ -923,13 +923,13 @@ pgp = ["gpg"]
 
 [[package]]
 name = "dunamai"
-version = "1.17.0"
+version = "1.18.0"
 description = "Dynamic version generation"
 optional = false
 python-versions = ">=3.5,<4.0"
 files = [
-    {file = "dunamai-1.17.0-py3-none-any.whl", hash = "sha256:5aa4ac1085de10691269af021b10497261a5dd644f277e2a21822212604d877b"},
-    {file = "dunamai-1.17.0.tar.gz", hash = "sha256:459381b585a1e78e4070f0d38a6afb4d67de2ee95064bf6b0438ec620dde0820"},
+    {file = "dunamai-1.18.0-py3-none-any.whl", hash = "sha256:f9284a9f4048f0b809d11539896e78bde94c05b091b966a04a44ab4c48df03ce"},
+    {file = "dunamai-1.18.0.tar.gz", hash = "sha256:5200598561ea5ba956a6174c36e402e92206c6a6aa4a93a6c5cb8003ee1e0997"},
 ]
 
 [package.dependencies]
@@ -1575,13 +1575,13 @@ test = ["coverage", "jupyter-server (>=2.0.0)", "pytest (>=7.0)", "pytest-cov", 
 
 [[package]]
 name = "jupyterlab"
-version = "4.0.2"
+version = "4.0.3"
 description = "JupyterLab computational environment"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jupyterlab-4.0.2-py3-none-any.whl", hash = "sha256:201b4f729a7dc5e22ca6c4dd8944cde792f1cb008d7c6b821e0a48d2502205c8"},
-    {file = "jupyterlab-4.0.2.tar.gz", hash = "sha256:0a77898aebb55da391e5f57022774c089fb075e98803ff3d514a79b727dc934d"},
+    {file = "jupyterlab-4.0.3-py3-none-any.whl", hash = "sha256:d369944391b1d15f2d1f3cb965fb67352956279b2ae6f03ce7947a43940a8301"},
+    {file = "jupyterlab-4.0.3.tar.gz", hash = "sha256:e14d1ce46a613028111d0d476a1d7d6b094003b7462bac669f5b478317abcb39"},
 ]
 
 [package.dependencies]
@@ -2442,17 +2442,17 @@ files = [
 
 [[package]]
 name = "poetry-dynamic-versioning"
-version = "0.24.0"
+version = "0.25.0"
 description = "Plugin for Poetry to enable dynamic versioning based on VCS tags"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "poetry_dynamic_versioning-0.24.0-py3-none-any.whl", hash = "sha256:f90fbec96546d5a5112f4b5f324b271ded95214966f90d78d8e00e3ed925917a"},
-    {file = "poetry_dynamic_versioning-0.24.0.tar.gz", hash = "sha256:e53111b21fb11862a26f54f849f0d3b7a179b4455a0c3b890f875e717955f63a"},
+    {file = "poetry_dynamic_versioning-0.25.0-py3-none-any.whl", hash = "sha256:8dd146f2c5a12ae43145e82bed3386048880ebd52e1c52ae5517c62cb25206d3"},
+    {file = "poetry_dynamic_versioning-0.25.0.tar.gz", hash = "sha256:f751f345405f968e49423df147160b5c936960aabbee00fa4b74d3a4964789b1"},
 ]
 
 [package.dependencies]
-dunamai = ">=1.17.0,<2.0.0"
+dunamai = ">=1.18.0,<2.0.0"
 jinja2 = ">=2.11.1,<4"
 poetry = {version = ">=1.2.0,<2.0.0", optional = true, markers = "extra == \"plugin\""}
 tomlkit = ">=0.4"
@@ -3914,4 +3914,4 @@ interfaces = ["pyhepmc", "pylhe", "pyqgraf"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "77ddb89da7b38e28580a4d5c7ddd1ed8f67cb5f9e78ee2fb16e480f8e459749e"
+content-hash = "8fe34af85097a321afc34a701edaba68870d6aef2b4a3b82abc7f50b933a5b74"

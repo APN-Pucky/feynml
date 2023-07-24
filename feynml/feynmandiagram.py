@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 import cssutils
+import numpy as np
 import smpl_doc.doc as doc
 from cssselect import GenericTranslator, SelectorError
 from lxml import etree
@@ -122,30 +123,28 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         return self
 
     def get_bounding_box(self):
-        min_x = 0
-        min_y = 0
-        max_x = 0
-        max_y = 0
-        for v in self.vertices:
+        """
+        Get the bounding box of the diagram, i.e. the smallest rectangle that contains all vertices and legs.
+
+        Returns:
+            (min_x, min_y, max_x, max_y): The bounding box
+        """
+        min_x = np.inf
+        min_y = np.inf
+        max_x = -np.inf
+        max_y = -np.inf
+        for v in [*self.vertices, *self.legs]:
             if v.x is None or v.y is None:
                 warnings.warn(
-                    "Vertex " + v.id + " has no position, skipping it in bounding box"
+                    f"Vertex or leg {v}"
+                    + v.id
+                    + " has no position, skipping it in bounding box"
                 )
                 continue
             min_x = min(min_x, v.x)
             min_y = min(min_y, v.y)
             max_x = max(max_x, v.x)
             max_y = max(max_y, v.y)
-        for leg in self.legs:
-            if leg.x is None or leg.y is None:
-                warnings.warn(
-                    "Leg " + leg.id + " has no position, skipping it in bounding box"
-                )
-                continue
-            min_x = min(min_x, leg.x)
-            min_y = min(min_y, leg.y)
-            max_x = max(max_x, leg.x)
-            max_y = max(max_y, leg.y)
         return min_x, min_y, max_x, max_y
 
     @doc.append_doc(Head.get_style)
@@ -185,3 +184,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     def has(self, obj):
         return self.has_vertex(obj) or self.has_leg(obj) or self.has_propagator(obj)
+
+    def get_incoming(self):
+        return [leg for leg in self.legs if leg.is_incoming()]
+
+    def get_outgoing(self):
+        return [leg for leg in self.legs if leg.is_outgoing()]
