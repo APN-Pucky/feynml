@@ -212,3 +212,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     def get_outgoing(self):
         return [leg for leg in self.legs if leg.is_outgoing()]
+
+    def get_unpositioned_vertices(self):
+        return [v for v in self.vertices if v.x is None or v.y is None]
+
+    def get_loose_vertices(self):
+        return [v for v in self.vertices if not self.get_connections(v)]
