@@ -11,7 +11,9 @@ from feynml.targeting import Targeting
 @withify()
 @dataclass
 class Leg(Point, Targeting, Connector):
-    sense: str = field(default=None, metadata={})
+    sense: str = field(
+        default=None, metadata={}
+    )  # TODO why is this a string and not a bool?!?
     """Sense of the leg, either 'incoming' or 'outgoing'"""
 
     external: Optional[str] = field(
@@ -28,9 +30,22 @@ class Leg(Point, Targeting, Connector):
         return "out" == self.sense[:3] or self.sense[:7] == "anti-in"
 
     def with_incoming(self):
+        """Set the leg to be incoming."""
         self.sense = "incoming"
         return self
 
+    incoming = with_incoming
+
     def with_outgoing(self):
+        """Set the leg to be outgoing."""
         self.sense = "outgoing"
         return self
+
+    outgoing = with_outgoing
+
+    def conjugate(self):
+        """Set incoming to outgoing and vice versa."""
+        if self.is_incoming():
+            return self.with_outgoing()
+        elif self.is_outgoing():
+            return self.with_incoming()

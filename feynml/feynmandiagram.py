@@ -1,3 +1,4 @@
+import copy
 import logging
 import warnings
 from dataclasses import dataclass, field
@@ -218,3 +219,65 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     def get_loose_vertices(self):
         return [v for v in self.vertices if not self.get_connections(v)]
+
+    def copy(self):
+        copy = self.deepcopy()
+        id_map = {}
+        # Now generate new ids for all elements
+        for v in copy.vertices:
+            oid = v.id
+            id_map[oid] = v.with_new_id().id
+        for l in copy.legs:
+            oid = l.id
+            id_map[oid] = l.with_new_id().id
+        for p in copy.propagators:
+            oid = p.id
+            id_map[oid] = p.with_new_id().id
+        # Now replace all ids in the diagram
+        for l in copy.legs:
+            l.target = id_map[l.target]
+        for p in copy.propagators:
+            p.source = id_map[p.source]
+            p.target = id_map[p.target]
+        return copy
+
+    def deepcopy(self):
+        return copy.deepcopy(self)
+
+    def conjugated(self):
+        return self.copy()._conjugate()
+
+    def _conjugate(self):
+        for leg in self.legs:
+            leg.conjugate()
+        return self
+
+    def render(self, render="tikz", show=True, file=None):
+        import pyfeyn2.render.all as renderall
+        from pyfeyn2.auto.label import auto_label
+        from pyfeyn2.auto.position import (
+            auto_align_legs,
+            auto_vdw,
+            feynman_adjust_points,
+        )
+
+        # deepcopy to avoid modifying the original diagram
+        fd = self.deepcopy()
+        # remove all unpositioned vertices
+        fd = auto_align_legs(
+            fd,
+            incoming=[(0, i) for i in np.linspace(0, 10, len(self.get_incoming()))],
+            outgoing=[(10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))],
+        )
+        fd = auto_vdw(fd, points=[v for v in fd.vertices if v.x is None or v.y is None])
+        auto_label([*fd.propagators, *fd.legs])
+        renderer = renderall.renderer_from_string(render)
+        renderer(fd).render(show=show, file=file)
+
+    def _ipython_display_(self):
+        try:
+            self.render(show=True)
+        except ImportError as e:
+            warnings.warn("Could not import pyfeyn2, cannot render diagram")
+            pass
+        return self

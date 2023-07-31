@@ -99,6 +99,10 @@ class PDG(Identifiable):
                 )
                 self.type = tmptype
 
+    def is_anti(self):
+        """Return True if the particle is an anti particle, False otherwise."""
+        return self.pdgid < 0  # TODO use pdg option?
+
     def __post_init__(self):
         super().__post_init__()
         self._sync()

@@ -7,6 +7,12 @@ from smpl_util.util import withify
 global_id = 0
 
 
+def generate_new_id():
+    global global_id
+    global_id = global_id + 1
+    return global_id
+
+
 @withify()
 @dataclass
 class Identifiable:
@@ -16,8 +22,17 @@ class Identifiable:
     # id2: Optional[str] = field(default=None, metadata={"name": "id2", "namespace": ""})
 
     def __post_init__(self):
-        global global_id
         if self.id is None:
             # use some global counter to generate unique id
-            self.id = self.__class__.__name__ + str(global_id)
-            global_id = global_id + 1
+            self.with_new_id()
+
+    def with_id(self, id: str):
+        """set id"""
+        self.id = id
+        return self
+
+    def with_new_id(self):
+        """generate new id"""
+        id = generate_new_id()
+        self.id = self.__class__.__name__ + str(id)
+        return self
