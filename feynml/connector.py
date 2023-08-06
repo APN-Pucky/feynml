@@ -17,6 +17,12 @@ class Connector(Labeled, Styled, PDG):
     )
     """Momentum of the connector"""
 
+    def goes_into(self, vertex):
+        raise NotImplementedError
+
+    def goes_out_of(self, vertex):
+        raise NotImplementedError
+
     def with_tension(self, tension: float):
         """Add tension to the connector"""
         return self.with_style_properties(tension=tension)

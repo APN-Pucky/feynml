@@ -34,6 +34,14 @@ class Leg(Point, Targeting, Connector):
         self.sense = "incoming"
         return self
 
+    def goes_into(self, vertex):
+        """Return True if the leg goes into the vertex, False otherwise."""
+        return self.target == vertex.id and self.is_incoming()
+
+    def goes_out_of(self, vertex):
+        """Return True if the leg goes out of the vertex, False otherwise."""
+        return self.target == vertex.id and self.is_outgoing()
+
     incoming = with_incoming
 
     def with_outgoing(self):

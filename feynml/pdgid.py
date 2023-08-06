@@ -99,6 +99,18 @@ class PDG(Identifiable):
                 )
                 self.type = tmptype
 
+    def is_anti_fermion(self):
+        """Return True if the particle is an anti fermion, False otherwise."""
+        return self.type == "anti fermion"
+
+    def is_fermion(self):
+        """Return True if the particle is a fermion, False otherwise."""
+        return self.type == "fermion"
+
+    def is_any_fermion(self):
+        """Return True if the particle is a fermion or anti fermion, False otherwise."""
+        return self.type == "fermion" or self.type == "anti fermion"
+
     def is_anti(self):
         """Return True if the particle is an anti particle, False otherwise."""
         return self.pdgid < 0  # TODO use pdg option?

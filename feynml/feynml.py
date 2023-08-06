@@ -84,6 +84,11 @@ class FeynML(SheetHandler, XML):
         self.head.with_sheet(sheet)
         return self
 
+    def _ipython_display_(self):
+        for d in self.diagrams:
+            d._ipython_display_()
+        return self
+
     @classmethod
     def from_xml_file(cls, file: str):
         """Load self from XML file."""

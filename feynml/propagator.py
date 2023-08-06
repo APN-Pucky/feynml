@@ -9,4 +9,10 @@ from feynml.line import Line
 @withify()
 @dataclass
 class Propagator(Line, Connector):
-    pass
+    def goes_into(self, vertex):
+        """Return True if the propagator goes into the vertex, False otherwise."""
+        return self.target == vertex.id
+
+    def goes_out_of(self, vertex):
+        """Return True if the propagator goes out of the vertex, False otherwise."""
+        return self.target == vertex.id

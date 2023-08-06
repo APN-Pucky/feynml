@@ -36,3 +36,12 @@ class Identifiable:
         id = generate_new_id()
         self.id = self.__class__.__name__ + str(id)
         return self
+
+    def __lt__(self, other):
+        return self.id < other.id
+
+    def __gt__(self, other):
+        return self.id > other.id
+
+    def __hash__(self):
+        return hash(self.id)
