@@ -233,7 +233,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                         if i != fl1i and fl2[i][j].id == fl1[fl1i][fl1j].id:
                             perms += 1
                             fl2[fl1i][fl1j], fl2[i][j] = fl2[i][j], fl2[fl1i][fl1j]
-        print(perms)
+        # print(perms)
         return (-1) ** perms
 
     def get_fermion_line_ends(self):
@@ -266,6 +266,18 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 v = self.get_vertex(leg.target)
             if leg.is_outgoing() and leg.is_anti_fermion():
                 return chain
+        elif isinstance(leg, Propagator):
+            if leg.is_fermion():
+                v = self.get_vertex(leg.source)
+            elif leg.is_anti_fermion():
+                v = self.get_vertex(leg.target)
+            else:
+                raise Exception(
+                    "Propagator not connected to leg"
+                )  # when hit change to check full chain
+        else:
+            raise Exception("Unknown leg type")
+
         chain.append(v)
         # TODO handle case where there are mutliple fermions ( i.e. checkc the flow)
         cs = self.get_connections(v)
@@ -276,6 +288,18 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 return chain
         # TODO needs to handle loops and stop if already in chain
         raise Exception("Could not find fermion line end")
+
+    def has_pdgid(self, pdgid):
+        for p in [*self.propagators, *self.legs]:
+            if p.pdgid == pdgid:
+                return True
+        return False
+
+    def get_leg_by_pdgid(self, pdgid):
+        for leg in self.legs:
+            if leg.pdgid == pdgid:
+                return leg
+        return None
 
     def copy(self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True):
         copy = self.deepcopy()
@@ -319,6 +343,8 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     def _conjugate(self):
         for leg in self.legs:
             leg.conjugate()
+        for propagator in self.propagators:
+            propagator.conjugate()
         return self
 
     def render(self, render="tikz", show=True, file=None):

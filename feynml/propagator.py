@@ -16,3 +16,11 @@ class Propagator(Line, Connector):
     def goes_out_of(self, vertex):
         """Return True if the propagator goes out of the vertex, False otherwise."""
         return self.target == vertex.id
+
+    def conjugate(self):
+        """Return the conjugate of the propagator."""
+        tar = self.target
+        src = self.source
+        return self.with_target(src).with_source(
+            tar
+        )  # this is inprinciple the same as negating the id
