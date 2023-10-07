@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from feynml.id import Identifiable
+from feynml.pdgid import PDG
 
 
 @dataclass
@@ -10,6 +11,10 @@ class Sourcing:
     """Source of the object"""
 
     def __post_init__(self):
+        if isinstance(self, PDG):
+            PDG.__post_init__(self)
+        elif isinstance(self, Identifiable):
+            Identifiable.__post_init__(self)
         if isinstance(self.source, Identifiable):
             self.source = self.source.id
 
