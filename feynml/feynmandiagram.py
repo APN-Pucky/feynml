@@ -364,7 +364,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             incoming=[(0, i) for i in np.linspace(0, 10, len(self.get_incoming()))],
             outgoing=[(10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))],
         )
-        fd = auto_vdw(fd, points=[v for v in fd.vertices if v.x is None or v.y is None])
+        p = [v for v in fd.vertices if v.x is None or v.y is None]
+        if len(p) > 0:
+            fd = auto_vdw(fd, points=p)
         auto_label([*fd.propagators, *fd.legs])
         renderer = renderall.renderer_from_string(render)
         renderer(fd).render(show=show, file=file)
