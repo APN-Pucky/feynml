@@ -1,11 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+from feynml.id import Identifiable
+
 
 @dataclass
 class Targeting:
     target: Optional[str] = field(default="", metadata={})
     """Target of the object"""
+
+    def __post_init__(self):
+        if isinstance(self.target, Identifiable):
+            self.target = self.target.id
 
     def with_target(self, target):
         if isinstance(target, str):
