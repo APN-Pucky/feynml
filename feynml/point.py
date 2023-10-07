@@ -22,6 +22,14 @@ class Point:
         self.y = float(p.y)
         return self
 
+    def with_x(self, x):
+        self.x = float(x)
+        return self
+
+    def with_y(self, y):
+        self.y = float(y)
+        return self
+
     def with_xy(self, x, y):
         self.x = float(x)
         self.y = float(y)
