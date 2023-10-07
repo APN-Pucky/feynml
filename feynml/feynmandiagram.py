@@ -347,7 +347,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             propagator.conjugate()
         return self
 
-    def render(self, render="tikz", show=True, file=None):
+    def render(self, render="tikz", show=True, file=None, deepcopy=True):
         import pyfeyn2.render.all as renderall
         from pyfeyn2.auto.label import auto_label
         from pyfeyn2.auto.position import (
@@ -357,7 +357,10 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         )
 
         # deepcopy to avoid modifying the original diagram
-        fd = self.deepcopy()
+        if deepcopy:
+            fd = self.deepcopy()
+        else:
+            fd = self
         # remove all unpositioned vertices
         fd = auto_align_legs(
             fd,
