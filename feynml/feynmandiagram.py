@@ -329,7 +329,12 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         return copy
 
     def deepcopy(self):
-        return copy.deepcopy(self)
+        savesheets = self.sheet
+        self.sheet = None
+        ret = copy.deepcopy(self)
+        self.sheet = savesheets
+        ret.sheet = cssutils.parseString(self.sheet.cssText)
+        return ret
 
     def conjugated(
         self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True
