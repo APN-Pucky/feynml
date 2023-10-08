@@ -349,6 +349,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     def render(self, render="tikz", show=True, file=None, deepcopy=True):
         import pyfeyn2.render.all as renderall
+        from pyfeyn2.auto.bend import auto_bend
         from pyfeyn2.auto.label import auto_label
         from pyfeyn2.auto.position import (
             auto_align_legs,
@@ -371,6 +372,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         if len(p) > 0:
             fd = auto_vdw(fd, points=p)
         auto_label([*fd.propagators, *fd.legs])
+        fd = auto_bend(fd)
         renderer = renderall.renderer_from_string(render)
         renderer(fd).render(show=show, file=file)
 
