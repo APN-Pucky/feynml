@@ -7,7 +7,7 @@ FeynML is a project to develop an XML dialect for describing Feynman diagrams as
 [![PyPI version][pypi image]][pypi link] [![PyPI version][pypi versions]][pypi link]  ![downloads](https://img.shields.io/pypi/dm/feynml.svg) [![DOI](https://zenodo.org/badge/584503197.svg)](https://zenodo.org/badge/latestdoi/584503197)
 
 
-[![test][a t image]][a t link]     [![Coverage Status][c t i]][c t l] [![Codacy Badge][cc c i]][cc c l]  [![Codacy Badge][cc q i]][cc q l]  [![Documentation][rtd t i]][rtd t l]
+[![test][a t image]][a t link]     [![Coverage Status][c t i]][c t l] [![Codacy Badge][cc c i]][cc c l]  [![Codacy Badge][cc q i]][cc q l]  [![Documentation][rtd t i]][rtd t l] [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/APN-Pucky/pyhep-2023/final)
 
 ## Installation
 ```sh
