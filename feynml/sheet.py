@@ -51,12 +51,12 @@ default_sheet = cssutils.parseString(
         [type=baryon] {
             line: baryon;
             arrow-sense: 1;
-            double-distance: 2pt;
+            double-distance: 3pt;
         }
         [type="anti baryon"] {
             line: anti baryon;
             arrow-sense: -1;
-            line-distance: 2pt;
+            double-distance: 3pt;
         }
         [type=fermion] {
             line: fermion;

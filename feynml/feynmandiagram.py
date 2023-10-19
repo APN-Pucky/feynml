@@ -352,7 +352,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             propagator.conjugate()
         return self
 
-    def render(self, render="tikz", show=True, file=None, deepcopy=True):
+    def render(
+        self, render="tikz", show=True, file=None, auto_position=True, deepcopy=True
+    ):
         import pyfeyn2.render.all as renderall
         from pyfeyn2.auto.bend import auto_bend
         from pyfeyn2.auto.label import auto_label
@@ -367,15 +369,18 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             fd = self.deepcopy()
         else:
             fd = self
-        # remove all unpositioned vertices
-        fd = auto_align_legs(
-            fd,
-            incoming=[(0, i) for i in np.linspace(0, 10, len(self.get_incoming()))],
-            outgoing=[(10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))],
-        )
-        p = [v for v in fd.vertices if v.x is None or v.y is None]
-        if len(p) > 0:
-            fd = auto_vdw(fd, points=p)
+        if auto_position:
+            # remove all unpositioned vertices
+            fd = auto_align_legs(
+                fd,
+                incoming=[(0, i) for i in np.linspace(0, 10, len(self.get_incoming()))],
+                outgoing=[
+                    (10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))
+                ],
+            )
+            p = [v for v in fd.vertices if v.x is None or v.y is None]
+            if len(p) > 0:
+                fd = auto_vdw(fd, points=p)
         auto_label([*fd.propagators, *fd.legs])
         fd = auto_bend(fd)
         renderer = renderall.renderer_from_string(render)
