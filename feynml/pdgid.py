@@ -66,10 +66,12 @@ class PDG(Identifiable):
                 self.type = "boson"
             elif self.pdgid == 25:
                 self.type = "higgs"
-            elif self.pdgid == 2212:
+            elif self.pdgid == 2212:  # proton
                 self.type = "baryon"
-            elif self.pdgid == -2212:
+            elif self.pdgid == -2212:  # anti proton
                 self.type = "anti baryon"
+            elif self.pdgid == 111:  # pion
+                self.type = "meson"
             elif self.pdgid < 1000000 and self.pdgid > 100:
                 if self.particle.pdgid.J == 0:
                     self.type = "line"
