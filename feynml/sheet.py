@@ -48,6 +48,16 @@ default_sheet = cssutils.parseString(
         /*************************************************************************/
 
         /* General */
+        [type=baryon] {
+            line: baryon;
+            arrow-sense: 1;
+            double-distance: 2pt;
+        }
+        [type="anti baryon"] {
+            line: anti baryon;
+            arrow-sense: -1;
+            line-distance: 2pt;
+        }
         [type=fermion] {
             line: fermion;
             arrow-sense: 1;
