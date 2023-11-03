@@ -51,17 +51,17 @@ default_sheet = cssutils.parseString(
         [type=meson] {
             line: meson;
             arrow-sense: 0;
-            double-distance: 3pt;
+            double-distance: 3;
         }
         [type=baryon] {
             line: baryon;
             arrow-sense: 1;
-            double-distance: 3pt;
+            double-distance: 3;
         }
         [type="anti baryon"] {
             line: anti baryon;
             arrow-sense: -1;
-            double-distance: 3pt;
+            double-distance: 3;
         }
         [type=fermion] {
             line: fermion;
