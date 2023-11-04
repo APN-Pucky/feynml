@@ -33,15 +33,50 @@ default_sheet = cssutils.parseString(
         [shape=empty] {
             symbol : empty;
         }
-        [shape=square] {
-            symbol : square;
-        }
-        [shape=cross] {
-            symbol : cross;
-        }
         [shape=blob] {
             symbol : blob;
         }
+
+        [shape=square] {
+            symbol : square;
+        }
+        [shape=triangle] {
+            symbol : triangle;
+        }
+        [shape=diamond] {
+            symbol : diamond;
+        }
+        [shape=pentagon] {
+            symbol : pentagon;
+        }
+        [shape=hexagon] {
+            symbol : hexagon;
+        }
+
+        [shape=triagram] {
+            symbol : triagram;
+        }
+        [shape=tetragram] {
+            symbol : tetragram;
+        }
+        [shape=pentagram] {
+            symbol : pentagram;
+        }
+
+        [shape=cross] {
+            symbol : cross;
+        }
+        [shape=triacross] {
+            symbol : triacross;
+        }
+        [shape=pentacross] {
+            symbol : pentacross;
+        }
+        [shape=hexacross] {
+            symbol : pentacross;
+        }
+        
+        
 
         /*************************************************************************/
         /* Propagator */
