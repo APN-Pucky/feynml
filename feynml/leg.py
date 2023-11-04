@@ -11,6 +11,8 @@ from feynml.targeting import Targeting
 @withify()
 @dataclass
 class Leg(Point, Targeting, Connector):
+    shape: Optional[str] = field(default=None, metadata={"type": "Attribute"})
+    """Shape of the leg end"""
     sense: str = field(
         default=None, metadata={}
     )  # TODO why is this a string and not a bool?!?

@@ -72,6 +72,8 @@ class PDG(Identifiable):
                 self.type = "anti baryon"
             elif self.pdgid == 111:  # pion
                 self.type = "meson"
+            elif abs(self.pdgid) == 211:  # pion
+                self.type = "meson"
             elif self.pdgid < 1000000 and self.pdgid > 100:
                 if self.particle.pdgid.J == 0:
                     self.type = "line"
