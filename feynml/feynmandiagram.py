@@ -301,6 +301,20 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 return leg
         return None
 
+    def scale_positions(self, scale):
+        """Scale the positions of the vertices and legs."""
+        for v in self.vertices:
+            if v.x is not None:
+                v.x *= scale
+            if v.y is not None:
+                v.y *= scale
+        for l in self.legs:
+            if l.x is not None:
+                l.x *= scale
+            if l.y is not None:
+                l.y *= scale
+        return self
+
     def copy(self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True):
         copy = self.deepcopy()
         id_map = {}

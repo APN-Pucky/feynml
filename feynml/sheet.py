@@ -36,6 +36,9 @@ default_sheet = cssutils.parseString(
         [shape=blob] {
             symbol : blob;
         }
+        [shape=star] {
+            symbol : star;
+        }
 
         [shape=square] {
             symbol : square;
