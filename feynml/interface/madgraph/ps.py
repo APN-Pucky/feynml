@@ -15,7 +15,7 @@ def ps_to_feynml(filename: str, Nincoming=2, reset_xy=True):
     # drop all before "%%PageFonts: Helvetica"
     # print(lines)
     pages = lines.split("%%PageFonts: Helvetica")
-    reg = re.search(r".*%%PageFonts: Helvetica(.*)%%trailer.*", lines, flags=re.DOTALL)
+    # reg = re.search(r".*%%PageFonts: Helvetica(.*)%%trailer.*", lines, flags=re.DOTALL)
 
     diagrams = []
     idd = 0
@@ -100,8 +100,8 @@ def ps_to_feynml(filename: str, Nincoming=2, reset_xy=True):
                             inc = False
                         if l1[2] == l2[1] or l1[2] == l2[2]:
                             exl = False
-                print(l1[1].x, l1[1].y, l1[2].x, l1[2].y)
-                print(l1[5], l1[6], inc, exl)
+                # print(l1[1].x, l1[1].y, l1[2].x, l1[2].y)
+                # print(l1[5], l1[6],inc, exl)
                 if inc and l1[6] is not None:
                     # print(l1)
                     l1[4] = "incoming" if l1[6] <= Nincoming else "outgoing"
@@ -149,7 +149,7 @@ def ps_to_feynml(filename: str, Nincoming=2, reset_xy=True):
                 #    raise Exception("Unknown sense, seems stray")
                 # else:
                 #    raise Exception("Unknown line case")
-            print("#")
+            # print('#')
             if reset_xy:
                 for v in [*vertices, *legs]:
                     v.x, v.y = None, None
