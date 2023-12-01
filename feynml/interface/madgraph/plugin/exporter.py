@@ -68,6 +68,15 @@ class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
     def __init__(self, *args, **opts):
         """Possibly define extra instance attribute for this daughter class."""
         print("Initializing MadFeynMLExporter...")
+        print("args: " + str(args))
+        print("opts: " + str(opts))
+
+        oo = args[1]["output_options"]
+
+        if "draw" in oo and oo["draw"]:
+            self.draw = True
+        else:
+            self.draw = False
 
         return super(MadFeynMLExporter, self).__init__(*args, **opts)
 
@@ -111,10 +120,14 @@ class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
         with open(f, "w") as file:
             file.write(fml.to_xml())
 
-        draw = True
-        if draw:
+        if self.draw:
+            print("Drawing FeynML")
             for i, d in enumerate(fml.diagrams):
-                d.render(file=f.replace(".fml", f"{i}"), render="tikz")
+                d.render(
+                    file=f.replace(".fml", f"{i}"),
+                    render="tikz",
+                    auto_position_legs=False,
+                )
 
         return 0
         super(MadFeynMLExporter, self).draw_feynman_diagrms(matrix_element)
@@ -193,16 +206,22 @@ class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
             if not endid in vids:
                 o = Leg(
                     id="l" + str(line.number),
+                    external=str(line.number),
                     pdgid=id,
                     target=str(beginid),
                     sense="outgoing" if line.state else "incoming",
+                    x=line.end.pos_x * 10,
+                    y=line.end.pos_y * 10,
                 )
             elif beginid not in vids:
                 o = Leg(
                     id="l" + str(line.number),
+                    external=str(line.number),
                     pdgid=id,
                     target=str(endid),
                     sense="outgoing" if line.state else "incoming",
+                    x=line.begin.pos_x * 10,
+                    y=line.begin.pos_y * 10,
                 )
             else:
                 # propagator

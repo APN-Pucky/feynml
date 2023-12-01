@@ -367,7 +367,13 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         return self
 
     def render(
-        self, render="tikz", show=True, file=None, auto_position=True, deepcopy=True
+        self,
+        render="tikz",
+        show=True,
+        file=None,
+        auto_position=True,
+        auto_position_legs=True,
+        deepcopy=True,
     ):
         import pyfeyn2.render.all as renderall
         from pyfeyn2.auto.bend import auto_bend
@@ -385,13 +391,16 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             fd = self
         if auto_position:
             # remove all unpositioned vertices
-            fd = auto_align_legs(
-                fd,
-                incoming=[(0, i) for i in np.linspace(0, 10, len(self.get_incoming()))],
-                outgoing=[
-                    (10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))
-                ],
-            )
+            if auto_position_legs:
+                fd = auto_align_legs(
+                    fd,
+                    incoming=[
+                        (0, i) for i in np.linspace(0, 10, len(self.get_incoming()))
+                    ],
+                    outgoing=[
+                        (10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))
+                    ],
+                )
             p = [v for v in fd.vertices if v.x is None or v.y is None]
             if len(p) > 0:
                 fd = auto_vdw(fd, points=p)
