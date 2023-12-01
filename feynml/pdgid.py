@@ -99,7 +99,7 @@ class PDG(Identifiable):
                 self.type = "line"
             if tmptype is not None and tmptype != "" and self.type != tmptype:
                 warnings.warn(
-                    f"Type {tmptype} is not consistent with pdgid {self.pdgid}, using {self.type} instead. Using {tmptype} now."
+                    f"Type {tmptype} is not consistent with pdgid {self.pdgid}, which is {self.type}. Using {tmptype} now."
                 )
                 self.type = tmptype
 

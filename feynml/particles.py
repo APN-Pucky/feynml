@@ -41,7 +41,7 @@ def get_particle(**kwargs) -> Particle:
         return None
 
 
-name_cache = {}
+name_cache = {"a": Particle.from_pdgid(22), "z": Particle.from_pdgid(23)}
 
 
 def get_either_particle(cache=True, **kwargs) -> Particle:
