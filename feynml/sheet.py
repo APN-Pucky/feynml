@@ -145,7 +145,11 @@ default_sheet = cssutils.parseString(
         }
         [type=ghost] {
             line: ghost;
-            arrow-sense: 0;
+            arrow-sense: 1;
+        }
+        [type=anti ghost] {
+            line: ghost;
+            arrow-sense: -1;
         }
         /* BSM */
         [type=graviton] {

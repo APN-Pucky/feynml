@@ -413,6 +413,5 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         try:
             self.render(show=True)
         except ImportError as e:
-            warnings.warn("Could not import pyfeyn2, cannot render diagram")
-            pass
+            warnings.warn("Could not import pyfeyn2, cannot render diagram" + str(e))
         return self

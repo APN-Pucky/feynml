@@ -34,6 +34,16 @@ class PDG(Identifiable):
             self.particle = Particle.from_pdgid(self.pdgid)
             self.name = self.particle.name
         elif self.name is not None:
+            if self.name == "ghG" or self.name == "gh" or self.name == "ghost":
+                self.particle = None
+                self.pdgid = None
+                self.type = "ghost"
+                return
+            if self.name == "ghG~" or self.name == "gh~" or self.name == "anti ghost":
+                self.particle = None
+                self.pdgid = None
+                self.type = "anti ghost"
+                return
             self.particle = get_either_particle(
                 programmatic_name=self.name,
                 name=self.name,

@@ -84,9 +84,12 @@ class FeynML(SheetHandler, XML):
         self.head.with_sheet(sheet)
         return self
 
-    def _ipython_display_(self):
+    def render(self, show=True, **kwargs):
         for d in self.diagrams:
-            d._ipython_display_()
+            d.render(show=show, **kwargs)
+
+    def _ipython_display_(self):
+        self.render(show=True)
         return self
 
     @classmethod
