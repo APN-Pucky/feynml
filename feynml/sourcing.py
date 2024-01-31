@@ -24,3 +24,7 @@ class Sourcing:
         else:
             self.source = source.id
         return self
+
+    def goes_out_of(self, vertex):
+        """Return True if the propagator goes out of the vertex, False otherwise."""
+        return self.source == vertex.id

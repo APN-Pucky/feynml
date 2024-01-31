@@ -24,3 +24,7 @@ class Targeting:
         else:
             self.target = target.id
         return self
+
+    def goes_into(self, vertex):
+        """Return True if the propagator goes into the vertex, False otherwise."""
+        return self.target == vertex.id
