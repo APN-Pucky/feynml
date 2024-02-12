@@ -2694,13 +2694,13 @@ test = ["matplotlib", "particle", "pytest"]
 
 [[package]]
 name = "pylhe"
-version = "0.7.0"
+version = "0.8.0"
 description = "small package to get structured data out of Les Houches Event files"
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "pylhe-0.7.0-py3-none-any.whl", hash = "sha256:13b38b7022cb1772f9763a818c9589d867d258536a69cab6a1b0095bae2eb445"},
-    {file = "pylhe-0.7.0.tar.gz", hash = "sha256:11450104082db6b0b1668b269b842432a2db94b0e6f80e68babfea8b1d7cf94c"},
+    {file = "pylhe-0.8.0-py3-none-any.whl", hash = "sha256:51383b942b5cb864df16a7c363581f023d243508b12974a63bee4851b618a5b0"},
+    {file = "pylhe-0.8.0.tar.gz", hash = "sha256:cbae891b8cbbef977c2d80797e37a5d81dd70d0cc97baa694403c60e840113d6"},
 ]
 
 [package.dependencies]
@@ -2710,10 +2710,10 @@ particle = ">=0.16"
 vector = ">=0.8.1"
 
 [package.extras]
-complete = ["black", "check-manifest", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.0)", "tbump (>=6.7.0)", "twine"]
-develop = ["black", "check-manifest", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.0)", "tbump (>=6.7.0)", "twine"]
+complete = ["black", "check-manifest", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)", "tbump (>=6.7.0)", "twine"]
+develop = ["black", "check-manifest", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)", "tbump (>=6.7.0)", "twine"]
 lint = ["black", "flake8"]
-test = ["pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.0)"]
+test = ["pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)"]
 
 [[package]]
 name = "pyproject-hooks"
