@@ -7,7 +7,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 class XML:
     def to_xml(self) -> str:
         """Return self as XML."""
-        config = SerializerConfig(pretty_print=True)
+        config = SerializerConfig(indent="  ")
         serializer = XmlSerializer(config=config)
         return serializer.render(self)
 
