@@ -11,6 +11,8 @@ date-released: '2023-12-02'
 doi: 10.5281/zenodo.8430845
 license: GPL-3.0-only
 type: software
+repository-code: "https://github.com/APN-Pucky/feynml"
+url: "https://github.com/APN-Pucky/feynml"
 identifiers:
   - description: Zenodo release
     type: doi
