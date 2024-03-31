@@ -258,11 +258,7 @@ class SheetHandler:
         Get a style property of an object.
         """
         style = self.get_style(obj, xml=xml)
-        p = style.getProperty(property_name)
-        if p is None:
-            return None
-        else:
-            return p.value
+        return style.getPropertyValue(property_name, default=None)
 
     def _get_obj_style(
         self, obj: Identifiable, xml: XML = None

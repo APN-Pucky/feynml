@@ -68,10 +68,7 @@ class Styled:
     def get_style_property(self, key):
         if self.style is None:
             return None
-        if self.style.getProperty(key) is not None:
-            return self.style.getProperty(key).value
-        else:
-            return None
+        return self.style.getPropertyValue(key, default=None)
 
     def with_style_property(self, key, value):
         if self.style is not None:

@@ -4165,4 +4165,4 @@ interfaces = ["pyhepmc", "pylhe", "pyqgraf"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "32505b37e03b006950dd0655aca100ef34ada21a2f212a6bc3339a53a243afc9"
+content-hash = "211bd124194748e9bd2c3b5c4eca5e4164451869f687e71f91dc5130969a88e7"
