@@ -7,7 +7,7 @@ FeynML is a project to develop an XML dialect for describing Feynman diagrams as
 [![PyPI version][pypi image]][pypi link] [![PyPI version][pypi versions]][pypi link]  ![downloads](https://img.shields.io/pypi/dm/feynml.svg) [![DOI](https://zenodo.org/badge/584503197.svg)](https://zenodo.org/badge/latestdoi/584503197)
 
 
-[![test][a t image]][a t link]     [![Coverage Status][c t i]][c t l] [![Codacy Badge][cc c i]][cc c l]  [![Codacy Badge][cc q i]][cc q l]  [![Documentation][rtd t i]][rtd t l] [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/APN-Pucky/pyhep-2023/final)
+[![test][a t image]][a t link]     [![Coverage Status][c t i]][c t l] [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/6ca71460fc2d44049a87bf4580134322)](https://app.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6ca71460fc2d44049a87bf4580134322)](https://app.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)  [![Documentation][rtd t i]][rtd t l] [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/APN-Pucky/pyhep-2023/final)
 
 ## Installation
 ```sh
@@ -46,12 +46,6 @@ poetry shell
 
 [a t link]: https://github.com/APN-Pucky/feynml/actions/workflows/test.yml
 [a t image]: https://github.com/APN-Pucky/feynml/actions/workflows/test.yml/badge.svg
-
-
-[cc q i]: https://app.codacy.com/project/badge/Grade/135bae47c6344ab0bfb180135ea1db44
-[cc q l]: https://www.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=APN-Pucky/feynml&amp;utm_campaign=Badge_Grade
-[cc c i]: https://app.codacy.com/project/badge/Coverage/135bae47c6344ab0bfb180135ea1db44
-[cc c l]: https://www.codacy.com/gh/APN-Pucky/feynml/dashboard?utm_source=github.com&utm_medium=referral&utm_content=APN-Pucky/feynml&utm_campaign=Badge_Coverage
 
 [c t l]: https://coveralls.io/github/APN-Pucky/feynml?branch=master
 [c t i]: https://coveralls.io/repos/github/APN-Pucky/feynml/badge.svg?branch=master
