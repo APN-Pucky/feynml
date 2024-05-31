@@ -111,7 +111,6 @@ def generate_fml(feyn_model, incoming_pdgs, outgoing_pdgs):
         str_pdg = pdg_id_to_qgraf_name(fm, pdg, True)  # Same bool as qfm call above
         outgoing.append(f"{str_pdg}[p{momentum_index}]")
         momentum_index += 1
-    print(incoming, outgoing)
     # run it
     xml_string = qgraf.run(
         ", ".join(incoming),
