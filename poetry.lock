@@ -2771,13 +2771,13 @@ test = ["matplotlib", "particle", "pytest"]
 
 [[package]]
 name = "pylhe"
-version = "0.9.0"
+version = "0.9.1"
 description = "A small package to get structured data out of Les Houches Event files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pylhe-0.9.0-py3-none-any.whl", hash = "sha256:733915ab481181937702a1e41cc7ad19e59b7b2c8a9ac1ba59ef07202b6be5fb"},
-    {file = "pylhe-0.9.0.tar.gz", hash = "sha256:fe294dd2b058fb9b131b0db6b391c363aff4e8c1813205c6e706e65b0be772f1"},
+    {file = "pylhe-0.9.1-py3-none-any.whl", hash = "sha256:406f8418d84e240ccb3174b7692416c6b5c993f41f432af96e59b390017baaf9"},
+    {file = "pylhe-0.9.1.tar.gz", hash = "sha256:920c84f344f4e4dbcc080d11a51b4a9d34dec6edadc6feacd258732ba729a668"},
 ]
 
 [package.dependencies]
@@ -2787,8 +2787,8 @@ particle = ">=0.16"
 vector = ">=0.8.1"
 
 [package.extras]
-develop = ["black", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)", "tbump (>=6.7.0)"]
-lint = ["black", "flake8"]
+develop = ["pre-commit", "pydocstyle", "pytest (>=6.0)", "pytest-cov (>=2.5.1)", "ruff", "scikit-hep-testdata (>=0.4.36)", "tbump (>=6.7.0)"]
+lint = ["ruff"]
 test = ["pydocstyle", "pytest (>=6.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)"]
 
 [[package]]
