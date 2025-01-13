@@ -48,7 +48,7 @@ optional = true
 ipython =  "*"
 jupyterlab =  "*"
 jupyter = "*"
-poetry-dynamic-versioning = {extras = ["plugin"], version = ">=0.21.1,<1.6.0"}
+poetry-dynamic-versioning = {extras = ["plugin"], version = ">=0.21.1,<1.7.0"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
