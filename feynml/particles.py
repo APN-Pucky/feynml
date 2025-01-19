@@ -1,4 +1,4 @@
-from particle import PDGID, Particle
+from particle import PDGID, Particle, ParticleNotFound
 from particle.converters.bimap import DirectionalMaps
 
 PDG2LaTeXNameMap, LaTeX2PDGNameMap = DirectionalMaps(
@@ -29,6 +29,19 @@ def get_name(pid: int) -> str:
     global PDG2LaTeXNameMap
     pdgid = PDG2LaTeXNameMap[pid]
     return pdgid
+
+
+def get_particle_and_name_from_pdgid(pdgid: int) -> Particle:
+    try:
+        particle = Particle.from_pdgid(pdgid)
+        name = particle.name
+        return particle, name
+    except ParticleNotFound:
+        # So far primary for SUSY
+        name = get_name(pdgid)
+        particle = Particle(pdgid, name)
+        particle.latex_name = name
+        return particle, name
 
 
 def get_particle(**kwargs) -> Particle:

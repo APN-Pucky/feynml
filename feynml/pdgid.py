@@ -7,7 +7,7 @@ from smpl_util.util import withify
 
 from feynml.id import Identifiable
 
-from .particles import get_either_particle
+from .particles import get_either_particle, get_particle_and_name_from_pdgid
 
 
 @withify()
@@ -24,15 +24,13 @@ class PDG(Identifiable):
     )
     """Type of the particle, e.g. fermion, boson, etc."""
 
-    # TODO check SUSY
     particle: Optional[Particle] = field(default=None, metadata={"type": "Ignore"})
-    """Particle object from the particle package"""
+    # """Particle object from the particle package"""
 
     def _sync(self):
         """Sync the particle with the pdgid, name etc."""
         if self.pdgid is not None:
-            self.particle = Particle.from_pdgid(self.pdgid)
-            self.name = self.particle.name
+            self.particle, self.name = get_particle_and_name_from_pdgid(self.pdgid)
         elif self.name is not None:
             if self.name == "ghG" or self.name == "gh" or self.name == "ghost":
                 self.particle = None
@@ -84,6 +82,53 @@ class PDG(Identifiable):
                 self.type = "meson"
             elif abs(self.pdgid) == 211:  # pion
                 self.type = "meson"
+            elif abs(self.pdgid) in [
+                1000022,
+                1000023,
+                1000024,
+                1000025,
+                1000035,
+                1000037,
+            ]:
+                self.type = "gaugino"
+            elif abs(self.pdgid) in [
+                1000011,
+                1000012,
+                1000013,
+                1000014,
+                1000015,
+                1000016,
+            ]:
+                self.type = "slepton"
+            elif abs(self.pdgid) in [
+                2000011,
+                2000012,
+                2000013,
+                2000014,
+                2000015,
+                2000016,
+            ]:
+                self.type = "slepton"
+            elif abs(self.pdgid) in [
+                1000001,
+                1000002,
+                1000003,
+                1000004,
+                1000005,
+                1000006,
+            ]:
+                self.type = "squark"
+            elif abs(self.pdgid) in [
+                2000001,
+                2000002,
+                2000003,
+                2000004,
+                2000005,
+                2000006,
+            ]:
+                self.type = "squark"
+            elif abs(self.pdgid) in [1000021]:
+                self.type = "gluino"
             elif self.pdgid < 1000000 and self.pdgid > 100:
                 if self.particle.pdgid.J == 0:
                     self.type = "line"
