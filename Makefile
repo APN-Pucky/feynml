@@ -1,26 +1,26 @@
 livehtml:
-	poetry run $(MAKE) -C docs livehtml
+	hatch run all:$(MAKE) -C docs livehtml
 
 html:
-	poetry run $(MAKE) -C docs html
+	hatch run all:$(MAKE) -C docs html
 
 pdf:
-	poetry run $(MAKE) -C docs latexpdf
-	
+	hatch run all:$(MAKE) -C docs latexpdf
+
 doc: html
 
 install:
-	poetry install --with dev --with test --extras "interfaces"
+	hatch env create
 	python3 -m pip install --user .
 
 build:
-	poetry build
+	hatch build
 
 test:
 	rm -f .coverage coverage.xml
-	poetry run pytest
+	hatch test
 
-commit: 
+commit:
 	-git add .
 	-git commit
 
@@ -30,7 +30,7 @@ push: commit
 pull: commit
 	git pull
 
-clean: 
+clean:
 	rm -r docs/build docs/source/_autosummary
 	rm -r .eggs .pytest_cache *.egg-info dist build
 
