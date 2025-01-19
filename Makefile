@@ -18,7 +18,7 @@ build:
 
 test:
 	rm -f .coverage coverage.xml
-	hatch test
+	hatch test --extras test
 
 commit:
 	-git add .
