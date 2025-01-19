@@ -30,72 +30,72 @@ def get_test_fml():
 
 def test_css_direct():
     fd, fml = get_test_fml()
-    l = fd.get_leg("myid1").with_style_property("color", "green")
-    assert fml.get_style_property(l, "color") == "green"
+    le = fd.get_leg("myid1").with_style_property("color", "green")
+    assert fml.get_style_property(le, "color") == "green"
 
 
 def test_css_global_rule():
     fd, fml = get_test_fml()
     fml.with_rule(" * { color: red } ")
-    l = fd.get_leg("myid1")
-    assert fml.get_style_property(l, "color") == "red"
-    assert fd.get_style_property(l, "color") == "red"
+    le = fd.get_leg("myid1")
+    assert fml.get_style_property(le, "color") == "red"
+    assert fd.get_style_property(le, "color") == "red"
 
     fd.with_rule(" * { color: green } ")
-    assert fml.get_style_property(l, "color") == "green"
-    assert fd.get_style_property(l, "color") == "green"
+    assert fml.get_style_property(le, "color") == "green"
+    assert fd.get_style_property(le, "color") == "green"
 
 
 def test_css_id():
     fd, fml = get_test_fml()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fml.add_rule("#myid1 { color: blue }")
-    assert fml.get_style_property(l, "color") == "blue"
-    assert fd.get_style_property(l, "color") == "blue"
+    assert fml.get_style_property(le, "color") == "blue"
+    assert fd.get_style_property(le, "color") == "blue"
     fd.add_rule("#myid1 { color: gray }")
-    assert fml.get_style_property(l, "color") == "gray"
-    assert fd.get_style_property(l, "color") == "gray"
+    assert fml.get_style_property(le, "color") == "gray"
+    assert fd.get_style_property(le, "color") == "gray"
 
 
 def test_css_pdgid():
     fd, fml = get_test_fml()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fml.add_rule('[pdgid="21"] { color: gray }')
-    assert fml.get_style_property(l, "color") == "gray"
-    assert fd.get_style_property(l, "color") == "gray"
+    assert fml.get_style_property(le, "color") == "gray"
+    assert fd.get_style_property(le, "color") == "gray"
     fd.add_rule('[pdgid="21"] { color: black }')
-    assert fml.get_style_property(l, "color") == "black"
-    assert fd.get_style_property(l, "color") == "black"
+    assert fml.get_style_property(le, "color") == "black"
+    assert fd.get_style_property(le, "color") == "black"
 
 
 def test_css_type():
     fd, fml = get_test_fml()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fml.add_rule('[type="gluon"] { color: gray }')
-    assert fml.get_style_property(l, "color") == "gray"
-    assert fd.get_style_property(l, "color") == "gray"
+    assert fml.get_style_property(le, "color") == "gray"
+    assert fd.get_style_property(le, "color") == "gray"
     fd.add_rule('[type="gluon"] { color: blue }')
-    assert fml.get_style_property(l, "color") == "blue"
-    assert fd.get_style_property(l, "color") == "blue"
+    assert fml.get_style_property(le, "color") == "blue"
+    assert fd.get_style_property(le, "color") == "blue"
 
 
 def test_css_class():
     fd, fml = get_test_fml()
-    l = fd.get_leg("myid1").with_class("notred")
+    le = fd.get_leg("myid1").with_class("notred")
     fml.add_rule(".notred { color: blue }")
-    assert fml.get_style_property(l, "color") == "blue"
-    assert fd.get_style_property(l, "color") == "blue"
+    assert fml.get_style_property(le, "color") == "blue"
+    assert fd.get_style_property(le, "color") == "blue"
     fd.add_rule(".notred { color: red }")
-    assert fml.get_style_property(l, "color") == "red"
-    assert fd.get_style_property(l, "color") == "red"
+    assert fml.get_style_property(le, "color") == "red"
+    assert fd.get_style_property(le, "color") == "red"
 
 
 def test_css_obj():
     fd, fml = get_test_fml()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fml.add_rule("leg { color: black }")
-    assert fml.get_style_property(l, "color") == "black"
-    assert fd.get_style_property(l, "color") == "black"
+    assert fml.get_style_property(le, "color") == "black"
+    assert fd.get_style_property(le, "color") == "black"
 
     p = fd.propagators[0]
     fml.add_rule("propagator { color: green }")
