@@ -78,8 +78,8 @@ default_sheet = cssutils.parseString(
         [shape=hexacross] {
             symbol : pentacross;
         }
-        
-        
+
+
 
         /*************************************************************************/
         /* Propagator */
@@ -239,7 +239,7 @@ class SheetHandler:
         """
         Get the style of an object.
 
-        This is prefered over accessing the style attribute directly, since it includes class and pdgid definitions.
+        This is preferred over accessing the style attribute directly, since it includes class and pdgid definitions.
         """
         # selectorText is string
         css = []

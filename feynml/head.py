@@ -1,7 +1,4 @@
-import logging
-import warnings
 from dataclasses import dataclass, field
-from importlib.metadata import version
 from typing import List, Optional
 
 import cssutils
@@ -10,7 +7,7 @@ import smpl_io.io as io
 from feynml.link import Link
 from feynml.meta import Meta as alias_meta
 from feynml.sheet import SheetHandler
-from feynml.styled import CSSSheet, Styled
+from feynml.styled import CSSSheet
 
 
 @dataclass

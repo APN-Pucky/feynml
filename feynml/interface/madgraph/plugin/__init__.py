@@ -7,7 +7,7 @@
 #                                                   #
 #####################################################
 
-import madgraph
+import madgraph  # noqa: F401
 
 import feynml
 
@@ -24,14 +24,14 @@ from . import exporter as madfeynml_exporter
 # 1. Define new output mode
 #    example: new_output = {'myformat': MYCLASS}
 #    madgraph will then allow the command "output myformat PATH"
-#    MYCLASS should inherated of the class madgraph.iolibs.export_v4.VirtualExporter
+#    MYCLASS should inherited of the class madgraph.iolibs.export_v4.VirtualExporter
 new_output = {"feynml": madfeynml_exporter.MadFeynMLExporter}
 # new_output = None
 
 # 2. Define new way to handle the cluster.
 #    example new_cluster = {'mycluster': MYCLUSTERCLASS}
 #    allow "set cluster_type mycluster" in madgraph
-#    MYCLUSTERCLASS should inherated from madgraph.various.cluster.Cluster
+#    MYCLUSTERCLASS should inherited from madgraph.various.cluster.Cluster
 new_cluster = {}
 
 # 3. Define a new interface (allow to add/modify MG5 command)

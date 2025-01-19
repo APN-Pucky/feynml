@@ -1,6 +1,5 @@
 import re
 from dataclasses import dataclass
-from typing import List
 
 from feynml.interface.formcalc.feynmangraph import FeynmanGraph
 from feynml.interface.formcalc.field import Field

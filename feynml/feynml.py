@@ -1,4 +1,3 @@
-import logging
 import os
 import warnings
 from dataclasses import dataclass, field
@@ -12,7 +11,6 @@ from feynml.head import Head
 from feynml.id import Identifiable
 from feynml.meta import Meta
 from feynml.sheet import SheetHandler
-from feynml.styled import CSSSheet
 from feynml.xml import XML
 
 feynml_version = version("feynml")

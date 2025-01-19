@@ -11,7 +11,7 @@ style = r"""
 <<feynml>>
 <diagram>
   <back>
- <<diagram 
+ <<diagram
           id="Diagram<diagram_index>"
           incoming="<legs_in>"
           outgoing="<legs_out>"
@@ -19,13 +19,13 @@ style = r"""
           symmmetry_factor="<symmetry_factor>"
  >>
 
-<vertex_loop> 
+<vertex_loop>
   <<vertex id="Vert<vertex_index>">>
   <</vertex>>
 <end>
 
 <in_loop>
-  <<leg id="In<in_index>">>  
+  <<leg id="In<in_index>">>
         <<name>><field><</name>>
         <<sense>>incoming<</sense>>
         <<target>>Vert<vertex_index><</target>>
@@ -35,8 +35,8 @@ style = r"""
   <</leg>>
 <end>
 
-<out_loop> 
-  <<leg id="Out<out_index>">>  
+<out_loop>
+  <<leg id="Out<out_index>">>
         <<name>><field><</name>>
         <<sense>>outgoing<</sense>>
         <<target>>Vert<vertex_index><</target>>
@@ -46,8 +46,8 @@ style = r"""
   <</leg>>
 <end>
 
-<propagator_loop> 
-  <<propagator id="Prop<propagator_index>">>  
+<propagator_loop>
+  <<propagator id="Prop<propagator_index>">>
         <<name>><field><</name>>
         <<source>>Vert<dual-vertex_index><</source>>
         <<target>>Vert<vertex_index><</target>>
@@ -82,7 +82,7 @@ def generate_fml(feyn_model, incoming_pdgs, outgoing_pdgs):
     try:
         from feynmodel.feyn_model import FeynModel
         from feynmodel.interface.qgraf import feynmodel_to_qgraf, pdg_id_to_qgraf_name
-        from feynmodel.interface.ufo import load_ufo_model
+        from feynmodel.interface.ufo import load_ufo_model  # noqa: F401
     except ImportError:
         raise ImportError("Please install the feynmodel package")
     try:
