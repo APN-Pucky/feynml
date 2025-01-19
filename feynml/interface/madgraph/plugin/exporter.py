@@ -5,25 +5,11 @@
 #                                                   #
 #####################################################
 
-import copy
-import itertools
 import logging
 import os
-import re
-import shutil
-import subprocess
-from collections import defaultdict
-from math import fmod
 
-import madgraph.core.color_algebra as color
 import madgraph.core.helas_objects as helas_objects
-import madgraph.iolibs.drawing_eps as draw
-import madgraph.iolibs.file_writers as writers
-import madgraph.iolibs.files as files
 import madgraph.iolibs.group_subprocs as group_subprocs
-import madgraph.iolibs.helas_call_writers as helas_call_writers
-import madgraph.iolibs.template_files as Template
-import madgraph.iolibs.ufo_expression_parsers as parsers
 
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.feynml import FeynML
@@ -35,10 +21,9 @@ from feynml.vertex import Vertex
 
 plugin_path = os.path.dirname(os.path.realpath(__file__))
 
-import madgraph.iolibs.export_fks as export_fks
-from madgraph import MG5DIR, InvalidCmd, MadGraph5Error
-from madgraph.core.drawing import DiagramDrawer, DrawOption
-from madgraph.iolibs.export_v4 import ProcessExporterFortran
+from madgraph import MadGraph5Error  # noqa: E402
+from madgraph.core.drawing import DiagramDrawer, DrawOption  # noqa: E402
+from madgraph.iolibs.export_v4 import ProcessExporterFortran  # noqa: E402
 
 logger = logging.getLogger("MadFeynML_plugin.MEExporter")
 
@@ -50,7 +35,6 @@ class MadFeynMLExporterError(MadGraph5Error):
 
 
 class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
-
     ## check status of the directory. Remove it if already exists
     # check = True
     ## Language type: 'v4' for f77 'cpp' for C++ output
@@ -130,7 +114,7 @@ class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
                 )
 
         return 0
-        super(MadFeynMLExporter, self).draw_feynman_diagrms(matrix_element)
+        super(MadFeynMLExporter, self).draw_feynman_diagrms(matrix_element)  # noqa: F821
 
     def diagrams_to_feynml(self, matrix_elements: helas_objects.HelasMatrixElementList):
         fds = []
@@ -171,10 +155,10 @@ class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
         def v_to_id(v):
             # check if has attr lines
             if hasattr(v, "lines"):
-                return "v" + "v".join(["v" + str(l.number) for l in v.lines])
+                return "v" + "v".join(["v" + str(le.number) for le in v.lines])
             else:
                 return "v" + "v".join(
-                    ["v" + str(l.get("number")) for l in v.get("legs")]
+                    ["v" + str(le.get("number")) for le in v.get("legs")]
                 )
 
         # add Vertices
@@ -203,7 +187,7 @@ class MadFeynMLExporter(ProcessExporterFortran, DiagramDrawer):
             beginid = v_to_id(line.begin)
             if model.get_particle(abs(id)).get("self_antipart"):
                 id = abs(id)
-            if not endid in vids:
+            if endid not in vids:
                 o = Leg(
                     id="l" + str(line.number),
                     external=str(line.number),

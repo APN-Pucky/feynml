@@ -1,6 +1,3 @@
-from smpl_doc.doc import deprecated
-
-
 def id_wrap(idd, id_type=""):
     """
     Wrap a id in the format expected by feynml.

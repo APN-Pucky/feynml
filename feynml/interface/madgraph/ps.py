@@ -4,6 +4,7 @@ from feynml import FeynmanDiagram, FeynML, Head, Leg, Meta, Propagator, Vertex
 
 # TODO move this to feynml interface module
 
+
 # MadGraph
 def ps_to_feynml(filename: str, Nincoming=2, reset_xy=True):
     """Read Feynman diagram from eps file"""
@@ -29,10 +30,10 @@ def ps_to_feynml(filename: str, Nincoming=2, reset_xy=True):
             legs = []
             props = []
             ll = d.split("\n")
-            for i, l in enumerate(ll):
+            for i, le in enumerate(ll):
                 match = re.search(
                     r"([0-9\.]+)\s([0-9\.]+)\s([0-9\.]+)\s([0-9\.]+)\s([0-9\.\-]+)?\s?([0-9\.\-]+)?\s?F([a-zA-Z]+).*",
-                    l,
+                    le,
                     flags=re.DOTALL,
                 )
                 match2 = (

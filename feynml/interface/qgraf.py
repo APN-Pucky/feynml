@@ -11,7 +11,7 @@ style = r"""
 <<feynml>>
 <diagram>
   <back>
- <<diagram 
+ <<diagram
           id="Diagram<diagram_index>"
           incoming="<legs_in>"
           outgoing="<legs_out>"
@@ -19,13 +19,13 @@ style = r"""
           symmmetry_factor="<symmetry_factor>"
  >>
 
-<vertex_loop> 
+<vertex_loop>
   <<vertex id="Vert<vertex_index>">>
   <</vertex>>
 <end>
 
 <in_loop>
-  <<leg id="In<in_index>">>  
+  <<leg id="In<in_index>">>
         <<name>><field><</name>>
         <<sense>>incoming<</sense>>
         <<target>>Vert<vertex_index><</target>>
@@ -35,8 +35,8 @@ style = r"""
   <</leg>>
 <end>
 
-<out_loop> 
-  <<leg id="Out<out_index>">>  
+<out_loop>
+  <<leg id="Out<out_index>">>
         <<name>><field><</name>>
         <<sense>>outgoing<</sense>>
         <<target>>Vert<vertex_index><</target>>
@@ -46,8 +46,8 @@ style = r"""
   <</leg>>
 <end>
 
-<propagator_loop> 
-  <<propagator id="Prop<propagator_index>">>  
+<propagator_loop>
+  <<propagator id="Prop<propagator_index>">>
         <<name>><field><</name>>
         <<source>>Vert<dual-vertex_index><</source>>
         <<target>>Vert<vertex_index><</target>>
@@ -71,3 +71,55 @@ def get_style() -> str:
     """Get the style for qgraf to produce feynml."""
     global style
     return style
+
+
+def generate_fml(feyn_model, incoming_pdgs, outgoing_pdgs):
+    """Generate a feynml object from a feyn_model and incoming/outgoing pdgs."""
+    try:
+        from pyqgraf import qgraf
+    except ImportError:
+        raise ImportError("Please install the pyqgraf package")
+    try:
+        from feynmodel.feyn_model import FeynModel
+        from feynmodel.interface.qgraf import feynmodel_to_qgraf, pdg_id_to_qgraf_name
+        from feynmodel.interface.ufo import load_ufo_model  # noqa: F401
+    except ImportError:
+        raise ImportError("Please install the feynmodel package")
+    try:
+        from xsdata.formats.dataclass.parsers import XmlParser
+
+        from feynml.feynml import FeynML
+        from feynml.interface.qgraf import style
+    except ImportError:
+        raise ImportError("Please install the feynml package")
+
+    fm = feyn_model
+
+    assert isinstance(fm, FeynModel)
+    qfm = feynmodel_to_qgraf(fm, True, False)
+    # make sure qgraf is installed
+    qgraf.install()
+
+    momentum_index = 1
+    incoming = []
+    outgoing = []
+    for pdg in incoming_pdgs:
+        str_pdg = pdg_id_to_qgraf_name(fm, pdg, True)  # Same bool as qfm call above
+        incoming.append(f"{str_pdg}[p{momentum_index}]")
+        momentum_index += 1
+    for pdg in outgoing_pdgs:
+        str_pdg = pdg_id_to_qgraf_name(fm, pdg, True)  # Same bool as qfm call above
+        outgoing.append(f"{str_pdg}[p{momentum_index}]")
+        momentum_index += 1
+    # run it
+    xml_string = qgraf.run(
+        ", ".join(incoming),
+        ", ".join(outgoing),
+        loops=0,
+        loop_momentum="l",
+        model=qfm,
+        style=style,
+    )
+    parser = XmlParser()
+    fml = parser.from_string(xml_string, FeynML)
+    return fml

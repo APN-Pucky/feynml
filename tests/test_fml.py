@@ -38,12 +38,12 @@ def test_fml_load():
 
 def test_fml_css():
     fml = FeynML.from_xml_file("tests/test.fml")
-    for l in fml.diagrams[0].legs:
-        if l.id == "E1":
-            if l.style is None:
+    for le in fml.diagrams[0].legs:
+        if le.id == "E1":
+            if le.style is None:
                 continue
-            l.style.opacity = "0.5"
-            l.style.width = "40%"
+            le.style.opacity = "0.5"
+            le.style.width = "40%"
 
     assert (
         fml.get_style_property(
@@ -58,12 +58,12 @@ def test_fml_css_online():
     fml.head.links[
         0
     ].href = "https://raw.githubusercontent.com/APN-Pucky/feynml/master/tests/test_styles.css"
-    for l in fml.diagrams[0].legs:
-        if l.id == "E1":
-            if l.style is None:
+    for le in fml.diagrams[0].legs:
+        if le.id == "E1":
+            if le.style is None:
                 continue
-            l.style.opacity = "0.5"
-            l.style.width = "40%"
+            le.style.opacity = "0.5"
+            le.style.width = "40%"
 
     assert (
         fml.get_style_property(

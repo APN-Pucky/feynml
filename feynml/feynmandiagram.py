@@ -2,13 +2,11 @@ import copy
 import logging
 import warnings
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Union
 
 import cssutils
 import numpy as np
 import smpl_doc.doc as doc
-from cssselect import GenericTranslator, SelectorError
-from lxml import etree
 from smpl_util.util import withify
 
 from feynml.head import Head
@@ -20,7 +18,7 @@ from feynml.styled import CSSSheet, Styled
 from feynml.vertex import Vertex
 from feynml.xml import XML
 
-from .type import get_default_sheet
+from .log import debug
 
 # We don't want to see the cssutils warnings, since we have custom properties
 cssutils.log.setLevel(logging.CRITICAL)
@@ -70,16 +68,16 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         return self
 
     def has_id(self, id):
-        for l in [self.propagators, self.vertices, self.legs]:
-            for a in l:
+        for le in [self.propagators, self.vertices, self.legs]:
+            for a in le:
                 if a.id == id:
                     return True
         return False
 
     def get(self, lmbda):
         ret = []
-        for l in [self.propagators, self.vertices, self.legs]:
-            for a in l:
+        for le in [self.propagators, self.vertices, self.legs]:
+            for a in le:
                 try:
                     if lmbda(a):
                         ret.append(a)
@@ -121,7 +119,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
 
     def get_neighbours(self, vertex):
         return [v for v in self.vertices if self.are_neighbours(vertex, v)] + [
-            l for l in self.legs if self.are_neighbours(vertex, l)
+            le for le in self.legs if self.are_neighbours(vertex, le)
         ]
 
     def are_neighbours(self, vertex1, vertex2):
@@ -134,10 +132,10 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             ]
         ) or any(
             [
-                l
-                for l in self.legs
-                if (l.id == vertex1.id and l.target == vertex2.id)
-                or (l.id == vertex2.id and l.target == vertex1.id)
+                le
+                for le in self.legs
+                if (le.id == vertex1.id and le.target == vertex2.id)
+                or (le.id == vertex2.id and le.target == vertex1.id)
             ]
         )
 
@@ -227,7 +225,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         # TODO assert same legs!
         perms = 0
         fl1 = sorted(self.get_fermion_line_ends())
+        debug(f"{fl1=}")
         fl2 = sorted(fd.get_fermion_line_ends())
+        debug(f"{fl2=}")
         # find fl1[0][0] in fl2
         for fl1i in range(len(fl1)):
             for fl1j in [0, 1]:
@@ -236,15 +236,17 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                         if i != fl1i and fl2[i][j].id == fl1[fl1i][fl1j].id:
                             perms += 1
                             fl2[fl1i][fl1j], fl2[i][j] = fl2[i][j], fl2[fl1i][fl1j]
-        # print(perms)
+        debug(f"{perms=}")
         return (-1) ** perms
 
     def get_fermion_line_ends(self):
+        """ """
         fl = self.get_fermion_lines()
         ret = [[f[0], f[-1]] for f in fl]
         return ret
 
     def get_fermion_lines(self):
+        """ """
         ret = []
         for leg in self.legs:
             if leg.is_outgoing() and leg.is_fermion():
@@ -282,7 +284,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             raise Exception("Unknown leg type")
 
         chain.append(v)
-        # TODO handle case where there are mutliple fermions ( i.e. checkc the flow)
+        # TODO handle case where there are multiple fermions ( i.e. checkc the flow)
         cs = self.get_connections(v)
         for c in cs:
             if c != leg and c.is_any_fermion():
@@ -311,11 +313,11 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 v.x *= scale
             if v.y is not None:
                 v.y *= scale
-        for l in self.legs:
-            if l.x is not None:
-                l.x *= scale
-            if l.y is not None:
-                l.y *= scale
+        for le in self.legs:
+            if le.x is not None:
+                le.x *= scale
+            if le.y is not None:
+                le.y *= scale
         return self
 
     def copy(self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True):
@@ -327,19 +329,19 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             if new_vertex_ids:
                 v = v.with_new_id()
             id_map[oid] = v.id
-        for l in copy.legs:
-            oid = l.id
+        for le in copy.legs:
+            oid = le.id
             if new_leg_ids:
-                l = l.with_new_id()
-            id_map[oid] = l.id
+                le = le.with_new_id()
+            id_map[oid] = le.id
         for p in copy.propagators:
             oid = p.id
             if new_propagator_ids:
                 p = p.with_new_id()
             id_map[oid] = p.id
         # Now replace all ids in the diagram
-        for l in copy.legs:
-            l.target = id_map[l.target]
+        for le in copy.legs:
+            le.target = id_map[le.target]
         for p in copy.propagators:
             p.source = id_map[p.source]
             p.target = id_map[p.target]
@@ -356,6 +358,10 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     def conjugated(
         self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True
     ):
+        """
+        Warning: This does not mathematically conjugate the diagram, but only switches directions.
+        Differences to the mathematical conjugation are missing complex conjugation of i's and wrong momenta for e.g. 3g-vertex.
+        """
         return self.copy(
             new_vertex_ids=new_vertex_ids,
             new_leg_ids=new_leg_ids,
@@ -384,7 +390,6 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         from pyfeyn2.auto.position import (
             auto_align_legs,
             auto_vdw,
-            feynman_adjust_points,
         )
 
         # deepcopy to avoid modifying the original diagram

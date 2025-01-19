@@ -1,5 +1,3 @@
-import pytest
-
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.leg import Leg
 from feynml.propagator import Propagator
@@ -31,50 +29,50 @@ def get_test_fd():
 
 def test_css_direct():
     fd = get_test_fd()
-    l = fd.get_leg("myid1").with_style_property("color", "green")
-    assert fd.get_style_property(l, "color") == "green"
+    le = fd.get_leg("myid1").with_style_property("color", "green")
+    assert fd.get_style_property(le, "color") == "green"
 
 
 def test_css_global_rule():
     fd = get_test_fd()
     fd.with_rule(" * { color: red } ")
-    l = fd.get_leg("myid1")
-    assert fd.get_style_property(l, "color") == "red"
+    le = fd.get_leg("myid1")
+    assert fd.get_style_property(le, "color") == "red"
 
 
 def test_css_id():
     fd = get_test_fd()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fd.add_rule("#myid1 { color: blue }")
-    assert fd.get_style_property(l, "color") == "blue"
+    assert fd.get_style_property(le, "color") == "blue"
 
 
 def test_css_pdgid():
     fd = get_test_fd()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fd.add_rule('[pdgid="21"] { color: gray }')
-    assert fd.get_style_property(l, "color") == "gray"
+    assert fd.get_style_property(le, "color") == "gray"
 
 
 def test_css_type():
     fd = get_test_fd()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fd.add_rule('[type="gluon"] { color: gray }')
-    assert fd.get_style_property(l, "color") == "gray"
+    assert fd.get_style_property(le, "color") == "gray"
 
 
 def test_css_class():
     fd = get_test_fd()
-    l = fd.get_leg("myid1").with_class("notred")
+    le = fd.get_leg("myid1").with_class("notred")
     fd.add_rule(".notred { color: blue }")
-    assert fd.get_style_property(l, "color") == "blue"
+    assert fd.get_style_property(le, "color") == "blue"
 
 
 def test_css_obj():
     fd = get_test_fd()
-    l = fd.get_leg("myid1")
+    le = fd.get_leg("myid1")
     fd.add_rule("leg { color: black }")
-    assert fd.get_style_property(l, "color") == "black"
+    assert fd.get_style_property(le, "color") == "black"
 
     p = fd.propagators[0]
     fd.add_rule("propagator { color: green }")

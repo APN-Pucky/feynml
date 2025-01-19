@@ -5,34 +5,20 @@
 #                                                   #
 #####################################################
 
-import itertools
 import logging
 import multiprocessing
 import os
-import random
-import re
 import shutil
 import signal
-import subprocess
-import sys
 import time
 
 import madgraph.core.helas_objects as helas_objects
 import madgraph.fks.fks_helas_objects as fks_helas
 import madgraph.interface.amcatnlo_run_interface as amcatnlo_run
-import madgraph.interface.extended_cmd as extended_cmd
-import madgraph.interface.loop_interface as loop_interface
-import madgraph.interface.madgraph_interface as madgraph_interface
 import madgraph.interface.master_interface as master_interface
-import madgraph.iolibs.export_v4 as export_v4
-import madgraph.iolibs.files as files
 import madgraph.iolibs.helas_call_writers as helas_call_writers
-import madgraph.various.lhe_parser as lhe_parser
-import madgraph.various.misc as misc
-import madgraph.various.progressbar as pbar
 import six.moves.cPickle
-from madgraph import MG5DIR, InvalidCmd, MadGraph5Error
-from madgraph.interface.loop_interface import CommonLoopInterface
+from madgraph import InvalidCmd, MadGraph5Error
 
 from . import interface as MadFeynML_exporter
 from .madgraph.plugin import fks as MadFeynML_fks
@@ -556,10 +542,12 @@ class MadFeynMLInterface(master_interface.MasterCmd):
                 self._curr_exporter.write_coef_specs_file(max_loop_vertex_ranks)
             if self._generate_info:
                 self._curr_exporter.write_procdef_mg5(
-                    card_path, self._curr_model["name"], self._generate_info  #
+                    card_path,
+                    self._curr_model["name"],
+                    self._generate_info,  #
                 )
                 try:
-                    cmd.Cmd.onecmd(self, "history .")
+                    cmd.Cmd.onecmd(self, "history .")  # noqa: F821
                 except Exception:
                     logger.debug('fail to run command "history cmd"')
                     pass
@@ -570,7 +558,7 @@ class MadFeynMLInterface(master_interface.MasterCmd):
                 subproc_path, self._curr_matrix_elements.get("initial_states")
             )
 
-        cpu_time1 = time.time()
+        cpu_time1 = time.time()  # noqa: F841
 
 
 class ResummationRunInterface(amcatnlo_run.aMCatNLOCmdShell):

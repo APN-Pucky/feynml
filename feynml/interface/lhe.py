@@ -71,7 +71,7 @@ def lhe_event_to_feynman(event: pylhe.LHEEvent) -> FeynmanDiagram:
                     # print("2Candidate particle: ", lhe_id, p.id, p.status, p.mother1, p.mother2)
                     if p.status == 1:
                         # check if the particle is already in the diagram
-                        if not leg_id_wrap(lhe_id) in [l.id for l in fd.legs]:
+                        if leg_id_wrap(lhe_id) not in [le.id for le in fd.legs]:
                             fd.add(
                                 Leg(
                                     id=leg_id_wrap(lhe_id),
@@ -83,7 +83,7 @@ def lhe_event_to_feynman(event: pylhe.LHEEvent) -> FeynmanDiagram:
                     if p.status == 2:
                         # Propagator
                         # create a new vertex... , this will result in rerunning the loop
-                        if not vertex_id_wrap(lhe_id) in [l.id for l in fd.vertices]:
+                        if vertex_id_wrap(lhe_id) not in [le.id for le in fd.vertices]:
                             fd.add(Vertex(id=vertex_id_wrap(lhe_id)))
                             fd.add(
                                 Propagator(
@@ -94,8 +94,8 @@ def lhe_event_to_feynman(event: pylhe.LHEEvent) -> FeynmanDiagram:
                                 )
                             )
 
-    assert len(fd.legs) + len(fd.propagators) == len(
-        event.particles
+    assert (
+        len(fd.legs) + len(fd.propagators) == len(event.particles)
     ), "Not all particles are accounted for!\nlegs = {}\npropagators = {}\nparticles = {}".format(
         len(fd.legs), len(fd.propagators), len(event.particles)
     )

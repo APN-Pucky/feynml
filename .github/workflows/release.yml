@@ -1,15 +1,15 @@
 name: release
 
-on: 
+on:
   push:
-    tags: 
+    tags:
       - '*'
 
 jobs:
     stable:
       runs-on: ubuntu-latest
       container:
-        image: apnpucky/ubuntu-python-latexmk
+        image: apnpucky/ubuntu-hatch
       steps:
         - uses: APN-Pucky/make-python-action@main
           with:

@@ -39,7 +39,7 @@
    </propagator>
    <propagator id="P7" type="gluon" source="V5" target="V6" bend="0.5"
       label="g" style="parallel-arrow-displace:0.2;">
-      <source>V5</source>  
+      <source>V5</source>
       <target>V6</target>
    </propagator>
    <leg id="E2" type="fermion" sense="incoming" target="V5" x="4.0" y="-2.0"
