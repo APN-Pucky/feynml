@@ -320,12 +320,11 @@ class SheetHandler:
         """
         Add rules to the style.
         """
-        self.with_sheet(
+        return self.with_sheet(
             cssutils.parseString(
                 self.get_sheet().cssText.decode("utf-8") + "\n" + rules
             )
         )
-        return self
 
     def with_rule(self, rule: str):
         """
@@ -337,5 +336,4 @@ class SheetHandler:
         """
         Replace rules of the style.
         """
-        self.with_sheet(cssutils.parseString(rules))
-        return self
+        return self.with_sheet(cssutils.parseString(rules))
