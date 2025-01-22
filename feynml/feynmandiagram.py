@@ -65,11 +65,11 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     def to_matrix(self):
         # Create a square matrix of arrays of size len(vert) + incoming + outgoing category
         lv = len(self.vertices) + 2
-        mat = np.zeros((lv, lv))  # TODO this should be a matrix of arrays not zeros
+        mat = np.frompyfunc(list, 0, 1)(np.empty((lv, lv), dtype=object))
         for p in self.propagators:
             i = self.get_vertex_index(p.source) + 1
             j = self.get_vertex_index(p.target) + 1
-            mat[i, j] = p.pdgid
+            mat[i, j].append(p.pdgid)
         for leg in self.legs:
             if leg.is_incoming():
                 i = 0
@@ -77,7 +77,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             else:
                 i = self.get_vertex_index(leg.target) + 1
                 j = -1
-            mat[i, j] = leg.pdgid
+            mat[i, j].append(leg.pdgid)
 
         return mat
 

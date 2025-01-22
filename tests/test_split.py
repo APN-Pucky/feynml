@@ -8,16 +8,18 @@ def test_split_gamma():
         v1 := Vertex(), v2 := Vertex(), p1 := Propagator(pdgid=11).connect(v1, v2)
     )
     fd.split(p1, 22, sense="outgoing")
-    print(fd.to_matrix())
+    print(fd.to_matrix().tolist())
     assert len(fd.vertices) == 3
     assert len(fd.legs) == 1
     assert len(fd.propagators) == 2
-    # assert fd == 0
-    # [[ 0.  0.  0.  0.  0.]
-    # [ 0.  0.  0. 11.  0.]
-    # [ 0.  0.  0.  0.  0.]
-    # [ 0.  0. 11.  0. 22.]
-    # [ 0.  0.  0.  0.  0.]]
+
+    assert fd.to_matrix().tolist() == [
+        [[], [], [], [], []],
+        [[], [], [], [11], []],
+        [[], [], [], [], []],
+        [[], [], [11], [], [22]],
+        [[], [], [], [], []],
+    ]
 
 
 # TODO more test cases here: Leg split
@@ -30,12 +32,15 @@ def test_split_gluon():
     )
     fd.split(p1, 1, 1, 21, sense="incoming")
 
-    print(fd.to_matrix())
+    fd.to_matrix()
     assert len(fd.vertices) == 3
     assert len(fd.legs) == 1
     assert len(fd.propagators) == 2
-    # [[ 0.  0.  0.  1.  0.]
-    # [ 0.  0.  0.  1.  0.]
-    # [ 0.  0.  0.  0.  0.]
-    # [ 0.  0. 21.  0.  0.]
-    # [ 0.  0.  0.  0.  0.]]
+
+    assert fd.to_matrix().tolist() == [
+        [[], [], [], [1], []],
+        [[], [], [], [1], []],
+        [[], [], [], [], []],
+        [[], [], [21], [], []],
+        [[], [], [], [], []],
+    ]

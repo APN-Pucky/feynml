@@ -8,11 +8,13 @@ def test_split_gamma():
         v1 := Vertex(), v2 := Vertex(), Propagator(pdgid=11).connect(v1, v2)
     )
     print(fd.to_matrix())
-    # TODO how do I test that this matrix is
-    # [[ 0.  0.  0.  0.]
-    #  [ 0.  0. 11.  0.]
-    #  [ 0.  0.  0.  0.]
-    #  [ 0.  0.  0.  0.]]
+
+    assert fd.to_matrix().tolist() == [
+        [[], [], [], []],
+        [[], [], [11], []],
+        [[], [], [], []],
+        [[], [], [], []],
+    ]
 
 
 # TODO visualize matrices to be safe (store ascii here too)
