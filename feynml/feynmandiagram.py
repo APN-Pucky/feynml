@@ -203,32 +203,36 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             new = Leg(pdgid=new, sense=sense, target=new_vert)
         self.add(new)
 
+        startid = leg_or_propagator.pdgid
+        if isinstance(start, int):
+            startid = start
+            start = None
+
+        endid = leg_or_propagator.pdgid
+        if isinstance(end, int):
+            endid = end
+            end = None
+
         if start is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_outgoing():
                 # Continue Leg as Propagator
-                start = Propagator(
-                    pdgid=leg_or_propagator.pdgid, source=leg_or_propagator.target
-                )
+                start = Propagator(pdgid=startid, source=leg_or_propagator.target)
             else:
                 start = copy.deepcopy(leg_or_propagator).with_new_id()
                 if self.has(leg_or_propagator):
                     self.remove(leg_or_propagator)
-        elif isinstance(start, int):
-            start = Propagator(pdgid=start)
+            start.pdgid = startid
         self.add(start)
 
         if end is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_incoming():
                 # Continue Leg as Propagator
-                end = Propagator(
-                    pdgid=leg_or_propagator.pdgid, target=leg_or_propagator.target
-                )
+                end = Propagator(pdgid=endid, target=leg_or_propagator.target)
             else:
                 end = copy.deepcopy(leg_or_propagator).with_new_id()
                 if self.has(leg_or_propagator):
                     self.remove(leg_or_propagator)
-        elif isinstance(end, int):
-            end = Propagator(pdgid=end)
+            end.pdgid = endid
         self.add(end)
 
         start.with_target(

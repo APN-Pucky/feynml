@@ -13,3 +13,6 @@ def test_split_gamma():
     #  [ 0.  0. 11.  0.]
     #  [ 0.  0.  0.  0.]
     #  [ 0.  0.  0.  0.]]
+
+
+# TODO visualize matrices to be safe (store ascii here too)
