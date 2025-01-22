@@ -55,6 +55,32 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         },
     )
 
+    def get_vertex_index(self, vertex: Union[Vertex, int]) -> int:
+        if isinstance(vertex, Vertex):
+            vertex = vertex.id
+        for i, v in enumerate(self.vertices):
+            if v.id == vertex:
+                return i
+
+    def to_matrix(self):
+        # Create a square matrix of arrays of size len(vert) + incoming + outgoing category
+        lv = len(self.vertices) + 2
+        mat = np.zeros((lv, lv))  # TODO this should be a matrix of arrays not zeros
+        for p in self.propagators:
+            i = self.get_vertex_index(p.source) + 1
+            j = self.get_vertex_index(p.target) + 1
+            mat[i, j] = p.pdgid
+        for leg in self.legs:
+            if leg.is_incoming():
+                i = 0
+                j = self.get_vertex_index(leg.target) + 1
+            else:
+                i = self.get_vertex_index(leg.target) + 1
+                j = -1
+            mat[i, j] = leg.pdgid
+
+        return mat
+
     def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
         for a in fd_all:
             if isinstance(a, Propagator):
@@ -65,6 +91,19 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 self.legs.append(a)
             else:
                 raise Exception("Unknown type: " + str(type(a)) + " " + str(a))
+        return self
+
+    def remove(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
+        for a in fd_all:
+            if isinstance(a, Propagator):
+                self.propagators.remove(a)
+            elif isinstance(a, Vertex):
+                self.vertices.remove(a)
+            elif isinstance(a, Leg):
+                self.legs.remove(a)
+            else:
+                raise Exception("Unknown type: " + str(type(a)) + " " + str(a))
+        return self
         return self
 
     def has_id(self, id):
@@ -114,7 +153,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 if p.source == vertex.id or p.target == vertex.id
             ]
             + [leg for leg in self.legs if leg.target == vertex.id]
-            + [leg for leg in self.legs if leg.id == vertex.id]
+            + [leg for leg in self.legs if leg.id == vertex.id]  # This seems od!
         )
 
     def get_neighbours(self, vertex):
@@ -142,6 +181,67 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
     def remove_propagator(self, propagator):
         self.propagators.remove(propagator)
         return self
+
+    def split(
+        self,
+        leg_or_propagator: Union[Leg, Propagator],
+        new: Union[Leg, int],
+        start=None,
+        end=None,
+        sense="outgoing",
+    ):
+        """
+
+        Example:
+           >>> fd.split(e, gamma)
+           >>> fd.split(u, u, u, g)
+           >>> fd.split(u, g, s, s)
+        """
+        new_vert = Vertex()
+        self.add(new_vert)
+        if isinstance(new, int):
+            new = Leg(pdgid=new, sense=sense, target=new_vert)
+        self.add(new)
+
+        if start is None:
+            if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_outgoing():
+                # Continue Leg as Propagator
+                start = Propagator(
+                    pdgid=leg_or_propagator.pdgid, source=leg_or_propagator.target
+                )
+            else:
+                start = copy.deepcopy(leg_or_propagator).with_new_id()
+                if self.has(leg_or_propagator):
+                    self.remove(leg_or_propagator)
+        elif isinstance(start, int):
+            start = Propagator(pdgid=start)
+        self.add(start)
+
+        if end is None:
+            if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_incoming():
+                # Continue Leg as Propagator
+                end = Propagator(
+                    pdgid=leg_or_propagator.pdgid, target=leg_or_propagator.target
+                )
+            else:
+                end = copy.deepcopy(leg_or_propagator).with_new_id()
+                if self.has(leg_or_propagator):
+                    self.remove(leg_or_propagator)
+        elif isinstance(end, int):
+            end = Propagator(pdgid=end)
+        self.add(end)
+
+        start.with_target(
+            new_vert
+        )  # It does not matter if we have a Leg or Propagator as start
+        if isinstance(end, Propagator):
+            end.with_source(new_vert)
+        elif isinstance(end, Leg):
+            end.with_target(new_vert)
+        else:
+            assert False  # we should never get here
+
+        return new_vert, new, start, end
 
     def get_bounding_box(self):
         """
