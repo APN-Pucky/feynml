@@ -9,6 +9,13 @@ from feynml.id import Identifiable
 
 from .particles import get_either_particle, get_particle_and_name_from_pdgid
 
+# u = 2
+# d = 1
+# g = 21
+# gamma = 22
+# e = 11
+# TODO continue here and allow this?
+
 
 @withify()
 @dataclass

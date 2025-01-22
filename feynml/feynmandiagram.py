@@ -78,8 +78,27 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 i = self.get_vertex_index(leg.target) + 1
                 j = -1
             mat[i, j].append(leg.pdgid)
-
         return mat
+
+    @staticmethod
+    def from_matrix(matrix):
+        fd = FeynmanDiagram()
+        lv = len(matrix)
+        for _ in range(lv - 2):
+            fd.add(Vertex())
+        for i in range(1, lv - 1):
+            for j in range(1, lv - 1):
+                for id in matrix[i, j]:
+                    fd.add(
+                        Propagator(pdgid=id).connect(
+                            fd.vertices[i - 1], fd.vertices[j - 1]
+                        )
+                    )
+            for id in matrix[0, i]:
+                fd.add(Leg(pdgid=id, sense="incoming").with_target(fd.vertices[i - 1]))
+            for id in matrix[i, -1]:
+                fd.add(Leg(pdgid=id, sense="outgoing").with_target(fd.vertices[i - 1]))
+        return fd
 
     def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
         for a in fd_all:
