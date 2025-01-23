@@ -240,7 +240,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 start = copy.deepcopy(leg_or_propagator).with_new_id()
                 if self.has(leg_or_propagator):
                     self.remove(leg_or_propagator)
-            start.pdgid = startid
+            start.with_pdgid(startid)
         self.add(start)
 
         if end is None:
@@ -251,7 +251,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 end = copy.deepcopy(leg_or_propagator).with_new_id()
                 if self.has(leg_or_propagator):
                     self.remove(leg_or_propagator)
-            end.pdgid = endid
+            end.with_pdgid(endid)
         self.add(end)
 
         start.with_target(
