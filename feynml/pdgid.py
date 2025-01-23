@@ -185,10 +185,15 @@ class PDG(Identifiable):
         super().__post_init__()
         self._sync()
 
-    # def with_pdgid(self, pdgid):
-    #    self.pdgid = pdgid
-    #    self._sync()
-    #    return self
+    def with_pdgid(
+        self,
+        pdgid,
+    ):
+        self.pdgid = pdgid
+        self.name = None
+        self.type = None
+        self._sync()
+        return self
 
     # def with_name(self, name):
     #    self.name = name
