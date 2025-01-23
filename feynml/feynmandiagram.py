@@ -208,15 +208,42 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         start=None,
         end=None,
         sense="outgoing",
+        position_ratio=0.5,
+        inplace=True,
     ):
         """
 
-        Example:
-           >>> fd.split(e, gamma)
-           >>> fd.split(u, u, u, g)
-           >>> fd.split(u, g, s, s)
+        Args:
+            inplace: If true keeps the original propagator/leg line, else the new intermediate Vertex can be located anywhere.
+            position_ratio: The position of the new vertex on the line between the source and target of the propagator/leg.
         """
-        new_vert = Vertex()
+        x = None
+        y = None
+        sx = None
+        sy = None
+        tx = None
+        ty = None
+        if isinstance(leg_or_propagator, Propagator):
+            sx, tx, sy, ty = (
+                self.get_vertex(leg_or_propagator.source).x,
+                self.get_vertex(leg_or_propagator.target).x,
+                self.get_vertex(leg_or_propagator.source).y,
+                self.get_vertex(leg_or_propagator.target).y,
+            )
+        elif isinstance(leg_or_propagator, Leg):
+            sx, tx, sy, ty = (
+                leg_or_propagator.x,
+                self.get_vertex(leg_or_propagator.target).x,
+                leg_or_propagator.y,
+                self.get_vertex(leg_or_propagator.target).y,
+            )
+        else:
+            raise NotImplementedError("Only Propagator and Leg are supported")
+        if sx is not None and sy is not None and tx is not None and ty is not None:
+            if inplace:
+                x = sx * (1.0 - position_ratio) + tx * (0.0 - position_ratio)
+                y = sy * (1.0 - position_ratio) + ty * (0.0 - position_ratio)
+        new_vert = Vertex(x=x, y=y)
         self.add(new_vert)
         if isinstance(new, int):
             new = Leg(pdgid=new, sense=sense, target=new_vert)
