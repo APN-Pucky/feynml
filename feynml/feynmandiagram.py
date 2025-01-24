@@ -7,6 +7,7 @@ from typing import List, Union
 import cssutils
 import numpy as np
 import smpl_doc.doc as doc
+from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
 from feynml.head import Head
@@ -197,9 +198,72 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             ]
         )
 
+    @deprecated("0.0.0", "use remove(propagator) instead")
     def remove_propagator(self, propagator):
         self.propagators.remove(propagator)
         return self
+
+    def insert_bubble(
+        self,
+        leg_or_propagator: Union[Leg, Propagator],
+        new_propagator1: Union[int, Propagator] = None,
+        new_propagator2: Union[int, Propagator] = None,
+    ):
+        """
+        Adds a bubble loop to a propagator or leg.
+
+        TODO add ascii example diagram here for documentation
+        """
+        v1, l1, s1, e1 = self.split(
+            leg_or_propagator=leg_or_propagator, new=new_propagator1
+        )
+        v2, l2, s2, e2 = self.split(
+            leg_or_propagator=e1, new=new_propagator1, start=new_propagator2
+        )
+        np = self.merge(l1, l2)
+        return v1, v2, np, s2, s1, e2
+
+    def merge(self, *obj):
+        """
+        Merges objects together
+        """
+        if len(obj) == 2 and isinstance(obj[0], Leg) and isinstance(obj[1], Leg):
+            return self.merge_legs(obj[0], obj[1])
+        else:
+            vs = True
+            for v in obj:
+                if not isinstance(v, Vertex):
+                    vs = False
+            if vs:
+                return self.merge_vertices(obj)
+
+    def merge_legs(self, leg1, leg2):
+        """
+        Merges two legs to a single propagator.
+        """
+        assert self.has(leg1) and self.has(leg2)
+        new_propagator = Propagator(
+            pdgid=leg1.pdgid, source=leg1.target, target=leg2.target
+        )  # Maybe we want to copy more properties
+        self.add(new_propagator)
+        self.remove(leg1)
+        self.remove(leg2)
+        return new_propagator
+
+    def merge_vertices(self, *vertices):
+        """
+        Merges vertices to a single vertex.
+        """
+        # We keep the first vertex and its properties
+        v0 = vertices[0]
+        for v in vertices[1:]:
+            for c in self.get_connections(v):
+                if c.target == v.id:
+                    c.with_target(v0)
+                elif c.source == v.id:
+                    c.with_source(v0)
+            self.remove(v)
+        return v0
 
     def split(
         self,
