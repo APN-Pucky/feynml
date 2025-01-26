@@ -3,11 +3,11 @@ from feynml.propagator import Propagator
 from feynml.vertex import Vertex
 
 
-def test_split_gamma():
+def test_emission_gamma():
     fd = FeynmanDiagram().add(
         v1 := Vertex(), v2 := Vertex(), p1 := Propagator(pdgid=11).connect(v1, v2)
     )
-    fd.split(p1, 22, sense="outgoing")
+    fd.emission(p1, 22, sense="outgoing")
     print(fd.to_matrix().tolist())
     assert len(fd.vertices) == 3
     assert len(fd.legs) == 1
@@ -26,11 +26,11 @@ def test_split_gamma():
 # TODO visualize matrices to be safe (store ascii here too)
 
 
-def test_split_gluon():
+def test_emission_gluon():
     fd = FeynmanDiagram().add(
         v1 := Vertex(), v2 := Vertex(), p1 := Propagator(pdgid=1).connect(v1, v2)
     )
-    fd.split(p1, 1, 1, 21, sense="incoming")
+    fd.emission(p1, 1, 1, 21, sense="incoming")
 
     fd.to_matrix()
     assert len(fd.vertices) == 3

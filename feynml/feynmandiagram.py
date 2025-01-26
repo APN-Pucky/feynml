@@ -204,22 +204,35 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         self.propagators.remove(propagator)
         return self
 
+    def insert_tadpole(
+        self,
+        leg_or_propagator: Union[Leg, Propagator],
+        new_propagator: Union[None, int] = None,
+    ):
+        v1, l1, s1, e1 = self.emission(
+            leg_or_propagator=leg_or_propagator, new=new_propagator
+        )
+        v2, l2, s2, e2 = self.emission(leg_or_propagator=e1, new=new_propagator)
+        v = self.merge_vertices(v1, v2)
+        p = self.merge_legs(l1, l2)
+        return v, p
+
     def insert_bubble(
         self,
         leg_or_propagator: Union[Leg, Propagator],
-        new_propagator1: Union[int, Propagator] = None,
-        new_propagator2: Union[int, Propagator] = None,
+        new_propagator1: Union[None, int, Propagator] = None,
+        new_propagator2: Union[None, int, Propagator] = None,
     ):
         """
         Adds a bubble loop to a propagator or leg.
 
-        TODO add ascii example diagram here for documentation (also split() etc.)
+        TODO add ascii example diagram here for documentation (also emission() etc.)
         TODO add tests, needs testing
         """
-        v1, l1, s1, e1 = self.split(
+        v1, l1, s1, e1 = self.emission(
             leg_or_propagator=leg_or_propagator, new=new_propagator1
         )
-        v2, l2, s2, e2 = self.split(
+        v2, l2, s2, e2 = self.emission(
             leg_or_propagator=e1, new=new_propagator1, start=new_propagator2
         )
         np = self.merge(l1, l2)
@@ -275,19 +288,42 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         self.remove(leg2)
         return new_propagator
 
-    def merge_vertices(self, *vertices):
+    def merge_vertices(self, *vertices, tadpole=False) -> Vertex:
         """
         Merges vertices to a single vertex.
         """
         # We keep the first vertex and its properties
         v0 = vertices[0]
+        # We need to remove propagators between two vertices that are replaced (unless it should become a tadpole)
+        if not tadpole:
+            for p in self.propagators:
+                for v1 in vertices:
+                    for v2 in vertices:
+                        if v1 != v2 and p.connects(v1, v2, directional=True):
+                            self.remove(p)
         for v in vertices[1:]:
             for c in self.get_connections(v):
                 c.replace_vertex(v, v0)
             self.remove(v)
         return v0
 
-    def split(
+    def decay(self, leg: Leg, *new_legs):
+        assert self.has(leg)
+        self.add(v := Vertex())
+        if leg.is_outgoing():
+            self.add(p := Propagator(pdgid=leg.pdgid, source=leg.target, target=v))
+        elif leg.is_incoming():
+            self.add(p := Propagator(pdgid=leg.pdgid, source=v, target=leg.target))
+        else:
+            raise Exception("Leg is not incoming or outgoing")
+        r_legs = [None] * len(new_legs)
+        for i, ls in enumerate(new_legs):
+            r_legs[i] = Leg(pdgid=ls, target=v, sense=leg.sense)
+            self.add(r_legs[i])
+        self.remove(leg)
+        return v, p, r_legs
+
+    def emission(
         self,
         leg_or_propagator: Union[Leg, Propagator],
         new: Union[Leg, int, None] = None,

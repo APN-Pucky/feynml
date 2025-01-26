@@ -4,7 +4,7 @@ from feynml.propagator import Propagator
 from feynml.vertex import Vertex
 
 
-def test_split_gamma():
+def test_matrix():
     fd = FeynmanDiagram().add(
         v1 := Vertex(), v2 := Vertex(), Propagator(pdgid=11).connect(v1, v2)
     )
