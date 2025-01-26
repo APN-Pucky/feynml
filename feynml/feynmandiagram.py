@@ -10,6 +10,7 @@ import smpl_doc.doc as doc
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
+from feynml.connector import Connector
 from feynml.head import Head
 from feynml.id import Identifiable
 from feynml.leg import Leg
@@ -165,7 +166,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 return leg
         return None
 
-    def get_connections(self, vertex):
+    def get_connections(self, vertex: Vertex) -> List[Connector]:
         return (
             [
                 p
@@ -212,7 +213,8 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         """
         Adds a bubble loop to a propagator or leg.
 
-        TODO add ascii example diagram here for documentation
+        TODO add ascii example diagram here for documentation (also split() etc.)
+        TODO add tests, needs testing
         """
         v1, l1, s1, e1 = self.split(
             leg_or_propagator=leg_or_propagator, new=new_propagator1
@@ -222,6 +224,29 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         )
         np = self.merge(l1, l2)
         return v1, v2, np, s2, s1, e2
+
+    def insert_vertex_loop(self, vertex: Vertex, *new_propagators):
+        if new_propagators is None or len(new_propagators) == 0:
+            new_propagators = [None] * len(self.get_connections(vertex))
+        else:
+            new_propagators = list(new_propagators)
+        # should cover insert_triangle, insert_box, pentagram, ...
+        assert len(new_propagators) == len(self.get_connections(vertex))
+        new_vertices = [None] * len(new_propagators)
+        # Add new vertices
+        for i in range(len(new_propagators)):
+            new_vertices[i] = Vertex()
+            self.add(new_vertices[i])
+            if new_propagators is None or isinstance(new_propagators[i], int):
+                new_propagators[i] = Propagator(pdgid=new_propagators[i])
+            self.add(new_propagators[i])
+
+        for i, op in enumerate(self.get_connections(vertex)):
+            op.replace_vertex(vertex, new_vertices[i])
+            new_propagators[i].with_source(new_vertices[i])
+            new_propagators[i - 1].with_target(new_vertices[i])
+        self.remove(vertex)
+        return new_vertices, new_propagators
 
     def merge(self, *obj):
         """
@@ -258,17 +283,14 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         v0 = vertices[0]
         for v in vertices[1:]:
             for c in self.get_connections(v):
-                if c.target == v.id:
-                    c.with_target(v0)
-                elif c.source == v.id:
-                    c.with_source(v0)
+                c.replace_vertex(v, v0)
             self.remove(v)
         return v0
 
     def split(
         self,
         leg_or_propagator: Union[Leg, Propagator],
-        new: Union[Leg, int],
+        new: Union[Leg, int, None] = None,
         start=None,
         end=None,
         sense="outgoing",
@@ -309,7 +331,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 y = sy * (1.0 - position_ratio) + ty * (0.0 - position_ratio)
         new_vert = Vertex(x=x, y=y)
         self.add(new_vert)
-        if isinstance(new, int):
+        if new is None or isinstance(new, int):
             new = Leg(pdgid=new, sense=sense, target=new_vert)
         self.add(new)
 

@@ -7,6 +7,7 @@ from feynml.labeled import Labeled
 from feynml.momentum import Momentum
 from feynml.pdgid import PDG
 from feynml.styled import Styled
+from feynml.vertex import Vertex
 
 
 @withify()
@@ -16,6 +17,10 @@ class Connector(Labeled, Styled, PDG):
         default=None, metadata={"name": "momentum", "type": "Element"}
     )
     """Momentum of the connector"""
+
+    def replace_vertex(self, old_vertex: Vertex, new_vertex: Vertex):
+        """Replace the old vertex with the new vertex"""
+        raise NotImplementedError
 
     def goes_into(self, vertex):
         raise NotImplementedError
