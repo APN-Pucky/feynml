@@ -18,6 +18,12 @@ class Propagator(Line, Connector):
             tar
         )  # this is inprinciple the same as negating the id
 
+    def connects(self, v1: Vertex, v2: Vertex, directional=False):
+        """Return True if the propagator connects to the vertex, False otherwise."""
+        return (v1.id == self.source and v2.id == self.target) or (
+            not directional and v2.id == self.source and v1.id == self.target
+        )
+
     def replace_vertex(self, old_vertex: Vertex, new_vertex: Vertex):
         """Replace the old vertex with the new vertex"""
         hit = False
