@@ -6,6 +6,7 @@ from smpl_util.util import withify
 from feynml.connector import Connector
 from feynml.point import Point
 from feynml.targeting import Targeting
+from feynml.vertex import Vertex
 
 
 @withify()
@@ -22,6 +23,13 @@ class Leg(Point, Targeting, Connector):
         default=None, metadata={"xml_attribute": True, "type": "Attribute"}
     )
     """External text for leg"""
+
+    def replace_vertex(self, old_vertex: Vertex, new_vertex: Vertex):
+        """Replace the old vertex with the new vertex"""
+        if self.target == old_vertex.id:
+            return self.with_target(new_vertex)
+        else:
+            raise ValueError("Vertex not found in leg")
 
     def is_incoming(self):
         """Return True if the leg is incoming, False otherwise."""
