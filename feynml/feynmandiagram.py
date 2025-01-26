@@ -655,6 +655,8 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         auto_position=True,
         auto_position_legs=True,
         deepcopy=True,
+        source=False,
+        debug=False,
     ):
         import pyfeyn2.render.all as renderall
         from pyfeyn2.auto.bend import auto_bend
@@ -686,8 +688,20 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 fd = auto_vdw(fd, points=p)
         auto_label([*fd.propagators, *fd.legs])
         fd = auto_bend(fd)
-        renderer = renderall.renderer_from_string(render)
-        renderer(fd).render(show=show, file=file)
+        # Last step enable debug
+        if debug:
+            for v in fd.vertices:
+                v.with_label(f"{v.id} {{\\{{{v.x:.2g},{v.y:.2g}\\}}}}")
+            for p in fd.propagators:
+                p.with_label(f"{p.id}")
+            for leg in fd.legs:
+                leg.with_label(f"{leg.id} {{\\{{{leg.x:.2g},{leg.y:.2g}\\}}}}")
+
+        renderer_class = renderall.renderer_from_string(render)
+        renderer = renderer_class(fd)
+        if source:
+            print(renderer.get_src())
+        renderer.render(show=show, file=file)
 
     def _ipython_display_(self):
         try:
