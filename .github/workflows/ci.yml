@@ -47,4 +47,4 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pytest --cov --cov-report=xml -r sx
+        pytest

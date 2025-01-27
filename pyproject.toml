@@ -84,9 +84,6 @@ features = [
     "test",
 ]
 
-[tool.coverage.report]
-format = "xml"
-
 [tool.coverage.run]
 relative_files = true
 omit = [ ]
