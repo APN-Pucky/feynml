@@ -1,11 +1,11 @@
 livehtml:
-	hatch run all:$(MAKE) -C docs livehtml
+	hatch run hatch-test:$(MAKE) -C docs livehtml
 
 html:
-	hatch run all:$(MAKE) -C docs html
+	hatch run hatch-test:$(MAKE) -C docs html
 
 pdf:
-	hatch run all:$(MAKE) -C docs latexpdf
+	hatch run hatch-test:$(MAKE) -C docs latexpdf
 
 doc: html
 
