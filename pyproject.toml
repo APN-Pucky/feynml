@@ -56,7 +56,6 @@ test = [
     "feynml[interfaces]",
     "feynmodel",
     "pytest",
-    "pytest-cov",
 ]
 dev = [
     "pre-commit",
@@ -76,7 +75,7 @@ Source = "https://github.com/APN-Pucky/feynml/"
 [tool.hatch]
 version.source = "vcs"
 
-[tool.hatch.envs.test]
+[tool.hatch.envs.hatch-test]
 features = [
     "lint",
     "interfaces",
