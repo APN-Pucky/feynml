@@ -76,7 +76,7 @@ Source = "https://github.com/APN-Pucky/feynml/"
 [tool.hatch]
 version.source = "vcs"
 
-[tool.hatch.envs.all]
+[tool.hatch.envs.test]
 features = [
     "lint",
     "interfaces",
@@ -84,6 +84,16 @@ features = [
     "docs",
     "test",
 ]
+
+[tool.coverage.report]
+format = "xml"
+
+[tool.coverage.run]
+relative_files = true
+omit = [ ]
+
+[tool.coverage.xml]
+output = "coverage.xml"
 
 [tool.ruff.lint]
 extend-select = [
