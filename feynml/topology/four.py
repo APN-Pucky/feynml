@@ -5,6 +5,26 @@ from feynml.propagator import Propagator
 from feynml.vertex import Vertex
 
 
+def fusion(in1=None, in2=None, in3=None, out1=None):
+    return FeynmanDiagram().add(
+        v1 := Vertex(),
+        Leg(**pdgid_param(in1), sense="incoming", target=v1),
+        Leg(**pdgid_param(in2), sense="incoming", target=v1),
+        Leg(**pdgid_param(in3), sense="incoming", target=v1),
+        Leg(**pdgid_param(out1), sense="outgoing", target=v1),
+    )
+
+
+def decay(in1=None, out1=None, out2=None, out3=None):
+    return FeynmanDiagram().add(
+        v1 := Vertex(),
+        Leg(**pdgid_param(in1), sense="incoming", target=v1),
+        Leg(**pdgid_param(out1), sense="outgoing", target=v1),
+        Leg(**pdgid_param(out2), sense="outgoing", target=v1),
+        Leg(**pdgid_param(out3), sense="outgoing", target=v1),
+    )
+
+
 def s_channel(in1=None, in2=None, prop=None, out1=None, out2=None):
     return FeynmanDiagram().add(
         v1 := Vertex(),

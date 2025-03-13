@@ -65,6 +65,43 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             if v.id == vertex:
                 return i
 
+    def is_isomorphic(self, fd: "FeynmanDiagram"):
+        import networkx as nx
+
+        G1 = self.to_graph()
+        G2 = fd.to_graph()
+        return nx.is_isomorphic(
+            G1,
+            G2,
+            node_match=lambda a1, a2: a1["sense"] == a2["sense"]
+            and a1["lid"] == a2["lid"],
+        )
+
+    def to_graph(self):
+        import networkx as nx
+
+        G = nx.Graph()
+        for v in self.vertices:
+            G.add_node(v.id, sense=None, lid=None)
+        # G.add_node("incoming", sense="incoming", lid=0)
+        # G.add_node("outgoing", sense="outgoing", lid=0)
+        n_in = 0
+        n_out = 0
+        for leg in self.legs:
+            if leg.is_incoming():
+                n_in += 1
+                G.add_node(leg.id, sense="incoming", lid=n_in)
+                # G.add_edge(l.id, "incoming")
+                G.add_edge(leg.id, leg.target)
+            else:
+                n_out += 1
+                G.add_node(leg.id, sense="outgoing", lid=n_out)
+                # G.add_edge(l.id, "outgoing")
+                G.add_edge(leg.target, leg.id)
+        for p in self.propagators:
+            G.add_edge(p.source, p.target)
+        return G
+
     def to_matrix(self):
         # Create a square matrix of arrays of size len(vert) + incoming + outgoing category
         lv = len(self.vertices) + 2
@@ -370,6 +407,8 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         self.add(new_vert)
         if new is None or is_pdgid_param(new):
             new = Leg(**pdgid_param(new), sense=sense, target=new_vert)
+        elif isinstance(new, Leg):
+            new.with_target(new_vert)
         self.add(new)
 
         startid = leg_or_propagator.pdgid
@@ -386,23 +425,38 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_outgoing():
                 # Continue Leg as Propagator
                 start = Propagator(pdgid=startid, source=leg_or_propagator.target)
+                self.add(start)
             else:
                 start = copy.deepcopy(leg_or_propagator).with_new_id()
-                if self.has(leg_or_propagator):
-                    self.remove(leg_or_propagator)
+                # replace leg_or_propagator with new leg (with out changing the order!)
+                if isinstance(leg_or_propagator, Leg):
+                    self.legs[self.legs.index(leg_or_propagator)] = start
+                elif isinstance(leg_or_propagator, Propagator):
+                    if leg_or_propagator in self.propagators:
+                        self.propagators.remove(leg_or_propagator)
+                    self.add(start)
+                else:
+                    raise Exception("Unknown leg_or_propagator type")
             start.with_pdgid(startid)
-        self.add(start)
 
         if end is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_incoming():
                 # Continue Leg as Propagator
                 end = Propagator(pdgid=endid, target=leg_or_propagator.target)
+                self.add(end)
             else:
                 end = copy.deepcopy(leg_or_propagator).with_new_id()
-                if self.has(leg_or_propagator):
-                    self.remove(leg_or_propagator)
+                if isinstance(leg_or_propagator, Leg):
+                    self.legs[self.legs.index(leg_or_propagator)] = end
+                elif isinstance(leg_or_propagator, Propagator):
+                    if (
+                        leg_or_propagator in self.propagators
+                    ):  # could already be removed
+                        self.propagators.remove(leg_or_propagator)
+                    self.add(end)
+                else:
+                    raise Exception("Unknown leg_or_propagator type")
             end.with_pdgid(endid)
-        self.add(end)
 
         start.with_target(
             new_vert
@@ -672,7 +726,10 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         else:
             fd = self
         fd = auto_default(
-            fd, auto_position=auto_position, auto_position_legs=auto_position_legs
+            fd,
+            auto_position=auto_position,
+            auto_position_legs=auto_position_legs,
+            debug=debug,
         )
 
         renderer_class = renderall.renderer_from_string(render)
