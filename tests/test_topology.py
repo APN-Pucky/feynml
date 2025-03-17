@@ -11,23 +11,28 @@ def test_topology_two():
 
     has_s, has_t, has_u, has_v = False, False, False, False
     for fd in fml.diagrams:
+        hit = False
         if fd.is_isomorphic(s):
             assert not has_s
+            assert not hit
             has_s = True
-            break
+            hit = True
         if fd.is_isomorphic(t):
             assert not has_t
+            assert not hit
             has_t = True
-            break
+            hit = True
         if fd.is_isomorphic(u):
             assert not has_u
+            assert not hit
             has_u = True
-            break
+            hit = True
         if fd.is_isomorphic(v):
             assert not has_v
+            assert not hit
             has_v = True
-            break
-        assert False
+            hit = True
+        assert hit
     assert has_s
     assert has_t
     assert has_u
