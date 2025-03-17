@@ -36,6 +36,7 @@ dependencies = [
     "xsdata[cli,lxml,soap]",
     "cssutils>=2.10.2",
     "cssselect",
+    "networkx",
     "deprecated",
     "deprecation",
     "smpl_io>=1.1.2",

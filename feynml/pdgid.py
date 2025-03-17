@@ -1,6 +1,6 @@
 import warnings
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 
 from particle import Particle
 from smpl_util.util import withify
@@ -8,6 +8,28 @@ from smpl_util.util import withify
 from feynml.id import Identifiable
 
 from .particles import get_either_particle, get_particle_and_name_from_pdgid
+
+PDGID_PARAM = Union[int, str, None]
+
+
+def is_pdgid_param(p):
+    return isinstance(p, int) or isinstance(p, str) or p is None
+
+
+def pdgid_param(p: PDGID_PARAM) -> dict:
+    if p is None:
+        return {"type": "line"}
+    elif isinstance(p, int):
+        return {"pdgid": p}
+    elif isinstance(p, str):
+        return {"name": p}
+    else:
+        raise ValueError("Invalid input type")
+
+
+def to_pdgid(p: PDGID_PARAM) -> int:
+    return PDG(**pdgid_param(p)).pdgid
+
 
 # u = 2
 # d = 1
@@ -82,6 +104,8 @@ class PDG(Identifiable):
             elif self.pdgid == 25:
                 self.type = "higgs"
             elif self.pdgid == 2212:  # proton
+                self.type = "baryon"
+            elif self.pdgid == 2112:  # neutron
                 self.type = "baryon"
             elif self.pdgid == -2212:  # anti proton
                 self.type = "anti baryon"
@@ -187,7 +211,7 @@ class PDG(Identifiable):
 
     def with_pdgid(
         self,
-        pdgid,
+        pdgid: int,
     ):
         self.pdgid = pdgid
         self.name = None

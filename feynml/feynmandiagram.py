@@ -4,6 +4,7 @@ import warnings
 from dataclasses import dataclass, field
 from typing import List, Union
 
+import networkx as nx
 import cssutils
 import numpy as np
 import smpl_doc.doc as doc
@@ -14,6 +15,7 @@ from feynml.connector import Connector
 from feynml.head import Head
 from feynml.id import Identifiable
 from feynml.leg import Leg
+from feynml.pdgid import is_pdgid_param, pdgid_param, to_pdgid
 from feynml.propagator import Propagator
 from feynml.sheet import SheetHandler
 from feynml.styled import CSSSheet, Styled
@@ -63,6 +65,39 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         for i, v in enumerate(self.vertices):
             if v.id == vertex:
                 return i
+
+    def is_isomorphic(self, fd: "FeynmanDiagram"):
+        G1 = self.to_graph()
+        G2 = fd.to_graph()
+        return nx.is_isomorphic(
+            G1,
+            G2,
+            node_match=lambda a1, a2: a1["sense"] == a2["sense"]
+            and a1["lid"] == a2["lid"],
+        )
+
+    def to_graph(self):
+        G = nx.Graph()
+        for v in self.vertices:
+            G.add_node(v.id, sense=None, lid=None)
+        # G.add_node("incoming", sense="incoming", lid=0)
+        # G.add_node("outgoing", sense="outgoing", lid=0)
+        n_in = 0
+        n_out = 0
+        for leg in self.legs:
+            if leg.is_incoming():
+                n_in += 1
+                G.add_node(leg.id, sense="incoming", lid=n_in)
+                # G.add_edge(l.id, "incoming")
+                G.add_edge(leg.id, leg.target)
+            else:
+                n_out += 1
+                G.add_node(leg.id, sense="outgoing", lid=n_out)
+                # G.add_edge(l.id, "outgoing")
+                G.add_edge(leg.target, leg.id)
+        for p in self.propagators:
+            G.add_edge(p.source, p.target)
+        return G
 
     def to_matrix(self):
         # Create a square matrix of arrays of size len(vert) + incoming + outgoing category
@@ -250,8 +285,8 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         for i in range(len(new_propagators)):
             new_vertices[i] = Vertex()
             self.add(new_vertices[i])
-            if new_propagators is None or isinstance(new_propagators[i], int):
-                new_propagators[i] = Propagator(pdgid=new_propagators[i])
+            if new_propagators is None or isinstance(new_propagators[i], (int, str)):
+                new_propagators[i] = Propagator(**pdgid_param(new_propagators[i]))
             self.add(new_propagators[i])
 
         for i, op in enumerate(self.get_connections(vertex)):
@@ -318,7 +353,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             raise Exception("Leg is not incoming or outgoing")
         r_legs = [None] * len(new_legs)
         for i, ls in enumerate(new_legs):
-            r_legs[i] = Leg(pdgid=ls, target=v, sense=leg.sense)
+            r_legs[i] = Leg(**pdgid_param(ls), target=v, sense=leg.sense)
             self.add(r_legs[i])
         self.remove(leg)
         return v, p, r_legs
@@ -367,41 +402,58 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 y = sy * (1.0 - position_ratio) + ty * (0.0 - position_ratio)
         new_vert = Vertex(x=x, y=y)
         self.add(new_vert)
-        if new is None or isinstance(new, int):
-            new = Leg(pdgid=new, sense=sense, target=new_vert)
+        if new is None or is_pdgid_param(new):
+            new = Leg(**pdgid_param(new), sense=sense, target=new_vert)
+        elif isinstance(new, Leg):
+            new.with_target(new_vert)
         self.add(new)
 
         startid = leg_or_propagator.pdgid
-        if isinstance(start, int):
-            startid = start
+        if start is not None and is_pdgid_param(start):
+            startid = to_pdgid(start)
             start = None
 
         endid = leg_or_propagator.pdgid
-        if isinstance(end, int):
-            endid = end
+        if end is not None and is_pdgid_param(end):
+            endid = to_pdgid(end)
             end = None
 
         if start is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_outgoing():
                 # Continue Leg as Propagator
                 start = Propagator(pdgid=startid, source=leg_or_propagator.target)
+                self.add(start)
             else:
                 start = copy.deepcopy(leg_or_propagator).with_new_id()
-                if self.has(leg_or_propagator):
-                    self.remove(leg_or_propagator)
+                # replace leg_or_propagator with new leg (with out changing the order!)
+                if isinstance(leg_or_propagator, Leg):
+                    self.legs[self.legs.index(leg_or_propagator)] = start
+                elif isinstance(leg_or_propagator, Propagator):
+                    if leg_or_propagator in self.propagators:
+                        self.propagators.remove(leg_or_propagator)
+                    self.add(start)
+                else:
+                    raise Exception("Unknown leg_or_propagator type")
             start.with_pdgid(startid)
-        self.add(start)
 
         if end is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_incoming():
                 # Continue Leg as Propagator
                 end = Propagator(pdgid=endid, target=leg_or_propagator.target)
+                self.add(end)
             else:
                 end = copy.deepcopy(leg_or_propagator).with_new_id()
-                if self.has(leg_or_propagator):
-                    self.remove(leg_or_propagator)
+                if isinstance(leg_or_propagator, Leg):
+                    self.legs[self.legs.index(leg_or_propagator)] = end
+                elif isinstance(leg_or_propagator, Propagator):
+                    if (
+                        leg_or_propagator in self.propagators
+                    ):  # could already be removed
+                        self.propagators.remove(leg_or_propagator)
+                    self.add(end)
+                else:
+                    raise Exception("Unknown leg_or_propagator type")
             end.with_pdgid(endid)
-        self.add(end)
 
         start.with_target(
             new_vert
@@ -658,44 +710,24 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         source=False,
         debug=False,
     ):
-        import pyfeyn2.render.all as renderall
-        from pyfeyn2.auto.bend import auto_bend
-        from pyfeyn2.auto.label import auto_label
-        from pyfeyn2.auto.position import (
-            auto_align_legs,
-            auto_vdw,
-        )
+        try:
+            import pyfeyn2.render.all as renderall
+            from pyfeyn2.auto import auto_default
+        except ImportError as e:
+            warnings.warn("Could not import pyfeyn2, cannot render diagram" + str(e))
+            return
 
         # deepcopy to avoid modifying the original diagram
         if deepcopy:
             fd = self.deepcopy()
         else:
             fd = self
-        if auto_position:
-            # remove all unpositioned vertices
-            if auto_position_legs:
-                fd = auto_align_legs(
-                    fd,
-                    incoming=[
-                        (0, i) for i in np.linspace(0, 10, len(self.get_incoming()))
-                    ],
-                    outgoing=[
-                        (10, i) for i in np.linspace(0, 10, len(self.get_outgoing()))
-                    ],
-                )
-            p = [v for v in fd.vertices if v.x is None or v.y is None]
-            if len(p) > 0:
-                fd = auto_vdw(fd, points=p)
-        auto_label([*fd.propagators, *fd.legs])
-        fd = auto_bend(fd)
-        # Last step enable debug
-        if debug:
-            for v in fd.vertices:
-                v.with_label(f"{v.id} {{\\{{{v.x:.2g},{v.y:.2g}\\}}}}")
-            for p in fd.propagators:
-                p.with_label(f"{p.id}")
-            for leg in fd.legs:
-                leg.with_label(f"{leg.id} {{\\{{{leg.x:.2g},{leg.y:.2g}\\}}}}")
+        fd = auto_default(
+            fd,
+            auto_position=auto_position,
+            auto_position_legs=auto_position_legs,
+            debug=debug,
+        )
 
         renderer_class = renderall.renderer_from_string(render)
         renderer = renderer_class(fd)
@@ -704,8 +736,5 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         renderer.render(show=show, file=file)
 
     def _ipython_display_(self):
-        try:
-            self.render(show=True)
-        except ImportError as e:
-            warnings.warn("Could not import pyfeyn2, cannot render diagram" + str(e))
+        self.render(show=True)
         return self
