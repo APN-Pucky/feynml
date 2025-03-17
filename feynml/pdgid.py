@@ -18,7 +18,7 @@ def is_pdgid_param(p):
 
 def pdgid_param(p: PDGID_PARAM) -> dict:
     if p is None:
-        return {"pdgid": None}
+        return {"type": "line"}
     elif isinstance(p, int):
         return {"pdgid": p}
     elif isinstance(p, str):
