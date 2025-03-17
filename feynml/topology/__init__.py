@@ -1,12 +1,12 @@
+"""
+Generate a list of topologies with incoming/outgoing number of legs and loops.
+"""
+
 import logging
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.feynml import FeynML
 from feynml.leg import Leg
 from feynml.topology import three
-
-"""
-Generate a list of topologies with incoming/outgoing number of legs and loops.
-"""
 
 
 def generate_topologies(incoming: int, outgoing: int, loops: int = 0):
@@ -34,13 +34,9 @@ def generate_topologies(incoming: int, outgoing: int, loops: int = 0):
         for fd in fds:
             fd.merge_legs(fd.legs[-1], fd.legs[-2])
 
-    for i in range(len(fds)):
+    for i, fdsi in enumerate(fds):
         for j in range(i + 1, len(fds)):
-            if (
-                fds[i] is not None
-                and fds[j] is not None
-                and fds[i].is_isomorphic(fds[j])
-            ):
+            if fdsi is not None and fds[j] is not None and fdsi.is_isomorphic(fds[j]):
                 logging.debug(f"removing isomorphic diagrams {i} and {j}")
                 fds[j] = None
     # remove Nones
@@ -52,15 +48,15 @@ def generate_topologies(incoming: int, outgoing: int, loops: int = 0):
 def add_leg(fd: FeynmanDiagram, sense):
     fds = []
     # fd.render(debug=True)
-    for i in range(len(fd.vertices)):
+    for i, _ in enumerate(fd.vertices):
         fd_new = fd.deepcopy()
         fd_new.add(Leg(sense=sense, target=fd_new.vertices[i].id))
         fds.append(fd_new)
-    for i in range(len(fd.legs)):
+    for i, _ in enumerate(fd.legs):
         fd_new = fd.deepcopy()
         fd_new.emission(fd_new.legs[i], Leg(sense=sense))
         fds.append(fd_new)
-    for i in range(len(fd.propagators)):
+    for i, _ in enumerate(fd.propagators):
         fd_new = fd.deepcopy()
         fd_new.emission(fd_new.propagators[i], Leg(sense=sense))
         fds.append(fd_new)
