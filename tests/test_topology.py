@@ -28,4 +28,7 @@ def test_topology_two():
             has_v = True
             break
         assert False
-    assert has_s and has_t and has_u and has_v
+    assert has_s
+    assert has_t
+    assert has_u
+    assert has_v

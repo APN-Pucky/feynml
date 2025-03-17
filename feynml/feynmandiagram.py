@@ -4,6 +4,7 @@ import warnings
 from dataclasses import dataclass, field
 from typing import List, Union
 
+import networkx as nx
 import cssutils
 import numpy as np
 import smpl_doc.doc as doc
@@ -66,8 +67,6 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 return i
 
     def is_isomorphic(self, fd: "FeynmanDiagram"):
-        import networkx as nx
-
         G1 = self.to_graph()
         G2 = fd.to_graph()
         return nx.is_isomorphic(
@@ -78,8 +77,6 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         )
 
     def to_graph(self):
-        import networkx as nx
-
         G = nx.Graph()
         for v in self.vertices:
             G.add_node(v.id, sense=None, lid=None)
