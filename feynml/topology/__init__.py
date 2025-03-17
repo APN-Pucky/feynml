@@ -1,16 +1,8 @@
 import logging
-from typing import List
 from feynml.feynmandiagram import FeynmanDiagram
 from feynml.feynml import FeynML
 from feynml.leg import Leg
 from feynml.topology import three
-
-
-def all() -> List[FeynmanDiagram]:
-    fds = []
-    # APN TODO collect many diagrams here to check if the look good in a automated way
-    return fds
-
 
 """
 Generate a list of topologies with incoming/outgoing number of legs and loops.
