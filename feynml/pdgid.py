@@ -2,8 +2,11 @@ import warnings
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from particle import Particle
+from particle import Particle, InvalidParticle
+from particle.exceptions import MatchingIDNotFound
+
 from smpl_util.util import withify
+from feynmodel.feyn_model import FeynModel
 
 from feynml.id import Identifiable
 
@@ -56,10 +59,17 @@ class PDG(Identifiable):
     particle: Optional[Particle] = field(default=None, metadata={"type": "Ignore"})
     # """Particle object from the particle package"""
 
-    def _sync(self):
+    def _sync(self, feynmodel: FeynModel = None):
         """Sync the particle with the pdgid, name etc."""
+        if feynmodel is not None:
+            p = feynmodel.get_particle(pdg_code=self.pdgid)
+            self.pdgid = p.pdg_code
+            self.name = p.name
         if self.pdgid is not None:
-            self.particle, self.name = get_particle_and_name_from_pdgid(self.pdgid)
+            try:
+                self.particle, self.name = get_particle_and_name_from_pdgid(self.pdgid)
+            except (MatchingIDNotFound, InvalidParticle):
+                pass
         elif self.name is not None:
             if self.name == "ghG" or self.name == "gh" or self.name == "ghost":
                 self.particle = None
@@ -160,7 +170,9 @@ class PDG(Identifiable):
                 self.type = "squark"
             elif abs(self.pdgid) in [1000021]:
                 self.type = "gluino"
-            elif self.pdgid < 1000000 and self.pdgid > 100:
+            elif (
+                self.pdgid < 1000000 and self.pdgid > 100 and self.particle is not None
+            ):
                 if self.particle.pdgid.J == 0:
                     self.type = "line"
                 elif self.particle.pdgid.J == 1:
@@ -169,7 +181,11 @@ class PDG(Identifiable):
                     self.type = "fermion"
                 elif self.particle.pdgid.J == 1.5:
                     self.type = "fermion"
-            elif self.pdgid > -1000000 and self.pdgid < -100:
+            elif (
+                self.pdgid > -1000000
+                and self.pdgid < -100
+                and self.particle is not None
+            ):
                 if self.particle.pdgid.J == 0:
                     self.type = "line"
                 elif self.particle.pdgid.J == 1:
@@ -211,15 +227,15 @@ class PDG(Identifiable):
 
     def with_pdgid(
         self,
-        pdgid: int,
+        pdgid: int = None,
+        type: str = None,
+        name: str = None,
+        feynmodel: FeynModel = None,
+        sync=True,
     ):
         self.pdgid = pdgid
-        self.name = None
-        self.type = None
-        self._sync()
+        self.name = name
+        self.type = type
+        if sync:
+            self._sync(feynmodel=feynmodel)
         return self
-
-    # def with_name(self, name):
-    #    self.name = name
-    #    self._sync()
-    #    return self

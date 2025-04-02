@@ -11,6 +11,8 @@ import smpl_doc.doc as doc
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
+from feynmodel.feyn_model import FeynModel
+
 from feynml.connector import Connector
 from feynml.head import Head
 from feynml.id import Identifiable
@@ -434,7 +436,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                     self.add(start)
                 else:
                     raise Exception("Unknown leg_or_propagator type")
-            start.with_pdgid(startid)
+            start.with_pdgid(**pdgid_param(startid))
 
         if end is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_incoming():
@@ -453,7 +455,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                     self.add(end)
                 else:
                     raise Exception("Unknown leg_or_propagator type")
-            end.with_pdgid(endid)
+            end.with_pdgid(**pdgid_param(endid))
 
         start.with_target(
             new_vert
@@ -644,6 +646,21 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 le.y *= scale
         return self
 
+    def is_valid(self, fm: FeynModel, only_vertex=False):
+        # first check that the propagator and leg pdgids are also in the model
+        if not only_vertex:
+            for p in self.propagators:
+                if not fm.has_particle(name=p.name, pdg_code=p.pdgid):
+                    return False
+            for l in self.legs:
+                if not fm.has_particle(name=l.name, pdg_code=l.pdgid):
+                    return False
+        for v in self.vertices:
+            pdgids = [c.pdgid for c in self.get_connections(v)]
+            if not fm.has_vertex(pdgids=pdgids):
+                return False
+        return True
+
     def copy(self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True):
         copy = self.deepcopy()
         id_map = {}
@@ -670,6 +687,12 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             p.source = id_map[p.source]
             p.target = id_map[p.target]
         return copy
+
+    def fastcopy(self):
+        # get the matrix representation of the diagram
+        mat = self.to_matrix()
+        # create a new diagram from the matrix
+        return FeynmanDiagram.from_matrix(mat)
 
     def deepcopy(self):
         savesheets = self.sheet
