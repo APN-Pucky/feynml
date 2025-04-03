@@ -6,7 +6,6 @@ import itertools
 import logging
 from typing import List
 
-from tqdm import tqdm
 from feynmodel.feyn_model import FeynModel
 
 from feynml.feynmandiagram import FeynmanDiagram
@@ -27,7 +26,7 @@ def insert_fields(
     # TODO maybe skip already inserted fields!, maybe skip legs?
     # TODO assert inserted legs
     ret = []
-    for fd in tqdm(fml.diagrams, disable=not progress):
+    for fd in fml.diagrams:
         for i, l in enumerate([ll for ll in fd.legs if ll.is_incoming()]):
             l.with_pdgid(incoming[i], feynmodel=fm)
         for i, l in enumerate([ll for ll in fd.legs if ll.is_outgoing()]):
