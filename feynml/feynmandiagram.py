@@ -656,10 +656,59 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 if not fm.has_particle(name=l.name, pdg_code=l.pdgid):
                     return False
         for v in self.vertices:
-            pdgids = [c.pdgid for c in self.get_connections(v)]
-            if not fm.has_vertex(pdgids=pdgids):
+            if self.find_vertex_in_model(v, fm) is None:
                 return False
+
         return True
+
+    def find_vertex_in_model(self, vertex: Vertex, model: FeynModel):
+        """
+        Finds the model vertex corresponding to the given FeynmanDiagram vertex
+
+        Note: Sorting is to check for the correct particles in a vertex given they can be in any order and have duplicates
+        """
+        assert vertex in self.vertices
+        cons = np.array(self.get_connections(vertex))
+        # debug(f"{cons=}")
+        pdg_ids_list = []
+
+        # correct for incoming vs outgoing fermion struct
+        for c in cons:
+            p = c.pdgid
+            if c.is_any_fermion():
+                if c.goes_into(vertex):
+                    p = -p
+            pdg_ids_list += [p]
+        pdg_ids_array = np.array(pdg_ids_list)
+
+        sort_mask = np.argsort(pdg_ids_array)
+        particles = pdg_ids_array[sort_mask]
+        scons = cons[sort_mask]
+        # debug(f"{scons=}")
+        ret = None
+        for v in model.vertices:
+            if len(v.particles) != len(particles):
+                continue
+            model_particle_ids = np.array([p.pdg_code for p in v.particles])
+            model_sort_mask = np.argsort(model_particle_ids)
+            # By sorting based on the indices we reproduce the order of the particles in the vertex
+            inverted_model_sort_mask = np.argsort(model_sort_mask)
+            sorted_model_particle_ids = model_particle_ids[model_sort_mask]
+            if np.array_equal(sorted_model_particle_ids, particles):
+                vc = []
+                for i, _ in enumerate(model_particle_ids):
+                    con = scons[inverted_model_sort_mask[i]]
+                    vc.append(con)
+                v.connections = vc
+                ret = v
+                break
+
+        # Make sure all connections are in the vertex
+        if ret is not None:
+            for c in cons:
+                assert c in ret.connections
+        # debug(f"{ret=}")
+        return ret
 
     def copy(self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True):
         copy = self.deepcopy()

@@ -37,10 +37,13 @@ def insert_fields(
             [p.pdg_code for p in fm.particles], repeat=len(fd.propagators)
         ):
             for i, p in enumerate(ps):
-                fd.propagators[i].with_pdgid(pdgid=p, feynmodel=fm, sync=False)
+                fd.propagators[i].with_pdgid(
+                    pdgid=p, feynmodel=fm, sync=True
+                )  # we need sync to know if it is a fermion
             if fd.is_valid(fm, only_vertex=True):
                 # deep copy is very slow..
                 ret.append(fd.fastcopy())
+
     return FeynML(diagrams=ret)
 
 
