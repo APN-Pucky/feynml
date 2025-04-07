@@ -11,6 +11,8 @@ import smpl_doc.doc as doc
 from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
+from feynmodel.feyn_model import FeynModel
+
 from feynml.connector import Connector
 from feynml.head import Head
 from feynml.id import Identifiable
@@ -99,42 +101,65 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             G.add_edge(p.source, p.target)
         return G
 
+    def get_number_of_incoming(self):
+        return len([leg for leg in self.legs if leg.is_incoming()])
+
+    def get_number_of_outgoing(self):
+        return len([leg for leg in self.legs if leg.is_outgoing()])
+
     def to_matrix(self):
         # Create a square matrix of arrays of size len(vert) + incoming + outgoing category
-        lv = len(self.vertices) + 2
+        li = self.get_number_of_incoming()
+        lo = self.get_number_of_outgoing()
+        lv = len(self.vertices) + li + lo
         mat = np.frompyfunc(list, 0, 1)(np.empty((lv, lv), dtype=object))
         for p in self.propagators:
-            i = self.get_vertex_index(p.source) + 1
-            j = self.get_vertex_index(p.target) + 1
+            i = self.get_vertex_index(p.source) + li
+            j = self.get_vertex_index(p.target) + li
             mat[i, j].append(p.pdgid)
-        for leg in self.legs:
-            if leg.is_incoming():
-                i = 0
-                j = self.get_vertex_index(leg.target) + 1
-            else:
-                i = self.get_vertex_index(leg.target) + 1
-                j = -1
+
+        for i, leg in enumerate([leg for leg in self.legs if leg.is_incoming()]):
+            j = self.get_vertex_index(leg.target) + li
             mat[i, j].append(leg.pdgid)
+        for j, leg in enumerate([leg for leg in self.legs if leg.is_outgoing()]):
+            i = self.get_vertex_index(leg.target) + li
+            mat[i, -j - 1].append(leg.pdgid)
+        # util data
+        # mat[0,0] = [li]
+        # mat[-1,-1] = [lo]
         return mat
 
     @staticmethod
-    def from_matrix(matrix):
+    def from_matrix(matrix, li, lo):
         fd = FeynmanDiagram()
+        # li = matrix[0,0][0]
+        # lo = matrix[-1,-1][0]
+        matrix[0, 0] = []
+        matrix[-1, -1] = []
         lv = len(matrix)
-        for _ in range(lv - 2):
+        for _ in range(lv - li - lo):
             fd.add(Vertex())
-        for i in range(1, lv - 1):
-            for j in range(1, lv - 1):
+        for i in range(li, lv - lo):
+            for j in range(li, lv - lo):
                 for id in matrix[i, j]:
                     fd.add(
                         Propagator(pdgid=id).connect(
-                            fd.vertices[i - 1], fd.vertices[j - 1]
+                            fd.vertices[i - li], fd.vertices[j - li]
                         )
                     )
-            for id in matrix[0, i]:
-                fd.add(Leg(pdgid=id, sense="incoming").with_target(fd.vertices[i - 1]))
-            for id in matrix[i, -1]:
-                fd.add(Leg(pdgid=id, sense="outgoing").with_target(fd.vertices[i - 1]))
+        # We need to keep the leg order
+        for ii in range(li):
+            for i in range(li, lv - lo):
+                for id in matrix[ii, i]:
+                    fd.add(
+                        Leg(pdgid=id, sense="incoming").with_target(fd.vertices[i - li])
+                    )
+        for jj in range(lo):
+            for i in range(li, lv - lo):
+                for id in matrix[i, -jj - 1]:
+                    fd.add(
+                        Leg(pdgid=id, sense="outgoing").with_target(fd.vertices[i - li])
+                    )
         return fd
 
     def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
@@ -434,7 +459,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                     self.add(start)
                 else:
                     raise Exception("Unknown leg_or_propagator type")
-            start.with_pdgid(startid)
+            start.with_pdgid(**pdgid_param(startid))
 
         if end is None:
             if isinstance(leg_or_propagator, Leg) and leg_or_propagator.is_incoming():
@@ -453,7 +478,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                     self.add(end)
                 else:
                     raise Exception("Unknown leg_or_propagator type")
-            end.with_pdgid(endid)
+            end.with_pdgid(**pdgid_param(endid))
 
         start.with_target(
             new_vert
@@ -644,6 +669,70 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
                 le.y *= scale
         return self
 
+    def is_valid(self, fm: FeynModel, only_vertex=False):
+        # first check that the propagator and leg pdgids are also in the model
+        if not only_vertex:
+            for p in self.propagators:
+                if not fm.has_particle(name=p.name, pdg_code=p.pdgid):
+                    return False
+            for le in self.legs:
+                if not fm.has_particle(name=le.name, pdg_code=le.pdgid):
+                    return False
+        for v in self.vertices:
+            if self.find_vertex_in_model(v, fm) is None:
+                return False
+
+        return True
+
+    def find_vertex_in_model(self, vertex: Vertex, model: FeynModel):
+        """
+        Finds the model vertex corresponding to the given FeynmanDiagram vertex
+
+        Note: Sorting is to check for the correct particles in a vertex given they can be in any order and have duplicates
+        """
+        assert vertex in self.vertices
+        cons = np.array(self.get_connections(vertex))
+        # debug(f"{cons=}")
+        pdg_ids_list = []
+
+        # correct for incoming vs outgoing fermion struct
+        for c in cons:
+            p = c.pdgid
+            if c.is_any_fermion():
+                if c.goes_into(vertex):
+                    p = -p
+            pdg_ids_list += [p]
+        pdg_ids_array = np.array(pdg_ids_list)
+
+        sort_mask = np.argsort(pdg_ids_array)
+        particles = pdg_ids_array[sort_mask]
+        scons = cons[sort_mask]
+        # debug(f"{scons=}")
+        ret = None
+        for v in model.vertices:
+            if len(v.particles) != len(particles):
+                continue
+            model_particle_ids = np.array([p.pdg_code for p in v.particles])
+            model_sort_mask = np.argsort(model_particle_ids)
+            # By sorting based on the indices we reproduce the order of the particles in the vertex
+            inverted_model_sort_mask = np.argsort(model_sort_mask)
+            sorted_model_particle_ids = model_particle_ids[model_sort_mask]
+            if np.array_equal(sorted_model_particle_ids, particles):
+                vc = []
+                for i, _ in enumerate(model_particle_ids):
+                    con = scons[inverted_model_sort_mask[i]]
+                    vc.append(con)
+                v.connections = vc
+                ret = v
+                break
+
+        # Make sure all connections are in the vertex
+        if ret is not None:
+            for c in cons:
+                assert c in ret.connections
+        # debug(f"{ret=}")
+        return ret
+
     def copy(self, new_vertex_ids=True, new_leg_ids=True, new_propagator_ids=True):
         copy = self.deepcopy()
         id_map = {}
@@ -670,6 +759,14 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             p.source = id_map[p.source]
             p.target = id_map[p.target]
         return copy
+
+    def fastcopy(self):
+        # get the matrix representation of the diagram
+        mat = self.to_matrix()
+        # create a new diagram from the matrix
+        return FeynmanDiagram.from_matrix(
+            mat, li=self.get_number_of_incoming(), lo=self.get_number_of_outgoing()
+        )
 
     def deepcopy(self):
         savesheets = self.sheet

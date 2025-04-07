@@ -50,6 +50,19 @@ class FeynML(SheetHandler, XML):
         metadata={"name": "diagram", "type": "Element", "namespace": ""},
     )
 
+    def is_isomorphic(self, other: "FeynML"):
+        if len(self.diagrams) != len(other.diagrams):
+            return False
+        found = [False] * len(self.diagrams)
+        for d in self.diagrams:
+            for i, od in enumerate(other.diagrams):
+                if d.is_isomorphic(od):
+                    if found[i]:
+                        # No duplicates
+                        return False
+                    found[i] = True
+        return all(found)
+
     def get_root(self):
         return self.head.root
 

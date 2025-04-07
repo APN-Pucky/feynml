@@ -1,3 +1,12 @@
+from typing import List
+from feynmodel.feyn_model import FeynModel
+from feynmodel.interface.qgraf import feynmodel_to_qgraf, pdg_id_to_qgraf_name
+from feynmodel.interface.ufo import load_ufo_model  # noqa: F401
+
+from xsdata.formats.dataclass.parsers import XmlParser
+
+from feynml.feynml import FeynML
+
 style = r"""
 <prologue>
 <<!--
@@ -73,25 +82,17 @@ def get_style() -> str:
     return style
 
 
-def generate_fml(feyn_model, incoming_pdgs, outgoing_pdgs):
+def generate_fml(
+    feyn_model: FeynModel,
+    incoming_pdgs: List[int],
+    outgoing_pdgs: List[int],
+    loops: int = 0,
+) -> FeynML:
     """Generate a feynml object from a feyn_model and incoming/outgoing pdgs."""
     try:
         from pyqgraf import qgraf
     except ImportError:
         raise ImportError("Please install the pyqgraf package")
-    try:
-        from feynmodel.feyn_model import FeynModel
-        from feynmodel.interface.qgraf import feynmodel_to_qgraf, pdg_id_to_qgraf_name
-        from feynmodel.interface.ufo import load_ufo_model  # noqa: F401
-    except ImportError:
-        raise ImportError("Please install the feynmodel package")
-    try:
-        from xsdata.formats.dataclass.parsers import XmlParser
-
-        from feynml.feynml import FeynML
-        from feynml.interface.qgraf import style
-    except ImportError:
-        raise ImportError("Please install the feynml package")
 
     fm = feyn_model
 
@@ -115,10 +116,10 @@ def generate_fml(feyn_model, incoming_pdgs, outgoing_pdgs):
     xml_string = qgraf.run(
         ", ".join(incoming),
         ", ".join(outgoing),
-        loops=0,
+        loops=loops,
         loop_momentum="l",
         model=qfm,
-        style=style,
+        style=get_style(),
     )
     parser = XmlParser()
     fml = parser.from_string(xml_string, FeynML)
