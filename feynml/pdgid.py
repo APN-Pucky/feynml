@@ -1,16 +1,12 @@
-import warnings
 from dataclasses import dataclass, field
 from typing import Optional, Union
-
-from particle import Particle, InvalidParticle
-from particle.exceptions import MatchingIDNotFound
 
 from smpl_util.util import withify
 from feynmodel.feyn_model import FeynModel
 
 from feynml.id import Identifiable
+from feynml.particle import Particle
 
-from .particles import get_either_particle, get_particle_and_name_from_pdgid
 
 PDGID_PARAM = Union[int, str, None]
 
@@ -51,26 +47,28 @@ class PDG(Identifiable):
     """PDG ID of the particle"""
     name: Optional[str] = field(default=None, metadata={"type": "Element"})
     """Name of the particle"""
+    texname: Optional[str] = field(default=None, metadata={"type": "Element"})
+    """LaTeX name of the particle"""
     type: Optional[str] = field(
         default=None, metadata={"xml_attribute": True, "type": "Attribute"}
     )
     """Type of the particle, e.g. fermion, boson, etc."""
 
-    particle: Optional[Particle] = field(default=None, metadata={"type": "Ignore"})
+    # particle: Optional[Particle] = field(default=None, metadata={"type": "Ignore"})
+    # """Particle object from the particle package"""
+
+    # _particle: Optional[Particle] = field(default=None, metadata={"type": "Ignore"})
     # """Particle object from the particle package"""
 
     def _sync(self, feynmodel: FeynModel = None):
-        """Sync the particle with the pdgid, name etc."""
-        if feynmodel is not None:
-            p = feynmodel.get_particle(pdg_code=self.pdgid)
-            self.pdgid = p.pdg_code
-            self.name = p.name
+        """Sync the particle with the pdgid, name and type."""
+        particle = None
         if self.pdgid is not None:
-            try:
-                self.particle, self.name = get_particle_and_name_from_pdgid(self.pdgid)
-            except (MatchingIDNotFound, InvalidParticle):
-                pass
-        elif self.name is not None:
+            if feynmodel is not None:
+                particle = Particle.fromfeynmodel(self.pdgid, feynmodel)
+            else:
+                particle = Particle.frompdg(self.pdgid)
+        if self.name is not None:
             if self.name == "ghG" or self.name == "gh" or self.name == "ghost":
                 self.particle = None
                 self.pdgid = None
@@ -81,129 +79,17 @@ class PDG(Identifiable):
                 self.pdgid = None
                 self.type = "anti ghost"
                 return
-            self.particle = get_either_particle(
-                programmatic_name=self.name,
-                name=self.name,
-                evtgen_name=self.name,
-                html_name=self.name,
-                latex_name=self.name,
-            )
-            if self.particle is None:
-                raise ValueError(f"Particle {self.name} not found")
-            self.pdgid = int(self.particle.pdgid)
+            particle = Particle.fromname(self.name)
 
-        if self.pdgid is not None:
-            tmptype = self.type
-            # TODO infere type from pdgid
-            if self.pdgid in range(1, 7):
-                self.type = "fermion"
-            elif -self.pdgid in range(1, 7):
-                self.type = "anti fermion"
-            elif self.pdgid == 22:
-                self.type = "photon"
-            elif self.pdgid == 21:
-                self.type = "gluon"
-            elif self.pdgid in range(11, 19):
-                self.type = "fermion"
-            elif -self.pdgid in range(11, 19):
-                self.type = "anti fermion"
-            elif abs(self.pdgid) == 24:
-                self.type = "boson"
-            elif self.pdgid == 23:
-                self.type = "boson"
-            elif self.pdgid == 25:
-                self.type = "higgs"
-            elif self.pdgid == 2212:  # proton
-                self.type = "baryon"
-            elif self.pdgid == 2112:  # neutron
-                self.type = "baryon"
-            elif self.pdgid == -2212:  # anti proton
-                self.type = "anti baryon"
-            elif self.pdgid == 111:  # pion
-                self.type = "meson"
-            elif abs(self.pdgid) == 211:  # pion
-                self.type = "meson"
-            elif abs(self.pdgid) in [
-                1000022,
-                1000023,
-                1000024,
-                1000025,
-                1000035,
-                1000037,
-            ]:
-                self.type = "gaugino"
-            elif abs(self.pdgid) in [
-                1000011,
-                1000012,
-                1000013,
-                1000014,
-                1000015,
-                1000016,
-            ]:
-                self.type = "slepton"
-            elif abs(self.pdgid) in [
-                2000011,
-                2000012,
-                2000013,
-                2000014,
-                2000015,
-                2000016,
-            ]:
-                self.type = "slepton"
-            elif abs(self.pdgid) in [
-                1000001,
-                1000002,
-                1000003,
-                1000004,
-                1000005,
-                1000006,
-            ]:
-                self.type = "squark"
-            elif abs(self.pdgid) in [
-                2000001,
-                2000002,
-                2000003,
-                2000004,
-                2000005,
-                2000006,
-            ]:
-                self.type = "squark"
-            elif abs(self.pdgid) in [1000021]:
-                self.type = "gluino"
-            elif (
-                self.pdgid < 1000000 and self.pdgid > 100 and self.particle is not None
-            ):
-                if self.particle.pdgid.J == 0:
-                    self.type = "line"
-                elif self.particle.pdgid.J == 1:
-                    self.type = "line"
-                elif self.particle.pdgid.J == 0.5:
-                    self.type = "fermion"
-                elif self.particle.pdgid.J == 1.5:
-                    self.type = "fermion"
-            elif (
-                self.pdgid > -1000000
-                and self.pdgid < -100
-                and self.particle is not None
-            ):
-                if self.particle.pdgid.J == 0:
-                    self.type = "line"
-                elif self.particle.pdgid.J == 1:
-                    self.type = "line"
-                elif self.particle.pdgid.J == 0.5:
-                    self.type = "anti fermion"
-                elif self.particle.pdgid.J == 1.5:
-                    self.type = "anti fermion"
-            else:
-                warnings.warn(
-                    f"Inferring type from pdgid not implemented for pdgid {self.pdgid} "
-                )
-                self.type = "line"
-            if tmptype is not None and tmptype != "" and self.type != tmptype:
-                warnings.warn(
-                    f"Type {tmptype} is not consistent with pdgid {self.pdgid}, which is {self.type}. Using {tmptype} now."
-                )
-                self.type = tmptype
+        if particle is not None:
+            if self.texname is None:
+                self.texname = particle.texname
+            if self.name is None:
+                self.name = particle.name
+            if self.pdgid is None:
+                self.pdgid = particle.pdgid
+            if self.type is None:
+                self.type = particle.get_type()
 
     def is_anti_fermion(self):
         """Return True if the particle is an anti fermion, False otherwise."""

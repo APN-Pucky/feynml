@@ -11,10 +11,8 @@ def test_matrix():
     print(fd.to_matrix())
 
     assert fd.to_matrix().tolist() == [
-        [[], [], [], []],
-        [[], [], [11], []],
-        [[], [], [], []],
-        [[], [], [], []],
+        [[], [11]],
+        [[], []],
     ]
 
 
@@ -27,7 +25,7 @@ def test_matrix_idempotency():
         Leg(pdgid=2, sense="incoming", target=v2),
     )
     mat = fd.to_matrix()
-    nfd = FeynmanDiagram.from_matrix(mat)
+    nfd = FeynmanDiagram.from_matrix(mat, li=1, lo=1)
     assert nfd.to_matrix().tolist() == fd.to_matrix().tolist()
 
 

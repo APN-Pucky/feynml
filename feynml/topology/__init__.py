@@ -15,6 +15,16 @@ from feynml.pdgid import pdgid_param
 from feynml.topology import three
 
 
+def generate_fml(
+    feyn_model: FeynModel,
+    incoming_pdgs: List[int],
+    outgoing_pdgs: List[int],
+    loops: int = 0,
+):
+    fml = generate_topologies(len(incoming_pdgs), len(outgoing_pdgs), loops=loops)
+    return insert_fields(fml, feyn_model, incoming_pdgs, outgoing_pdgs)
+
+
 def insert_fields(
     fml: FeynML, fm: FeynModel, incoming: List[int], outgoing: List[int], progress=True
 ) -> FeynML:
@@ -26,12 +36,13 @@ def insert_fields(
     # TODO maybe skip already inserted fields!, maybe skip legs?
     # TODO assert inserted legs
     ret = []
-    for fd in fml.diagrams:
-        for i, l in enumerate([ll for ll in fd.legs if ll.is_incoming()]):
-            l.with_pdgid(incoming[i], feynmodel=fm)
-        for i, l in enumerate([ll for ll in fd.legs if ll.is_outgoing()]):
-            l.with_pdgid(outgoing[i], feynmodel=fm)
+    for _fdi, fd in enumerate(fml.diagrams):
+        for i, le in enumerate([ll for ll in fd.legs if ll.is_incoming()]):
+            le.with_pdgid(incoming[i], feynmodel=fm, sync=True)
+        for i, le in enumerate([ll for ll in fd.legs if ll.is_outgoing()]):
+            le.with_pdgid(outgoing[i], feynmodel=fm, sync=True)
         # TODO speed up, by not considering all combinations but only the valid ones, step by step
+        # TODO remove duplicates from list
         for ps in itertools.product(
             [p.pdg_code for p in fm.particles], repeat=len(fd.propagators)
         ):

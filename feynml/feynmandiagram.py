@@ -101,42 +101,65 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             G.add_edge(p.source, p.target)
         return G
 
+    def get_number_of_incoming(self):
+        return len([leg for leg in self.legs if leg.is_incoming()])
+
+    def get_number_of_outgoing(self):
+        return len([leg for leg in self.legs if leg.is_outgoing()])
+
     def to_matrix(self):
         # Create a square matrix of arrays of size len(vert) + incoming + outgoing category
-        lv = len(self.vertices) + 2
+        li = self.get_number_of_incoming()
+        lo = self.get_number_of_outgoing()
+        lv = len(self.vertices) + li + lo
         mat = np.frompyfunc(list, 0, 1)(np.empty((lv, lv), dtype=object))
         for p in self.propagators:
-            i = self.get_vertex_index(p.source) + 1
-            j = self.get_vertex_index(p.target) + 1
+            i = self.get_vertex_index(p.source) + li
+            j = self.get_vertex_index(p.target) + li
             mat[i, j].append(p.pdgid)
-        for leg in self.legs:
-            if leg.is_incoming():
-                i = 0
-                j = self.get_vertex_index(leg.target) + 1
-            else:
-                i = self.get_vertex_index(leg.target) + 1
-                j = -1
+
+        for i, leg in enumerate([leg for leg in self.legs if leg.is_incoming()]):
+            j = self.get_vertex_index(leg.target) + li
             mat[i, j].append(leg.pdgid)
+        for j, leg in enumerate([leg for leg in self.legs if leg.is_outgoing()]):
+            i = self.get_vertex_index(leg.target) + li
+            mat[i, -j - 1].append(leg.pdgid)
+        # util data
+        # mat[0,0] = [li]
+        # mat[-1,-1] = [lo]
         return mat
 
     @staticmethod
-    def from_matrix(matrix):
+    def from_matrix(matrix, li, lo):
         fd = FeynmanDiagram()
+        # li = matrix[0,0][0]
+        # lo = matrix[-1,-1][0]
+        matrix[0, 0] = []
+        matrix[-1, -1] = []
         lv = len(matrix)
-        for _ in range(lv - 2):
+        for _ in range(lv - li - lo):
             fd.add(Vertex())
-        for i in range(1, lv - 1):
-            for j in range(1, lv - 1):
+        for i in range(li, lv - lo):
+            for j in range(li, lv - lo):
                 for id in matrix[i, j]:
                     fd.add(
                         Propagator(pdgid=id).connect(
-                            fd.vertices[i - 1], fd.vertices[j - 1]
+                            fd.vertices[i - li], fd.vertices[j - li]
                         )
                     )
-            for id in matrix[0, i]:
-                fd.add(Leg(pdgid=id, sense="incoming").with_target(fd.vertices[i - 1]))
-            for id in matrix[i, -1]:
-                fd.add(Leg(pdgid=id, sense="outgoing").with_target(fd.vertices[i - 1]))
+        # We need to keep the leg order
+        for ii in range(li):
+            for i in range(li, lv - lo):
+                for id in matrix[ii, i]:
+                    fd.add(
+                        Leg(pdgid=id, sense="incoming").with_target(fd.vertices[i - li])
+                    )
+        for jj in range(lo):
+            for i in range(li, lv - lo):
+                for id in matrix[i, -jj - 1]:
+                    fd.add(
+                        Leg(pdgid=id, sense="outgoing").with_target(fd.vertices[i - li])
+                    )
         return fd
 
     def add(self, *fd_all: List[Union[Propagator, Vertex, Leg]]):
@@ -652,8 +675,8 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             for p in self.propagators:
                 if not fm.has_particle(name=p.name, pdg_code=p.pdgid):
                     return False
-            for l in self.legs:
-                if not fm.has_particle(name=l.name, pdg_code=l.pdgid):
+            for le in self.legs:
+                if not fm.has_particle(name=le.name, pdg_code=le.pdgid):
                     return False
         for v in self.vertices:
             if self.find_vertex_in_model(v, fm) is None:
@@ -741,7 +764,9 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
         # get the matrix representation of the diagram
         mat = self.to_matrix()
         # create a new diagram from the matrix
-        return FeynmanDiagram.from_matrix(mat)
+        return FeynmanDiagram.from_matrix(
+            mat, li=self.get_number_of_incoming(), lo=self.get_number_of_outgoing()
+        )
 
     def deepcopy(self):
         savesheets = self.sheet
