@@ -8,7 +8,7 @@ import networkx as nx
 import cssutils
 import numpy as np
 import smpl_doc.doc as doc
-from smpl_doc.doc import deprecated
+from warnings import deprecated
 from smpl_util.util import withify
 
 from feynmodel.feyn_model import FeynModel
@@ -259,7 +259,7 @@ class FeynmanDiagram(SheetHandler, XML, Styled, Identifiable):
             ]
         )
 
-    @deprecated("0.0.0", "use remove(propagator) instead")
+    @deprecated("use remove(propagator) instead")
     def remove_propagator(self, propagator):
         self.propagators.remove(propagator)
         return self

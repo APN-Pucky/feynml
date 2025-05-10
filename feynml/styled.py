@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 import cssutils
-from smpl_doc.doc import deprecated
+from warnings import deprecated
 from xsdata.formats.converter import Converter, converter
 
 # We don't want to see the cssutils warnings, since we have custom properties
@@ -54,11 +54,11 @@ class Styled:
     def raw_style(self):
         return self.style.cssText.replace("\n", " ")
 
-    @deprecated("0.0.0", "use with_style_property")
+    @deprecated("use with_style_property")
     def put_style(self, key, value):
         return self.put_styles(**{key: value})
 
-    @deprecated("0.0.0", "use with_style_properties")
+    @deprecated("use with_style_properties")
     def put_styles(self, **kwargs):
         if self.style is not None:
             for key, value in kwargs.items():

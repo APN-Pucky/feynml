@@ -1,18 +1,18 @@
 from typing import List
+from warnings import deprecated
 
 import cssutils
-import smpl_doc.doc as doc
 
 from feynml import shape, sheet
 
 
-@doc.deprecated("0.1.7", "Use :func:`feynml.sheet.get_default_sheet` instead.")
+@deprecated("Use :func:`feynml.sheet.get_default_sheet` instead.")
 def get_default_sheet() -> cssutils.css.CSSStyleSheet:
     """Return the default sheet."""
     return sheet.get_default_sheet()
 
 
-@doc.deprecated("0.1.7", "Use :func:`feynml.shape.get_shapes` instead.")
+@deprecated("Use :func:`feynml.shape.get_shapes` instead.")
 def get_shapes() -> List[str]:
     """Return the default shapes."""
     return shape.get_shapes()
