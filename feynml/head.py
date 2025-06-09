@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 import cssutils
-import smpl_io.io as io
+import smpl.io as io
 
 from feynml.link import Link
 from feynml.meta import Meta as alias_meta

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from smpl_util.util import withify
+from smpl.util import withify
 
 from feynml.id import Identifiable
 from feynml.pdgid import PDG

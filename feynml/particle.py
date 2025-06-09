@@ -3,7 +3,7 @@ from typing import Optional
 from dataclasses import dataclass, field
 import warnings
 
-from smpl_util.util import withify
+from smpl.util import withify
 
 from feynmodel.feyn_model import FeynModel
 

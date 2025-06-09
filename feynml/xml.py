@@ -1,4 +1,4 @@
-import smpl_io.io as io
+import smpl.io as io
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig

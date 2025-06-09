@@ -5,7 +5,7 @@ from typing import Optional
 import cssutils
 
 # from warnings import deprecated
-from smpl_doc.doc import deprecated
+from smpl.doc import deprecated
 from xsdata.formats.converter import Converter, converter
 
 # We don't want to see the cssutils warnings, since we have custom properties
