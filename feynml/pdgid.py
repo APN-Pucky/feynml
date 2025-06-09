@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from smpl_util.util import withify
+from smpl.util import withify
 from feynmodel.feyn_model import FeynModel
 
 from feynml.id import Identifiable

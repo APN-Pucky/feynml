@@ -7,9 +7,11 @@ from typing import List, Union
 import networkx as nx
 import cssutils
 import numpy as np
-import smpl_doc.doc as doc
-from warnings import deprecated
-from smpl_util.util import withify
+import smpl.doc as doc
+
+# from warnings import deprecated
+from smpl.doc import deprecated
+from smpl.util import withify
 
 from feynmodel.feyn_model import FeynModel
 
