@@ -1,5 +1,7 @@
 from typing import List
-from warnings import deprecated
+
+# from warnings import deprecated
+from smpl_doc.doc import deprecated
 
 import cssutils
 

@@ -169,12 +169,15 @@ class Particle:
     def frompdg(pdgid: int) -> "Particle":
         """Create a Particle from a PDG"""
         particle, name = get_particle_and_name_from_pdgid(pdgid)
+        theid = pdgid
         return Particle(
-            pdgid=pdgid,
+            pdgid=theid,
             name=name,
             mass=particle.mass,
             charge=particle.pdgid.charge,
-            spin=round(particle.pdgid.J * 2 + 1),
+            spin=round(particle.pdgid.J * 2 + 1)
+            if theid != 25
+            else 0,  # particle bug https://github.com/scikit-hep/particle/pull/673
             texname=particle.latex_name,
         )
 
@@ -188,11 +191,14 @@ class Particle:
             html_name=name,
             latex_name=name,
         )
+        theid = int(particle.pdgid)
         return Particle(
-            pdgid=int(particle.pdgid),
+            pdgid=theid,
             name=name,
             mass=particle.mass,
             charge=particle.pdgid.charge,
-            spin=round(particle.pdgid.J * 2 + 1),
+            spin=round(particle.pdgid.J * 2 + 1)
+            if theid != 25
+            else 0,  # particle bug https://github.com/scikit-hep/particle/pull/673
             texname=particle.latex_name,
         )

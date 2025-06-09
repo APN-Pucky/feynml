@@ -8,7 +8,9 @@ import networkx as nx
 import cssutils
 import numpy as np
 import smpl_doc.doc as doc
-from warnings import deprecated
+
+# from warnings import deprecated
+from smpl_doc.doc import deprecated
 from smpl_util.util import withify
 
 from feynmodel.feyn_model import FeynModel
